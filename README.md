@@ -91,6 +91,40 @@ class SelectboxExample extends React.Component {
 
 
 ```
+| Prop        | Type           | Default Value  |
+| ------------- |:-------------:| -----:|
+| label      | String | Label |
+| inputPlaceholder      | string      |   Label |
+| width | string      |    "100%" |
+| viewMargin | string      |    "0px" |
+| isMulti | boolean      |    false |
+| hideInputFilter | boolean      |    true |
+| selectedValues | array      |    [] |
+| value | array      |    [] |
+| selectIcon | component      |    <Icon name={'downArrow'} /> |
+| options | array      |    `[`
+`  { item: 'Afghanistan', id: 'AF' },`
+`  { item: 'land Islands', id: 'AX' },`
+`  { item: 'Albania', id: 'AL' },`
+`  { item: 'Algeria', id: 'DZ' },`
+`  { item: 'American Samoa', id: 'AS' },`
+`  { item: 'AndorrA', id: 'AD' },`
+`  { item: 'Angola', id: 'AO' },`
+`  { item: 'Anguilla', id: 'AI' },`
+`  { item: 'Antarctica', id: 'AQ' },`
+`  { item: 'Antigua and Barbuda', id: 'AG' },`
+`  { item: 'Argentina', id: 'AR' },`
+`  { item: 'Armenia', id: 'AM' },`
+`  { item: 'Aruba', id: 'AW' },`
+`  { item: 'Australia', id: 'AU' },`
+`  { item: 'Austria', id: 'AT' },`
+`  { item: 'Azerbaijan', id: 'AZ' },`
+`  { item: 'Bahamas', id: 'BS' },`
+`  { item: 'Bahrain', id: 'BH' },`
+`  { item: 'Bangladesh', id: 'BD' },`
+`  { item: 'Barbados', id: 'BB' }`
+`]` 
+
 
 ## Want to contribute?
 
