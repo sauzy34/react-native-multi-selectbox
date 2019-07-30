@@ -34,5 +34,5 @@
     "jest-expo": "^33.0.0",
     "prettier": "^1.18.2"
   },
-  "private": true
+  "private": false
 }

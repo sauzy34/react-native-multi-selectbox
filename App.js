@@ -3,7 +3,12 @@ import { ThemeProvider } from 'styled-components'
 import { Text, View } from 'react-native'
 import SelectBox from 'react-native-multi-selectbox'
 import { xor } from 'lodash'
-import Colors from './Colors'
+
+const Colors = {
+  primary: '#078489',
+  secondary: '#124b5f',
+  tertiary: '#f7f1e3'
+}
 
 export default class App extends React.Component {
   state = {
