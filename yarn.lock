@@ -2409,9 +2409,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.191:
-  version "1.3.204"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.204.tgz#1ea5c6d495bab77995aa135dbcbc1d383dd4e21e"
-  integrity sha512-T0eXE6hfbtpzRUaI7aHI/HYJ29Ndk84aVSborRAmXfWvBvz2EuB2OWYUxNcUX9d+jtqEIjgZjWMdoxS0hp5j1g==
+  version "1.3.205"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.205.tgz#084835a5ecca0765a805acb50a0fddc23d8d530e"
+  integrity sha512-VV+f2FVeFI5D/slUD7A3V1lTMDkQTUGWYH2dZGAijIutN5Aga4Fn/Hv4Gc+60OpXFVLYIq5HpXb2cG6NrGGQaA==
 
 emoji-regex@^7.0.1, emoji-regex@^7.0.2:
   version "7.0.3"
@@ -5979,10 +5979,10 @@ react-native-branch@~3.0.1:
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-3.0.1.tgz#5b07b61cbd290168cd3c3662e017ebe0f356d2ca"
   integrity sha512-vbcYxPZlpF5f39GAEUF8kuGQqCNeD3E6zEdvtOq8oCGZunHXlWlKgAS6dgBKCvsHvXgHuMtpvs39VgOp8DaKig==
 
-react-native-multi-selectbox@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/react-native-multi-selectbox/-/react-native-multi-selectbox-1.2.3.tgz#c1002c24d322d18bb70d6ac72f7e84a5739a3785"
-  integrity sha512-r36KQPxNoSP34P18d4USRXdXV4pmL3ES5Z1c3Ld2MNxiPgnNbKPQGHFBYtnUAYP3OMA0VqUQbD5RrjryqN5LVw==
+react-native-multi-selectbox@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-multi-selectbox/-/react-native-multi-selectbox-1.2.4.tgz#34bc87cfd493b6a6ea10a419e0b62ee04bf3fe2a"
+  integrity sha512-qEGaoCLkgpC9VJZl1vecUQvcz2PtW/qH6A9nUENK0NxKtPKWtlOj9sDQ3LR8qPgXNraRbn+Ifz7vIrlqM2E/rA==
 
 react-native-svg@~9.5.1:
   version "9.5.3"

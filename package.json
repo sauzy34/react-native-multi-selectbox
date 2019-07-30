@@ -19,7 +19,7 @@
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
-    "react-native-multi-selectbox": "^1.2.3",
+    "react-native-multi-selectbox": "^1.2.4",
     "react-native-svg": "~9.5.1",
     "react-native-web": "^0.11.4",
     "styled-components": "^4.3.2"
