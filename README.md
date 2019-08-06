@@ -2,6 +2,8 @@
 
 Renders the Picker/SelectBox/Dropdown with common styling for iOS/Android.
 
+![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
+
 ## Getting started
 
 ### How to install:
