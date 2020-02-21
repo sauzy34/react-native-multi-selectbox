@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
+import SelectBox from './lib'
 import { xor } from 'lodash'
 
 const Colors = {
