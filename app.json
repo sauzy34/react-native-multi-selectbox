@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "react-native-multi-selectbox",
-    "slug": "selectbox-package",
+    "slug": "multi-selectbox",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -26,6 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "React Native customized multi select for iOS/Android"
+    "description": "React Native customized multi select for iOS/Android",
+    "githubUrl": "https://github.com/sauzy34/react-native-multi-selectbox"
   }
 }
