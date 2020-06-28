@@ -19,20 +19,13 @@ or
 ```
 
 import React from 'react'
-import { ThemeProvider } from 'styled-components'
-import SelectBox  from 'react-native-multi-selectbox'
+import { Text, View } from 'react-native'
+import SelectBox from './lib'
 import { xor } from 'lodash'
 
-const Colors = {
-  primary: '#078489',
-  secondary: '#124b5f',
-  tertiary: '#f7f1e3'
-}
-
-
-class SelectboxExample extends React.Component {
+export default class App extends React.Component {
   state = {
-    selectedLocations: [],
+    selectedLocations: {},
     selectedValues: [],
     locations: [
       { item: 'Afghanistan', id: 'AF' },
@@ -60,33 +53,31 @@ class SelectboxExample extends React.Component {
   render() {
     const { locations, selectedLocations, selectedValues } = this.state
     return (
-      <ThemeProvider theme={Colors}>
-        <View style={{ margin: 30 }}>
-          <View style={{ width: '100%', alignItems: 'center' }}>
-            <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
-          </View>
-          <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
-          <SelectBox
-            label="Select"
-            options={locations}
-            value={selectedLocations[0]}
-            onChange={val => this.setState({ selectedLocations: [val] })}
-            hideInputFilter={false}
-            viewMargin="0 0 20px 0"
-          />
-
-          <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
-          <SelectBox
-            label="Select Groups"
-            options={locations}
-            selectedValues={selectedValues}
-            onMultiSelect={item => this.setState({ selectedValues: xor(selectedValues, [item]) })}
-            onTapClose={val => this.setState({ selectedValues: xor(selectedValues, [val]) })}
-            viewMargin="0 0 20px 0"
-            isMulti
-          />
+      <View style={{ margin: 30 }}>
+        <View style={{ width: '100%', alignItems: 'center' }}>
+          <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
         </View>
-      </ThemeProvider>
+        <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
+        <SelectBox
+          label="Select"
+          options={locations}
+          value={selectedLocations}
+          onChange={val => this.setState({ selectedLocations: val })}
+          hideInputFilter={false}
+        />
+        <View style={{ height: 40 }}></View>
+        <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
+        <SelectBox
+          label="Select Groups"
+          options={locations}
+          selectedValues={selectedValues}
+          onMultiSelect={item => {
+            this.setState({ selectedValues: xor(selectedValues, [item]) })
+          }}
+          onTapClose={val => this.setState({ selectedValues: xor(selectedValues, [val]) })}
+          isMulti
+        />
+      </View>
     )
   }
 }
