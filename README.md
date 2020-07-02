@@ -86,24 +86,34 @@ export default class App extends React.Component {
 ```
 | Prop        | Type           | Default Value  |
 | ------------- |:-------------:| -----:|
-| label      | String | `Label` |
-| inputPlaceholder      | string      |   `Label` |
-| width | string      |    `"100%"` |
-| viewMargin | string      |    `"0px"` |
-| isMulti | boolean      |    `false` |
-| hideInputFilter | boolean      |    `true` |
-| selectedValues | array      |    `[]` |
-| value | array      |    `[]` |
-| selectIcon | component      |    `<Icon name={'downArrow'} />` |
-| options | array `options items must have `item ` & ` id` properties`      |  ```[{ item: 'Afghanistan', id: 'AF' },{ item: 'land Islands', id: 'AX' },{ item: 'Albania', id: 'AL' },{ item: 'Algeria', id: 'DZ' },{ item: 'American Samoa', id: 'AS' },{ item: 'AndorrA', id: 'AD' },{ item: 'Angola', id: 'AO' },{ item: 'Anguilla', id: 'AI' },{ item: 'Antarctica', id: 'AQ' },{ item: 'Antigua and Barbuda', id: 'AG' },{ item: 'Argentina', id: 'AR' },{ item: 'Armenia', id: 'AM' },{ item: 'Aruba', id: 'AW' },{ item: 'Australia', id: 'AU' },{ item: 'Austria', id: 'AT' },{ item: 'Azerbaijan', id: 'AZ' },{ item: 'Bahamas', id: 'BS' },{ item: 'Bahrain', id: 'BH' },{ item: 'Bangladesh', id: 'BD' },{ item: 'Barbados', id: 'BB' }] ```
-|
+| label      | String | Label |
+| inputPlaceholder      | string      |   Label |
+| width | string      |    "100%" |
+| viewMargin | string      |    "0px" |
+| isMulti | boolean      |    false |
+| hideInputFilter | boolean      |    true |
+| selectedValues | array      |    [] |
+| value | array      |    [] |
+| selectIcon | component      |    <Icon name={'downArrow'} /> |
+| labelStyle | style object | Default style |
+| containerStyle | style object | Default style |
+| inputFilterContainerStyle | style object | Default style |
+| inputFilterStyle | style object | Default style |
+| optionsLabelStyle | style object | Default style |
+| optionContainerStyle | style object | Default style |
+| multiOptionContainerStyle | style object | Default style |
+| multiOptionsLabelStyle | style object | Default style |
+| multiListEmptyLabelStyle | style object | Default style |
+| listEmptyLabelStyle | style object | Default style |
+| selectedItemStyle | style object | Default style |
+| options | array      |  ``` [{ item: 'Afghanistan', id: 'AF' },{ item: 'land Islands', id: 'AX' },{ item: 'Albania', id: 'AL' },{ item: 'Algeria', id: 'DZ' },{ item: 'American Samoa', id: 'AS' },{ item: 'AndorrA', id: 'AD' },{ item: 'Angola', id: 'AO' },{ item: 'Anguilla', id: 'AI' },{ item: 'Antarctica', id: 'AQ' },{ item: 'Antigua and Barbuda', id: 'AG' },{ item: 'Argentina', id: 'AR' },{ item: 'Armenia', id: 'AM' },{ item: 'Aruba', id: 'AW' },{ item: 'Australia', id: 'AU' },{ item: 'Austria', id: 'AT' },{ item: 'Azerbaijan', id: 'AZ' },{ item: 'Bahamas', id: 'BS' },{ item: 'Bahrain', id: 'BH' },{ item: 'Bangladesh', id: 'BD' },{ item: 'Barbados', id: 'BB' }] ```|
 
 
 ## Want to contribute?
 
 Checkout to `develop` branch and create a new branch & submit a PR
 
-## Issues or Feature Requests ?
+## Issues or feature ?
 
 You can submit a request on https://github.com/sauzy34/react-native-multi-selectbox/issues
 
