@@ -95,6 +95,17 @@ export default class App extends React.Component {
 | selectedValues | array      |    [] |
 | value | array      |    [] |
 | selectIcon | component      |    <Icon name={'downArrow'} /> |
+| labelStyle | style object | Default style |
+| containerStyle | style object | Default style |
+| inputFilterContainerStyle | style object | Default style |
+| inputFilterStyle | style object | Default style |
+| optionsLabelStyle | style object | Default style |
+| optionContainerStyle | style object | Default style |
+| multiOptionContainerStyle | style object | Default style |
+| multiOptionsLabelStyle | style object | Default style |
+| multiListEmptyLabelStyle | style object | Default style |
+| listEmptyLabelStyle | style object | Default style |
+| selectedItemStyle | style object | Default style |
 | options | array      |  ``` [{ item: 'Afghanistan', id: 'AF' },{ item: 'land Islands', id: 'AX' },{ item: 'Albania', id: 'AL' },{ item: 'Algeria', id: 'DZ' },{ item: 'American Samoa', id: 'AS' },{ item: 'AndorrA', id: 'AD' },{ item: 'Angola', id: 'AO' },{ item: 'Anguilla', id: 'AI' },{ item: 'Antarctica', id: 'AQ' },{ item: 'Antigua and Barbuda', id: 'AG' },{ item: 'Argentina', id: 'AR' },{ item: 'Armenia', id: 'AM' },{ item: 'Aruba', id: 'AW' },{ item: 'Australia', id: 'AU' },{ item: 'Austria', id: 'AT' },{ item: 'Azerbaijan', id: 'AZ' },{ item: 'Bahamas', id: 'BS' },{ item: 'Bahrain', id: 'BH' },{ item: 'Bangladesh', id: 'BD' },{ item: 'Barbados', id: 'BB' }] ```|
 
 
