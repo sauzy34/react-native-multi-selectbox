@@ -1,12 +1,15 @@
 # react-native-multi-selectbox 
 
-Renders the Picker/SelectBox/Dropdown with common styling for iOS/Android.
+[![npm version](https://badge.fury.io/js/react-native-multi-selectbox.svg)](https://badge.fury.io/js/react-native-multi-selectbox)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-multi-selectbox.svg?style=flat-square)](https://www.npmjs.com/package/react-native-multi-selectbox)
+
+Platform independent (Android / iOS) Selextbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms. 
 
 ![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
 
 ## Getting started
 
-### How to install:
+### How to install 🎹
 
 ### `npm install react-native-multi-selectbox`
 
@@ -14,74 +17,111 @@ or
 
 ### `yarn add react-native-multi-selectbox`
 
-### How to use ?
+### Usage 𖣠
 
 ```
-
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import SelectBox from './lib'
-import { xor } from 'lodash'
+import SelectBox from 'react-native-multi-selectbox'
+import { xorBy } from 'lodash'
 
-export default class App extends React.Component {
-  state = {
-    selectedLocations: {},
-    selectedValues: [],
-    locations: [
-      { item: 'Afghanistan', id: 'AF' },
-      { item: 'land Islands', id: 'AX' },
-      { item: 'Albania', id: 'AL' },
-      { item: 'Algeria', id: 'DZ' },
-      { item: 'American Samoa', id: 'AS' },
-      { item: 'AndorrA', id: 'AD' },
-      { item: 'Angola', id: 'AO' },
-      { item: 'Anguilla', id: 'AI' },
-      { item: 'Antarctica', id: 'AQ' },
-      { item: 'Antigua and Barbuda', id: 'AG' },
-      { item: 'Argentina', id: 'AR' },
-      { item: 'Armenia', id: 'AM' },
-      { item: 'Aruba', id: 'AW' },
-      { item: 'Australia', id: 'AU' },
-      { item: 'Austria', id: 'AT' },
-      { item: 'Azerbaijan', id: 'AZ' },
-      { item: 'Bahamas', id: 'BS' },
-      { item: 'Bahrain', id: 'BH' },
-      { item: 'Bangladesh', id: 'BD' },
-      { item: 'Barbados', id: 'BB' }
-    ]
+// Options data must contain 'item' & 'id' keys
+
+const K_OPTIONS = [
+  {
+    item: 'Juventus',
+    id: 'JUVE'
+  },
+  {
+    item: 'Real Madrid',
+    id: 'RM'
+  },
+  {
+    item: 'Barcelona',
+    id: 'BR'
+  },
+  {
+    item: 'PSG',
+    id: 'PSG'
+  },
+  {
+    item: 'FC Bayern Munich',
+    id: 'FBM'
+  },
+  {
+    item: 'Manchester United FC',
+    id: 'MUN'
+  },
+  {
+    item: 'Manchester City FC',
+    id: 'MCI'
+  },
+  {
+    item: 'Everton FC',
+    id: 'EVE'
+  },
+  {
+    item: 'Tottenham Hotspur FC',
+    id: 'TOT'
+  },
+  {
+    item: 'Chelsea FC',
+    id: 'CHE'
+  },
+  {
+    item: 'Liverpool FC',
+    id: 'LIV'
+  },
+  {
+    item: 'Arsenal FC',
+    id: 'ARS'
+  },
+
+  {
+    item: 'Leicester City FC',
+    id: 'LEI'
   }
-  render() {
-    const { locations, selectedLocations, selectedValues } = this.state
-    return (
-      <View style={{ margin: 30 }}>
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
-        </View>
-        <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
-        <SelectBox
-          label="Select"
-          options={locations}
-          value={selectedLocations}
-          onChange={val => this.setState({ selectedLocations: val })}
-          hideInputFilter={false}
-        />
-        <View style={{ height: 40 }}></View>
-        <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
-        <SelectBox
-          label="Select Groups"
-          options={locations}
-          selectedValues={selectedValues}
-          onMultiSelect={item => {
-            this.setState({ selectedValues: xor(selectedValues, [item]) })
-          }}
-          onTapClose={val => this.setState({ selectedValues: xor(selectedValues, [val]) })}
-          isMulti
-        />
+]
+
+function App() {
+  const [selectedLocations, setSelectedLocations] = useState({})
+  const [selectedValues, setSelectedValues] = useState([])
+  return (
+    <View style={{ margin: 30 }}>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
       </View>
-    )
+      <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
+      <SelectBox
+        label="Select single"
+        options={K_OPTIONS}
+        value={selectedLocations}
+        onChange={onChange()}
+        hideInputFilter={false}
+      />
+      <View style={{ height: 40 }} />
+      <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
+      <SelectBox
+        label="Select multiple"
+        options={K_OPTIONS}
+        selectedValues={selectedValues}
+        onMultiSelect={onMultiChange()}
+        onTapClose={onMultiChange()}
+        isMulti
+      />
+    </View>
+  )
+
+  function onMultiChange() {
+    return item => setSelectedValues(xorBy(selectedValues, [item], 'id'))
+  }
+
+  function onChange() {
+    return val => setSelectedLocations(val)
   }
 }
 
+export default App
 
 ```
 | Prop        | Type           | Default Value  |
@@ -106,17 +146,17 @@ export default class App extends React.Component {
 | multiListEmptyLabelStyle | style object | Default style |
 | listEmptyLabelStyle | style object | Default style |
 | selectedItemStyle | style object | Default style |
-| options | array      |  ``` [{ item: 'Afghanistan', id: 'AF' },{ item: 'land Islands', id: 'AX' },{ item: 'Albania', id: 'AL' },{ item: 'Algeria', id: 'DZ' },{ item: 'American Samoa', id: 'AS' },{ item: 'AndorrA', id: 'AD' },{ item: 'Angola', id: 'AO' },{ item: 'Anguilla', id: 'AI' },{ item: 'Antarctica', id: 'AQ' },{ item: 'Antigua and Barbuda', id: 'AG' },{ item: 'Argentina', id: 'AR' },{ item: 'Armenia', id: 'AM' },{ item: 'Aruba', id: 'AW' },{ item: 'Australia', id: 'AU' },{ item: 'Austria', id: 'AT' },{ item: 'Azerbaijan', id: 'AZ' },{ item: 'Bahamas', id: 'BS' },{ item: 'Bahrain', id: 'BH' },{ item: 'Bangladesh', id: 'BD' },{ item: 'Barbados', id: 'BB' }] ```|
+| options | array      |  ``` [{  item: 'Juventus',  id: 'JUVE'},{  item: 'Real Madrid',  id: 'RM'},{  item: 'Barcelona',  id: 'BR'},{  item: 'PSG',  id: 'PSG'},{  item: 'FC Bayern Munich',  id: 'FBM'}] ```|
 
 
-## Want to contribute?
+## Want to be a contributor? 👷🏼‍♂️👷🏼‍♀️
 
-Checkout to `develop` branch and create a new branch & submit a PR
+Check-in `develop` branch and submit a new pull-request
 
-## Issues or feature ?
+## Issues or feature request? ✍🏼
 
 You can submit a request on https://github.com/sauzy34/react-native-multi-selectbox/issues
 
-## Support & Share
+## Support & Share 💆🏼‍♂️
 
-Star the repository
+Please star the repository on Github to enhance the reach to more developers.
