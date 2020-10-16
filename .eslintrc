@@ -5,7 +5,8 @@
     "prettier"
   ],
   "plugins": [
-    "prettier"
+    "prettier",
+    "react-hooks"
   ],
   "globals": {
     "document": true,
@@ -13,6 +14,8 @@
     "process": true
   },
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "prettier/prettier": [
       "error",
       {

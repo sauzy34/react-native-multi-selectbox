@@ -1,33 +1,93 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import SelectBox from './lib'
-import { xor } from 'lodash'
+import { xorBy } from 'lodash'
 
 export default class App extends React.Component {
   state = {
     selectedLocations: {},
     selectedValues: [],
     locations: [
-      { item: 'Afghanistan', id: 'AF' },
-      { item: 'land Islands', id: 'AX' },
-      { item: 'Albania', id: 'AL' },
-      { item: 'Algeria', id: 'DZ' },
-      { item: 'American Samoa', id: 'AS' },
-      { item: 'AndorrA', id: 'AD' },
-      { item: 'Angola', id: 'AO' },
-      { item: 'Anguilla', id: 'AI' },
-      { item: 'Antarctica', id: 'AQ' },
-      { item: 'Antigua and Barbuda', id: 'AG' },
-      { item: 'Argentina', id: 'AR' },
-      { item: 'Armenia', id: 'AM' },
-      { item: 'Aruba', id: 'AW' },
-      { item: 'Australia', id: 'AU' },
-      { item: 'Austria', id: 'AT' },
-      { item: 'Azerbaijan', id: 'AZ' },
-      { item: 'Bahamas', id: 'BS' },
-      { item: 'Bahrain', id: 'BH' },
-      { item: 'Bangladesh', id: 'BD' },
-      { item: 'Barbados', id: 'BB' }
+      {
+        item: 'Aston Villa FC',
+        id: 'AVL'
+      },
+      {
+        item: 'West Ham United FC',
+        id: 'WHU'
+      },
+      {
+        item: 'Stoke City FC',
+        id: 'STK'
+      },
+      {
+        item: 'Sunderland AFC',
+        id: 'SUN'
+      },
+      {
+        item: 'Everton FC',
+        id: 'EVE'
+      },
+      {
+        item: 'Tottenham Hotspur FC',
+        id: 'TOT'
+      },
+      {
+        item: 'Manchester City FC',
+        id: 'MCI'
+      },
+      {
+        item: 'Chelsea FC',
+        id: 'CHE'
+      },
+      {
+        item: 'West Bromwich Albion FC',
+        id: 'WBA'
+      },
+      {
+        item: 'Liverpool FC',
+        id: 'LIV'
+      },
+      {
+        item: 'Arsenal FC',
+        id: 'ARS'
+      },
+      {
+        item: 'Manchester United FC',
+        id: 'MUN'
+      },
+      {
+        item: 'Newcastle United FC',
+        id: 'NEW'
+      },
+      {
+        item: 'Norwich City FC',
+        id: 'NOR'
+      },
+      {
+        item: 'Watford FC',
+        id: 'WAT'
+      },
+      {
+        item: 'Swansea City FC',
+        id: 'SWA'
+      },
+      {
+        item: 'Crystal Palace FC',
+        id: 'CRY'
+      },
+      {
+        item: 'Leicester City FC',
+        id: 'LEI'
+      },
+      {
+        item: 'Southampton FC',
+        id: 'SOU'
+      },
+      {
+        item: 'AFC Bournemouth',
+        id: 'BOU'
+      }
     ]
   }
   render() {
@@ -45,16 +105,18 @@ export default class App extends React.Component {
           onChange={val => this.setState({ selectedLocations: val })}
           hideInputFilter={false}
         />
-        <View style={{ height: 40 }}></View>
+        <View style={{ height: 40 }} />
         <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
         <SelectBox
           label="Select Groups"
           options={locations}
           selectedValues={selectedValues}
           onMultiSelect={item => {
-            this.setState({ selectedValues: xor(selectedValues, [item]) })
+            this.setState({ selectedValues: xorBy(selectedValues, [item], 'id') })
           }}
-          onTapClose={val => this.setState({ selectedValues: xor(selectedValues, [val]) })}
+          onTapClose={val => {
+            this.setState({ selectedValues: xorBy(selectedValues, [val], 'id') })
+          }}
           isMulti
         />
       </View>
