@@ -1,7 +1,7 @@
 {
   "name": "react-native-multi-selectbox",
-  "version": "1.3.0",
-  "description": "React Native customized multi select for iOS/Android",
+  "version": "1.4.0",
+  "description": "Platform independent (Android / iOS) Selextbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms..",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
