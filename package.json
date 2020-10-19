@@ -1,5 +1,5 @@
 {
-  "description": "React Native customized multi select for iOS/Android",
+  "description": "Platform independent (Android / iOS) Selextbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms..",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
@@ -36,6 +36,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "jest-expo": "^36.0.0",
     "prettier": "^1.18.2"
   },
