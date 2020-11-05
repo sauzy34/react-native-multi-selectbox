@@ -1,7 +1,12 @@
 {
   "name": "ReactCore",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
+  "description": "Platform independent (Android / iOS) Selextbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms..",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -34,5 +39,23 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/sauzy34/react-native-multi-selectbox/issues"
+  },
+  "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
+  "license": "MIT",
+  "keywords": [
+    "react-native-select",
+    "react-native",
+    "react",
+    "selectbox",
+    "dropdown",
+    "picker",
+    "select",
+    "expo",
+    "expo-picker",
+    "expo-select",
+    "expo-multi-select"
+  ]
 }
