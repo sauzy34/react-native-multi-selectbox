@@ -24,9 +24,7 @@ import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import SelectBox from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
-
 // Options data must contain 'item' & 'id' keys
-
 const K_OPTIONS = [
   {
     item: 'Juventus',
@@ -76,13 +74,11 @@ const K_OPTIONS = [
     item: 'Arsenal FC',
     id: 'ARS'
   },
-
   {
     item: 'Leicester City FC',
     id: 'LEI'
   }
 ]
-
 function App() {
   const [selectedLocations, setSelectedLocations] = useState({})
   const [selectedValues, setSelectedValues] = useState([])
@@ -111,18 +107,14 @@ function App() {
       />
     </View>
   )
-
   function onMultiChange() {
     return item => setSelectedValues(xorBy(selectedValues, [item], 'id'))
   }
-
   function onChange() {
     return val => setSelectedLocations(val)
   }
 }
-
 export default App
-
 ```
 | Prop        | Type           | Default Value  |
 | ------------- |:-------------:| -----:|
