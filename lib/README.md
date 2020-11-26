@@ -22,7 +22,7 @@ or
 ```
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
+import SelectBox from './lib'
 import { xorBy } from 'lodash'
 
 // Options data must contain 'item' & 'id' keys
@@ -30,62 +30,62 @@ import { xorBy } from 'lodash'
 const K_OPTIONS = [
   {
     item: 'Juventus',
-    id: 'JUVE'
+    id: 'JUVE',
   },
   {
     item: 'Real Madrid',
-    id: 'RM'
+    id: 'RM',
   },
   {
     item: 'Barcelona',
-    id: 'BR'
+    id: 'BR',
   },
   {
     item: 'PSG',
-    id: 'PSG'
+    id: 'PSG',
   },
   {
     item: 'FC Bayern Munich',
-    id: 'FBM'
+    id: 'FBM',
   },
   {
     item: 'Manchester United FC',
-    id: 'MUN'
+    id: 'MUN',
   },
   {
     item: 'Manchester City FC',
-    id: 'MCI'
+    id: 'MCI',
   },
   {
     item: 'Everton FC',
-    id: 'EVE'
+    id: 'EVE',
   },
   {
     item: 'Tottenham Hotspur FC',
-    id: 'TOT'
+    id: 'TOT',
   },
   {
     item: 'Chelsea FC',
-    id: 'CHE'
+    id: 'CHE',
   },
   {
     item: 'Liverpool FC',
-    id: 'LIV'
+    id: 'LIV',
   },
   {
     item: 'Arsenal FC',
-    id: 'ARS'
+    id: 'ARS',
   },
 
   {
     item: 'Leicester City FC',
-    id: 'LEI'
-  }
+    id: 'LEI',
+  },
 ]
 
 function App() {
-  const [selectedLocations, setSelectedLocations] = useState({})
-  const [selectedValues, setSelectedValues] = useState([])
+  const [selectedTeam, setSelectedTeam] = useState({})
+  const [selectedTeams, setSelectedTeams] = useState([])
   return (
     <View style={{ margin: 30 }}>
       <View style={{ width: '100%', alignItems: 'center' }}>
@@ -95,7 +95,7 @@ function App() {
       <SelectBox
         label="Select single"
         options={K_OPTIONS}
-        value={selectedLocations}
+        value={selectedTeam}
         onChange={onChange()}
         hideInputFilter={false}
       />
@@ -104,7 +104,7 @@ function App() {
       <SelectBox
         label="Select multiple"
         options={K_OPTIONS}
-        selectedValues={selectedValues}
+        selectedValues={selectedTeams}
         onMultiSelect={onMultiChange()}
         onTapClose={onMultiChange()}
         isMulti
@@ -113,15 +113,16 @@ function App() {
   )
 
   function onMultiChange() {
-    return item => setSelectedValues(xorBy(selectedValues, [item], 'id'))
+    return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
   }
 
   function onChange() {
-    return val => setSelectedLocations(val)
+    return (val) => setSelectedTeam(val)
   }
 }
 
 export default App
+
 
 ```
 
@@ -147,6 +148,9 @@ export default App
 | multiListEmptyLabelStyle  | style object |                                                                                                                                                        Default style |
 | listEmptyLabelStyle       | style object |                                                                                                                                                        Default style |
 | selectedItemStyle         | style object |                                                                                                                                                        Default style |
+| arrowIconColor         | color string |                                                                                                                                                        Default primary color |
+| searchIconColor         | color string |                                                                                                                                                        Default primary color |
+| toggleIconColor         | color string |                                                                                                                                                        Default primary color |
 | options                   |    array     | `[{ item: 'Juventus', id: 'JUVE'},{ item: 'Real Madrid', id: 'RM'},{ item: 'Barcelona', id: 'BR'},{ item: 'PSG', id: 'PSG'},{ item: 'FC Bayern Munich', id: 'FBM'}]` |
 
 ## Want to be a contributor? 👷🏼‍♂️👷🏼‍♀️
