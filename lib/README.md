@@ -22,7 +22,7 @@ or
 ```
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import SelectBox from 'import SelectBox from 'react-native-multi-selectbox''
+import SelectBox from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
 
 // Options data must contain 'item' & 'id' keys
