@@ -148,6 +148,8 @@ export default App
 | multiListEmptyLabelStyle  | style object |                                                                                                                                                        Default style |
 | listEmptyLabelStyle       | style object |                                                                                                                                                        Default style |
 | selectedItemStyle         | style object |                                                                                                                                                        Default style |
+searchInputProps         | object |                                                                                                                                                        Default props |
+multiSelectInputFieldProps         | object |                                                                                                                                                        Default props |
 | arrowIconColor         | color string |                                                                                                                                                        Default primary color |
 | searchIconColor         | color string |                                                                                                                                                        Default primary color |
 | toggleIconColor         | color string |                                                                                                                                                        Default primary color |

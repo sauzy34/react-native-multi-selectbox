@@ -11,7 +11,7 @@ const K_OPTIONS = [
     id: 'JUVE',
   },
   {
-    item: 'Real Madrid Real Madrid Real Madrid Real Madrid',
+    item: 'Real Madrid',
     id: 'RM',
   },
   {
