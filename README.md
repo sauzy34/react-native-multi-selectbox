@@ -150,6 +150,7 @@ export default App
 | selectedItemStyle         | style object |                                                                                                                                                        Default style |
 searchInputProps         | object |                                                                                                                                                        Default props |
 multiSelectInputFieldProps         | object |                                                                                                                                                        Default props |
+| listOptionProps          | object |      Default props |
 | arrowIconColor         | color string |                                                                                                                                                        Default primary color |
 | searchIconColor         | color string |                                                                                                                                                        Default primary color |
 | toggleIconColor         | color string |                                                                                                                                                        Default primary color |
