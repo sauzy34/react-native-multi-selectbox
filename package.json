@@ -8,18 +8,17 @@
     "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
   },
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "android": "npm run build && react-native run-android",
+    "ios": "npm run build && react-native run-ios",
+    "start": "npm run build && react-native start",
     "test": "jest",
-    "lint": "eslint **/*.js --fix",
-    "prettier": "prettier **/*.js"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "build": "tsc",
+    "prettier": "prettier {,*/**/}*.{js,jsx,ts,tsx}"
   },
   "dependencies": {
-    "lodash": "^4.17.19",
     "react": "16.13.1",
     "react-native": "0.63.3",
-    "react-native-multi-selectbox": "^1.4.1",
     "react-native-svg": "^12.1.0"
   },
   "peerDependencies": {
@@ -29,17 +28,20 @@
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^1.1.0",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
+    "@types/react": "^17.0.3",
+    "@types/react-native": "^0.64.2",
+    "@types/react-test-renderer": "^17.0.1",
     "babel-jest": "^25.1.0",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint": "^7.14.0",
     "jest": "^25.1.0",
+    "lodash": "^4.17.21",
     "metro-react-native-babel-preset": "^0.59.0",
-    "prettier": "^2.1.2",
-    "react-test-renderer": "16.13.1"
+    "prettier": "^2.2.1",
+    "react-test-renderer": "16.13.1",
+    "typescript": "^3.8.3"
   },
   "jest": {
     "preset": "react-native"

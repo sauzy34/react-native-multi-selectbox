@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
+import React, {useState} from 'react';
+import {Text, View, StyleSheet} from 'react-native';
+import SelectBox from './dist';
+import {xorBy} from 'lodash';
 
 // Options data must contain 'item' & 'id' keys
 
@@ -59,17 +59,38 @@ const K_OPTIONS = [
     item: 'Leicester City FC',
     id: 'LEI',
   },
-]
+];
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 30,
+  },
+  titleContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 30,
+    paddingBottom: 20,
+  },
+  label: {
+    fontSize: 20,
+    paddingBottom: 10,
+  },
+  spacer: {
+    height: 40,
+  },
+});
 
 function App() {
-  const [selectedTeam, setSelectedTeam] = useState({})
-  const [selectedTeams, setSelectedTeams] = useState([])
+  const [selectedTeam, setSelectedTeam] = useState({});
+  const [selectedTeams, setSelectedTeams] = useState([]);
   return (
-    <View style={{ margin: 30 }}>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Demos</Text>
       </View>
-      <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
+      <Text style={styles.label}>Select Demo</Text>
       <SelectBox
         label="Select single"
         options={K_OPTIONS}
@@ -77,8 +98,8 @@ function App() {
         onChange={onChange()}
         hideInputFilter={false}
       />
-      <View style={{ height: 40 }} />
-      <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
+      <View style={styles.spacer} />
+      <Text style={styles.label}>MultiSelect Demo</Text>
       <SelectBox
         label="Select multiple"
         options={K_OPTIONS}
@@ -88,15 +109,15 @@ function App() {
         isMulti
       />
     </View>
-  )
+  );
 
   function onMultiChange() {
-    return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
+    return item => setSelectedTeams(xorBy(selectedTeams, [item], 'id'));
   }
 
   function onChange() {
-    return (val) => setSelectedTeam(val)
+    return val => setSelectedTeam(val);
   }
 }
 
-export default App
+export default App;
