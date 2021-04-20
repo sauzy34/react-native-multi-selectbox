@@ -130,6 +130,7 @@ export default App
 | ------------------------- | :----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | label                     |    String    |                                                                                                                                                                Label |
 | inputPlaceholder          |    string    |                                                                                                                                                                Label |
+| listEmptyText                     |    String    |                                                                                                                                                                "No results found" |
 | width                     |    string    |                                                                                                                                                               "100%" |
 | viewMargin                |    string    |                                                                                                                                                                "0px" |
 | isMulti                   |   boolean    |                                                                                                                                                                false |
