@@ -22,10 +22,6 @@
     "react-native-multi-selectbox": "^1.4.1",
     "react-native-svg": "^12.1.0"
   },
-  "peerDependencies": {
-    "lodash": ">= ^4.17.19",
-    "react-native-svg": ">= ^12.1.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/runtime": "^7.8.4",
