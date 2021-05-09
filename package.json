@@ -16,7 +16,7 @@
     "prettier": "prettier **/*.js"
   },
   "dependencies": {
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-multi-selectbox": "^1.4.1",
