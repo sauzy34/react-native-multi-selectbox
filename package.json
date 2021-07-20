@@ -18,7 +18,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "react": "16.13.1",
-    "react-native": "0.63.3",
+    "react-native": "0.64.1",
     "react-native-multi-selectbox": "^1.4.1",
     "react-native-svg": "^12.1.0"
   },
