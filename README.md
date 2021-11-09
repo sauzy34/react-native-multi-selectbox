@@ -105,8 +105,8 @@ function App() {
         label="Select multiple"
         options={K_OPTIONS}
         selectedValues={selectedTeams}
-        onMultiSelect={onMultiChange()}
-        onTapClose={onMultiChange()}
+        onMultiSelect={onMultiChange}
+        onTapClose={onMultiChange}
         isMulti
       />
     </View>
