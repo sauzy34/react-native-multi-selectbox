@@ -8,37 +8,52 @@
     "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
   },
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
     "test": "jest",
-    "lint": "eslint **/*.js --fix",
-    "prettier": "prettier **/*.js"
+    "lint": "eslint **/*.{js,ts,tsx} --fix",
+    "prettier": "prettier **/*.{js,ts,tsx}",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "react": "16.13.1",
-    "react-native": "0.64.1",
-    "react-native-multi-selectbox": "^1.4.1",
-    "react-native-svg": "^12.1.0"
+    "expo": "~52.0.0",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.5",
+    "react-native-svg": "^15.8.0",
+    "react-native-web": "~0.19.13",
+    "@expo/metro-runtime": "~4.0.1",
+    "react-native-multi-selectbox": "file:./lib"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^1.1.0",
-    "babel-jest": "^25.1.0",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "jest": "^25.1.0",
-    "metro-react-native-babel-preset": "^0.59.0",
-    "prettier": "^2.1.2",
-    "react-test-renderer": "16.13.1"
+    "@babel/core": "^7.25.0",
+    "@expo/cli": "^0.18.0",
+    "@types/react": "~18.3.12",
+    "@types/react-native": "^0.73.0",
+    "babel-preset-expo": "~12.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "jest": "^29.7.0",
+    "jest-expo": "~52.0.0",
+    "prettier": "^3.3.0",
+    "react-test-renderer": "18.3.1",
+    "typescript": "~5.3.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "jest-expo"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "react-native-safe-area-context"
+      ]
+    }
   },
   "bugs": {
     "url": "https://github.com/sauzy34/react-native-multi-selectbox/issues"

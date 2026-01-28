@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
+import SelectBox, { Option } from 'react-native-multi-selectbox'
 
 // Options data must contain 'item' & 'id' keys
 
-const K_OPTIONS = [
+const K_OPTIONS: Option[] = [
   {
     item: 'Juventus',
     id: 'JUVE',
@@ -62,10 +61,10 @@ const K_OPTIONS = [
 ]
 
 function App() {
-  const [selectedTeam, setSelectedTeam] = useState({})
-  const [selectedTeams, setSelectedTeams] = useState([])
+  const [selectedTeam, setSelectedTeam] = useState<Option | null>(null)
+  const [selectedTeams, setSelectedTeams] = useState<Option[]>([])
   return (
-    <View style={{ margin: 30 }}>
+    <View style={{ margin: 30, backgroundColor: '#f0f0f0' }}>
       <View style={{ width: '100%', alignItems: 'center' }}>
         <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
       </View>
@@ -91,12 +90,17 @@ function App() {
   )
 
   function onMultiChange() {
-    return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
+    return (item: Option) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
   }
 
   function onChange() {
-    return (val) => setSelectedTeam(val)
+    return (val: Option) => setSelectedTeam(val)
   }
+}
+
+const xorBy = <T,>(array: T[], items: T[], key: keyof T): T[] => {
+  const ids = new Set(items.map(i => i[key]))
+  return array.filter(a => !ids.has(a[key])).concat(items.filter(i => !array.some(a => a[key] === i[key])))
 }
 
 export default App

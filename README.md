@@ -3,11 +3,17 @@
 [![npm version](https://badge.fury.io/js/react-native-multi-selectbox.svg)](https://badge.fury.io/js/react-native-multi-selectbox)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-multi-selectbox.svg?style=flat-square)](https://www.npmjs.com/package/react-native-multi-selectbox)
 
-Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms.
+Platform independent (Android / iOS / Web) Selectbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms. Now supports Expo with TypeScript.
 
 ![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
 
 ## Getting started
+
+### Prerequisites
+
+- Expo SDK 52+
+- React Native 0.76+
+- React 18+
 
 ### How to install 🎹
 
@@ -17,17 +23,20 @@ or
 
 ### `yarn add react-native-multi-selectbox`
 
+Also install peer dependencies:
+
+### `npm install react-native-svg`
+
 ### Usage 𖣠
 
-```
+```tsx
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
+import SelectBox, { Option } from 'react-native-multi-selectbox'
 
 // Options data must contain 'item' & 'id' keys
 
-const K_OPTIONS = [
+const K_OPTIONS: Option[] = [
   {
     item: 'Juventus',
     id: 'JUVE',
@@ -76,7 +85,6 @@ const K_OPTIONS = [
     item: 'Arsenal FC',
     id: 'ARS',
   },
-
   {
     item: 'Leicester City FC',
     id: 'LEI',
@@ -84,8 +92,8 @@ const K_OPTIONS = [
 ]
 
 function App() {
-  const [selectedTeam, setSelectedTeam] = useState({})
-  const [selectedTeams, setSelectedTeams] = useState([])
+  const [selectedTeam, setSelectedTeam] = useState<Option | null>(null)
+  const [selectedTeams, setSelectedTeams] = useState<Option[]>([])
   return (
     <View style={{ margin: 30 }}>
       <View style={{ width: '100%', alignItems: 'center' }}>
@@ -96,7 +104,7 @@ function App() {
         label="Select single"
         options={K_OPTIONS}
         value={selectedTeam}
-        onChange={onChange()}
+        onChange={onChange}
         hideInputFilter={false}
       />
       <View style={{ height: 40 }} />
@@ -105,57 +113,84 @@ function App() {
         label="Select multiple"
         options={K_OPTIONS}
         selectedValues={selectedTeams}
-        onMultiSelect={onMultiChange()}
-        onTapClose={onMultiChange()}
+        onMultiSelect={onMultiChange}
+        onTapClose={onMultiChange}
         isMulti
       />
     </View>
   )
 
-  function onMultiChange() {
-    return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
+  function onMultiChange(item: Option) {
+    const updated = selectedTeams.some(selected => selected.id === item.id)
+      ? selectedTeams.filter(selected => selected.id !== item.id)
+      : [...selectedTeams, item]
+    setSelectedTeams(updated)
   }
 
-  function onChange() {
-    return (val) => setSelectedTeam(val)
+  function onChange(val: Option) {
+    setSelectedTeam(val)
   }
 }
 
 export default App
-
-
 ```
 
-| Prop                      |     Type     |                                                                                                                                                        Default Value |
-| ------------------------- | :----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| label                     |    String    |                                                                                                                                                                Label |
-| inputPlaceholder          |    string    |                                                                                                                                                                Label |
-| listEmptyText                     |    String    |                                                                                                                                                                "No results found" |
-| width                     |    string    |                                                                                                                                                               "100%" |
-| viewMargin                |    string    |                                                                                                                                                                "0px" |
-| isMulti                   |   boolean    |                                                                                                                                                                false |
-| hideInputFilter           |   boolean    |                                                                                                                                                                 true |
-| selectedValues            |    array     |                                                                                                                                                                   [] |
-| value                     |    array     |                                                                                                                                                                   [] |
-| selectIcon                |  component   |                                                                                                                                          <Icon name={'downArrow'} /> |
-| labelStyle                | style object |                                                                                                                                                        Default style |
-| containerStyle            | style object |                                                                                                                                                        Default style |
-| inputFilterContainerStyle | style object |                                                                                                                                                        Default style |
-| inputFilterStyle          | style object |                                                                                                                                                        Default style |
-| optionsLabelStyle         | style object |                                                                                                                                                        Default style |
-| optionContainerStyle      | style object |                                                                                                                                                        Default style |
-| multiOptionContainerStyle | style object |                                                                                                                                                        Default style |
-| multiOptionsLabelStyle    | style object |                                                                                                                                                        Default style |
-| multiListEmptyLabelStyle  | style object |                                                                                                                                                        Default style |
-| listEmptyLabelStyle       | style object |                                                                                                                                                        Default style |
-| selectedItemStyle         | style object |                                                                                                                                                        Default style |
-searchInputProps         | object |                                                                                                                                                        Default props |
-multiSelectInputFieldProps         | object |                                                                                                                                                        Default props |
-| listOptionProps          | object |      Default props |
-| arrowIconColor         | color string |                                                                                                                                                        Default primary color |
-| searchIconColor         | color string |                                                                                                                                                        Default primary color |
-| toggleIconColor         | color string |                                                                                                                                                        Default primary color |
-| options                   |    array     | `[{ item: 'Juventus', id: 'JUVE'},{ item: 'Real Madrid', id: 'RM'},{ item: 'Barcelona', id: 'BR'},{ item: 'PSG', id: 'PSG'},{ item: 'FC Bayern Munich', id: 'FBM'}]` |
+### Expo Web Demo
+
+To run the demo on web:
+
+```bash
+npm install
+npm run web
+```
+
+## Props
+
+| Prop                      | Type                          | Default Value                                                                 | Description |
+|---------------------------|-------------------------------|-------------------------------------------------------------------------------|-------------|
+| `label`                   | `string`                      | `'Label'`                                                                    | The label text displayed above the select box. |
+| `inputPlaceholder`        | `string`                      | `'Select'`                                                                   | Placeholder text for the input filter. |
+| `listEmptyText`           | `string`                      | `'No results found'`                                                         | Text displayed when no options match the search. |
+| `width`                   | `string \| number`            | `'100%'`                                                                     | Width of the select box container. |
+| `isMulti`                 | `boolean`                     | `false`                                                                      | Enables multi-select mode. |
+| `hideInputFilter`         | `boolean`                     | `true`                                                                       | Hides the search input filter. |
+| `selectedValues`          | `Option[]`                    | `[]`                                                                         | Array of selected options for multi-select. |
+| `value`                   | `Option \| null`              | `null`                                                                       | Selected option for single select. |
+| `selectIcon`              | `React.ReactNode`             | `<Icon name='downArrow' />`                                                  | Custom icon for the select dropdown. |
+| `labelStyle`              | `TextStyle`                   | Default style                                                                | Style for the label text. |
+| `containerStyle`          | `ViewStyle`                   | Default style                                                                | Style for the main container. |
+| `inputFilterContainerStyle` | `ViewStyle`                 | Default style                                                                | Style for the input filter container. |
+| `inputFilterStyle`        | `TextStyle`                   | Default style                                                                | Style for the input filter text. |
+| `optionsLabelStyle`       | `TextStyle`                   | Default style                                                                | Style for option labels. |
+| `optionContainerStyle`    | `ViewStyle`                   | Default style                                                                | Style for individual option containers. |
+| `multiOptionContainerStyle` | `ViewStyle`                 | Default style                                                                | Style for multi-select option containers. |
+| `multiOptionsLabelStyle`  | `TextStyle`                   | Default style                                                                | Style for multi-select option labels. |
+| `multiListEmptyLabelStyle`| `TextStyle`                   | Default style                                                                | Style for empty multi-select list. |
+| `listEmptyLabelStyle`     | `TextStyle`                   | Default style                                                                | Style for empty options list. |
+| `selectedItemStyle`       | `TextStyle`                   | Default style                                                                | Style for selected item text. |
+| `searchInputProps`        | `TextInputProps`              | Default props                                                                | Props for the search input. |
+| `multiSelectInputFieldProps` | `FlatListProps<Option>`     | Default props                                                                | Props for the multi-select FlatList. |
+| `listOptionProps`         | `FlatListProps<Option>`       | Default props                                                                | Props for the options FlatList. |
+| `arrowIconColor`          | `string`                      | Primary color                                                                | Color for the arrow icon. |
+| `searchIconColor`         | `string`                      | Primary color                                                                | Color for the search icon. |
+| `toggleIconColor`         | `string`                      | Primary color                                                                | Color for the toggle icons. |
+| `options`                 | `Option[]`                    | Default options                                                              | Array of selectable options. |
+| `onChange`                | `(option: Option) => void`    | -                                                                           | Callback for single select changes. |
+| `onMultiSelect`          | `(option: Option) => void`    | -                                                                           | Callback for multi-select additions. |
+| `onTapClose`              | `(option: Option) => void`    | -                                                                           | Callback for removing multi-select items. |
+
+## Types
+
+```tsx
+export interface Option {
+  item: string
+  id: string
+}
+
+export interface SelectBoxProps {
+  // See the props table for full details
+}
+```
 
 ## Want to be a contributor? 👷🏼‍♂️👷🏼‍♀️
 

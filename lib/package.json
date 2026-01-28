@@ -1,18 +1,26 @@
 {
   "name": "react-native-multi-selectbox",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
   },
   "peerDependencies": {
-    "lodash": "^4.17.19",
-    "react-native-svg": "^12.1.0"
+    "react-native-svg": "^15.8.0",
+    "react": "*",
+    "react-native": "*"
   },
-  "main": "index.js",
+  "main": "index.tsx",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/react": "~18.3.12",
+    "@types/react-native": "^0.73.0",
+    "typescript": "~5.3.0"
   },
   "keywords": [
     "react-native-select",

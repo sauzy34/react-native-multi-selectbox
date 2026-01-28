@@ -1,8 +1,18 @@
 import React, { memo } from 'react'
 import { View } from 'react-native'
-import Svg, { Path, G, Ellipse, Polygon, Circle } from 'react-native-svg'
+import Svg, { Path, G, Ellipse, Polygon, Circle, SvgProps } from 'react-native-svg'
 
-const Icon = ({ name, fill, width, height, viewBox, ...otherProps }) => {
+export type IconName = 'downArrow' | 'upArrow' | 'deleteCircle' | 'searchBoxIcon' | 'addCircle' | 'closeCircle'
+
+interface IconProps {
+  name: IconName
+  fill?: string
+  width?: number
+  height?: number
+  viewBox?: string
+}
+
+const Icon: React.FC<IconProps & Omit<SvgProps, keyof IconProps>> = ({ name, fill, width, height, viewBox, ...otherProps }) => {
   const graphics = {
     downArrow: {
       width: 12,

@@ -1,4 +1,17 @@
 {
-  "name": "ReactCore",
-  "displayName": "ReactCore"
+  "expo": {
+    "name": "ReactCore",
+    "slug": "reactcore",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {},
+    "web": {}
+  }
 }
