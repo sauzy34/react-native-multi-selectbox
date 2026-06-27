@@ -1,9 +1,32 @@
-import React, { memo } from 'react'
-import { View } from 'react-native'
-import Svg, { Path, G, Ellipse, Polygon, Circle } from 'react-native-svg'
+import { memo, type ReactElement } from 'react'
+import { View, type ViewProps } from 'react-native'
+import Svg, { Path, G, Ellipse, Polygon, Circle, type SvgProps } from 'react-native-svg'
 
-const Icon = ({ name, fill, width, height, viewBox, ...otherProps }) => {
-  const graphics = {
+export type IconName =
+  | 'downArrow'
+  | 'upArrow'
+  | 'deleteCircle'
+  | 'searchBoxIcon'
+  | 'addCircle'
+  | 'closeCircle'
+
+export type IconProps = {
+  name: IconName
+  fill?: string
+  width?: number
+  height?: number
+  viewBox?: string
+} & Omit<SvgProps, 'width' | 'height' | 'viewBox'>
+
+type GraphicDef = {
+  width: number
+  height: number
+  viewBox: string
+  content: ReactElement
+}
+
+function Icon({ name, fill, width, height, viewBox, ...otherProps }: IconProps) {
+  const graphics: Record<IconName, GraphicDef> = {
     downArrow: {
       width: 12,
       height: 9,
@@ -51,7 +74,6 @@ const Icon = ({ name, fill, width, height, viewBox, ...otherProps }) => {
         </G>
       ),
     },
-
     addCircle: {
       width: 22,
       height: 22,
@@ -87,16 +109,18 @@ const Icon = ({ name, fill, width, height, viewBox, ...otherProps }) => {
     },
   }
 
+  const graphic = graphics[name]
+
   return (
-    <View pointerEvents="none">
+    <View pointerEvents="none" {...({} as ViewProps)}>
       <Svg
-        width={width || graphics[name].width}
-        height={height || graphics[name].height}
-        viewBox={viewBox || graphics[name].viewBox}
+        width={width ?? graphic.width}
+        height={height ?? graphic.height}
+        viewBox={viewBox ?? graphic.viewBox}
         x={0}
         y={0}
         {...otherProps}>
-        {graphics[name].content}
+        {graphic.content}
       </Svg>
     </View>
   )

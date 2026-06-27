@@ -58,7 +58,7 @@ export default function App() {
         selectedValues={selectedTeams}
         onMultiSelect={onMultiChange}
         onTapClose={onMultiChange}
-        isMulti
+        isMulti={true}
       />
     </ScrollView>
   )

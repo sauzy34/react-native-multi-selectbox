@@ -46,10 +46,10 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "lodash": "*",
-    "react": "*",
-    "react-native": "*",
-    "react-native-svg": "*"
+    "lodash": ">=4.17.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.73.0",
+    "react-native-svg": ">=13.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",

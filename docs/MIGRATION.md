@@ -236,11 +236,12 @@ Must all be true before calling the migration complete (Phase 8):
 - [ ] Interactive Fast Refresh QA (optional local)
 
 ### Phase 4 — TypeScript + full type-safety
-- [~] Interim `SelectBox.d.ts` + `SelectOption` / `SelectBoxProps` (not full discriminated unions yet)
-- [ ] Convert components to TS
-- [x] Export types from entry (`SelectOption`, `SelectBoxProps`)
-- [x] Typecheck package + example clean
-- [~] PeerDependencies include `lodash`, `react`, `react-native`, `react-native-svg` (finalize ranges in Phase 4)
+- [x] `src/types.ts` — `SelectOption`, shared props, **discriminated** `SelectBoxSingleProps` | `SelectBoxMultiProps`
+- [x] Convert `SelectBox`, `Icon`, `Toggle`, `Colors` to `.tsx` / `.ts` (removed legacy `.js` / ambient `.d.ts`)
+- [x] Export types from entry (`SelectOption`, `SelectBoxProps`, single/multi variants)
+- [x] Typecheck package + example clean; iOS `expo export` OK
+- [x] PeerDependencies ranges: `react>=18`, `react-native>=0.73`, `react-native-svg>=13`, `lodash>=4.17`
+- [x] Runtime `options` / `selectedValues` normalized with `Array.isArray` (guards non-array)
 
 ### Phase 5 — Testing architecture
 - [ ] Jest + jest-expo + RNTL in package
@@ -278,7 +279,7 @@ Must all be true before calling the migration complete (Phase 8):
 | 1 Monorepo skeleton | **Done** | 2026-06-27 | pnpm workspaces; placeholders; strict `tsconfig.base.json` |
 | 2 Expo example | **Done** | 2026-06-27 | SDK 56 / RN 0.85.3 / React 19.2.3; iOS `expo export` OK |
 | 3 Extract package | **Done** | 2026-06-27 | `/lib` deleted; `packages/multi-selectbox` sole source |
-| 4 TypeScript | **Partial** | 2026-06-27 | Ambient `.d.ts` only; JS implementation |
+| 4 TypeScript | **Done** | 2026-06-27 | Full TS modules + discriminated `SelectBoxProps` |
 | 5 Testing | Not started | | |
 | 6 Stability fixes | Not started | | |
 | 7 Cleanup & DX | Not started | | |
@@ -288,15 +289,15 @@ Must all be true before calling the migration complete (Phase 8):
 
 ## Next action
 
-**Start Phase 4:** convert `SelectBox.js` / components to TypeScript, discriminated `SelectBoxProps`, drop reliance on ambient-only types. Do not delete `android/` / `ios/` until Phase 7.
+**Start Phase 5:** Jest + jest-expo + RNTL library tests (render, single/multi, filter, options guard, controlled values). Do not delete `android/` / `ios/` until Phase 7.
 
-### Phase 3 commands (verified)
+### Phase 4 commands (verified)
 
 ```bash
 pnpm install
 pnpm typecheck
-test ! -d lib                  # legacy library tree must not exist
-pnpm example                   # expo start (interactive)
+# sources are .ts/.tsx only under packages/multi-selectbox/src
+pnpm example
 pnpm --filter @rn-multi-selectbox/example exec expo export --platform ios --output-dir /tmp/out
 ```
 

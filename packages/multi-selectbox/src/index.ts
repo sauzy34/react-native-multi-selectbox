@@ -1,10 +1,13 @@
 /**
  * Public entry for `react-native-multi-selectbox`.
- * Single source of truth: `packages/multi-selectbox/src` (legacy root `/lib` removed in Phase 3).
- * Implementation is still JS; Phase 4 converts modules to TypeScript with full prop types.
+ * TypeScript implementation (Phase 4); source of truth: `packages/multi-selectbox/src`.
  */
-import SelectBox from './SelectBox'
-
-export default SelectBox
-export { SelectBox }
-export type { SelectBoxProps, SelectOption } from './SelectBox'
+export { default } from './SelectBox'
+export { default as SelectBox } from './SelectBox'
+export type {
+  SelectBoxProps,
+  SelectBoxSharedProps,
+  SelectBoxSingleProps,
+  SelectBoxMultiProps,
+  SelectOption,
+} from './types'
