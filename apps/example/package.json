@@ -10,8 +10,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node -e \"console.log('[@rn-multi-selectbox/example] test: deferred until Phase 5')\"",
-    "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] test:ci: deferred until Phase 5')\"",
+    "test": "node -e \"require('react-native-multi-selectbox'); console.log('[@rn-multi-selectbox/example] package resolves')\"",
+    "test:ci": "node -e \"require('react-native-multi-selectbox'); console.log('[@rn-multi-selectbox/example] package resolves')\"",
     "lint": "node -e \"console.log('[@rn-multi-selectbox/example] lint: deferred until Phase 7')\""
   },
   "dependencies": {

@@ -11,3 +11,4 @@ export type {
   SelectBoxMultiProps,
   SelectOption,
 } from './types'
+export { TEST_IDS } from './testIDs'

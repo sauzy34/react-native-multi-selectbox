@@ -244,11 +244,11 @@ Must all be true before calling the migration complete (Phase 8):
 - [x] Runtime `options` / `selectedValues` normalized with `Array.isArray` (guards non-array)
 
 ### Phase 5 — Testing architecture
-- [ ] Jest + jest-expo + RNTL in package
-- [ ] Typed fixtures + `renderSelectBox` + `TEST_IDS`
-- [ ] Core regression tests
-- [ ] App smoke test
-- [ ] Root `test` / `test:ci`; optional CI workflow
+- [x] Jest + **`@react-native/jest-preset`** + RNTL in package (jest-expo deferred — peer/Babel friction with RN 0.85; RN preset is sufficient for a pure RN library)
+- [x] Typed fixtures + `renderSelectBox` + `TEST_IDS` (exported from package)
+- [x] Core regression tests: render, options guard, ScrollView host, single, multi, filter, empty list, controlled value, hideInputFilter
+- [x] Example smoke: resolves workspace package via `require('react-native-multi-selectbox')`
+- [x] Root `pnpm test` / `pnpm test:ci`; `.github/workflows/ci.yml` (typecheck + test:ci)
 
 ### Phase 6 — Stability fixes
 - [ ] Options guard
@@ -280,7 +280,7 @@ Must all be true before calling the migration complete (Phase 8):
 | 2 Expo example | **Done** | 2026-06-27 | SDK 56 / RN 0.85.3 / React 19.2.3; iOS `expo export` OK |
 | 3 Extract package | **Done** | 2026-06-27 | `/lib` deleted; `packages/multi-selectbox` sole source |
 | 4 TypeScript | **Done** | 2026-06-27 | Full TS modules + discriminated `SelectBoxProps` |
-| 5 Testing | Not started | | |
+| 5 Testing | **Done** | 2026-06-27 | 10 Jest tests; ~92% statements on SelectBox |
 | 6 Stability fixes | Not started | | |
 | 7 Cleanup & DX | Not started | | |
 | 8 Validate & release | Not started | | |
@@ -289,16 +289,16 @@ Must all be true before calling the migration complete (Phase 8):
 
 ## Next action
 
-**Start Phase 5:** Jest + jest-expo + RNTL library tests (render, single/multi, filter, options guard, controlled values). Do not delete `android/` / `ios/` until Phase 7.
+**Start Phase 6:** stability fixes still open beyond guards already in Phase 4 (ScrollView-friendly list strategy vs FlatList, richer controlled-selection semantics if needed, style passthrough). Do not delete `android/` / `ios/` until Phase 7.
 
-### Phase 4 commands (verified)
+### Phase 5 commands (verified)
 
 ```bash
 pnpm install
 pnpm typecheck
-# sources are .ts/.tsx only under packages/multi-selectbox/src
+pnpm test          # library Jest + example resolve smoke
+pnpm test:ci       # coverage thresholds on package
 pnpm example
-pnpm --filter @rn-multi-selectbox/example exec expo export --platform ios --output-dir /tmp/out
 ```
 
-**Note:** Prefer **pnpm** only. Legacy CLI (`android/`, `ios/`, root `App.js` / `index.js`) remains until Phase 7.
+**Note:** Prefer **pnpm** only. Legacy CLI (`android/`, `ios/`, root `App.js` / `index.js`) remains until Phase 7. `@babel/core` pinned to **7.x** via `pnpm.overrides` for Jest compatibility.

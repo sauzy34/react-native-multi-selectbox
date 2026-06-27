@@ -35,15 +35,20 @@
   },
   "files": [
     "src",
-    "README.md"
+    "README.md",
+    "!src/**/*.test.tsx",
+    "!src/**/*.test.ts",
+    "!src/test-utils/**",
+    "!jest.config.js"
   ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node -e \"console.log('[react-native-multi-selectbox] test: deferred until Phase 5')\"",
-    "test:ci": "node -e \"console.log('[react-native-multi-selectbox] test:ci: deferred until Phase 5')\"",
-    "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until Phase 4')\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until publish pipeline')\"",
     "lint": "node -e \"console.log('[react-native-multi-selectbox] lint: deferred until Phase 7')\"",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist coverage"
   },
   "peerDependencies": {
     "lodash": ">=4.17.0",
@@ -52,8 +57,20 @@
     "react-native-svg": ">=13.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@react-native/babel-preset": "0.85.3",
+    "@react-native/jest-preset": "0.85.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.20",
     "@types/react": "~19.2.2",
+    "babel-jest": "^30.4.1",
+    "jest": "^29.7.0",
+    "lodash": "^4.17.21",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-svg": "15.15.4",
+    "react-test-renderer": "19.2.3",
     "typescript": "~5.9.2"
   }
 }

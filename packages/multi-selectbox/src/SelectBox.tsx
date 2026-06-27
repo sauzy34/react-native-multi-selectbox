@@ -16,6 +16,7 @@ import Colors from './constants/Colors'
 import Icon from './components/Icon'
 import Toggle from './components/Toggle'
 import type { SelectBoxProps, SelectOption } from './types'
+import { TEST_IDS } from './testIDs'
 
 const hitSlop = { top: 14, bottom: 14, left: 14, right: 14 } as const
 
@@ -124,7 +125,11 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       }
       return (
         <View style={kOptionContainerStyle}>
-          <TouchableOpacity hitSlop={hitSlop} style={renderItemStyle} onPress={onPressMulti}>
+          <TouchableOpacity
+            testID={TEST_IDS.option(item.id)}
+            hitSlop={hitSlop}
+            style={renderItemStyle}
+            onPress={onPressMulti}>
             {renderLabel(item.item)}
           </TouchableOpacity>
           <Toggle iconColor={toggleIconColor} checked={checked} onTouch={onPressMulti} />
@@ -139,7 +144,11 @@ function SelectBox(props: SelectBoxProps): ReactElement {
 
     return (
       <View style={kOptionContainerStyle}>
-        <TouchableOpacity hitSlop={hitSlop} style={renderItemStyle} onPress={onPressSingle}>
+        <TouchableOpacity
+          testID={TEST_IDS.option(item.id)}
+          hitSlop={hitSlop}
+          style={renderItemStyle}
+          onPress={onPressSingle}>
           {renderLabel(item.item)}
           <View />
         </TouchableOpacity>
@@ -169,7 +178,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       ...(multiOptionsLabelStyle as object),
     }
     return (
-      <View style={kMultiOptionContainerStyle}>
+      <View style={kMultiOptionContainerStyle} testID={TEST_IDS.multiChip(item.id)}>
         <Text style={kMultiOptionsLabelStyle}>{chipLabel}</Text>
         <TouchableOpacity
           style={{ marginLeft: 15 }}
@@ -189,6 +198,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     }
     return (
       <TouchableOpacity
+        testID={TEST_IDS.multiEmpty}
         style={{ flexGrow: 1, width: '100%' }}
         hitSlop={hitSlop}
         onPress={() => setShowOptions((open) => !open)}>
@@ -204,7 +214,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       ...(listEmptyLabelStyle as object),
     }
     return (
-      <View style={kOptionListViewStyle}>
+      <View style={kOptionListViewStyle} testID={TEST_IDS.listEmpty}>
         <Text style={kListEmptyLabelStyle}>{listEmptyText}</Text>
       </View>
     )
@@ -258,6 +268,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         {!hideInputFilter && (
           <View style={kInputFilterContainerStyle}>
             <TextInput
+              testID={TEST_IDS.filterInput}
               value={inputValue}
               placeholder={inputPlaceholder}
               onChangeText={setInputValue}
@@ -278,8 +289,10 @@ function SelectBox(props: SelectBoxProps): ReactElement {
   const { style: listOptionStyle, ...restListOptionProps } = listOptionProps
 
   return (
-    <View style={{ width }}>
-      <Text style={kLabelStyle}>{label}</Text>
+    <View style={{ width }} testID={TEST_IDS.root}>
+      <Text style={kLabelStyle} testID={TEST_IDS.label}>
+        {label}
+      </Text>
       <View style={kContainerStyle}>
         <View style={{ paddingRight: 20, flexGrow: 1 }}>
           {isMulti ? (
@@ -293,14 +306,20 @@ function SelectBox(props: SelectBoxProps): ReactElement {
               {...multiSelectInputFieldProps}
             />
           ) : (
-            <TouchableOpacity hitSlop={hitSlop} onPress={() => setShowOptions((open) => !open)}>
+            <TouchableOpacity
+              testID={TEST_IDS.singleTrigger}
+              hitSlop={hitSlop}
+              onPress={() => setShowOptions((open) => !open)}>
               <Text style={kSelectedItemStyleValue}>
                 {selectedItemText || inputPlaceholder || label}
               </Text>
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity onPress={() => setShowOptions((open) => !open)} hitSlop={hitSlop}>
+        <TouchableOpacity
+          testID={TEST_IDS.dropdownToggle}
+          onPress={() => setShowOptions((open) => !open)}
+          hitSlop={hitSlop}>
           {selectIcon ? (
             selectIcon
           ) : (
@@ -310,6 +329,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       </View>
       {showOptions && (
         <FlatList
+          testID={TEST_IDS.optionsList}
           data={filteredSuggestions}
           extraData={options}
           keyExtractor={keyExtractor}
