@@ -3,174 +3,150 @@
 [![npm version](https://badge.fury.io/js/react-native-multi-selectbox.svg)](https://badge.fury.io/js/react-native-multi-selectbox)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-multi-selectbox.svg?style=flat-square)](https://www.npmjs.com/package/react-native-multi-selectbox)
 
-Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms.
+Platform-independent (Android / iOS / **Expo**) select box, multi-select, and picker with a shared UI.
 
 ![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
 
+> **2.0 is developed in this monorepo** (`packages/multi-selectbox`, TypeScript).  
+> **npm 1.5.x** remains the last published line until **2.0** ships (see [docs/MIGRATION.md](./docs/MIGRATION.md)).
 
-> **Migration in progress (2.0 / Expo monorepo):** library source lives in [`packages/multi-selectbox`](./packages/multi-selectbox).  
-> Run the demo with **pnpm**: `pnpm install` then `pnpm example` ([`apps/example`](./apps/example), Expo SDK 56).  
-> Plan: [`docs/MIGRATION.md`](./docs/MIGRATION.md). Legacy RN CLI `android/` / `ios/` / root `App.js` are deprecated pending Phase 7 removal. Published **npm 1.5.x** is unchanged until **2.0** ships.
+## Monorepo layout
 
-
-## Getting started
-
-### How to install 🎹
-
-### `npm install react-native-multi-selectbox`
-
-or
-
-### `yarn add react-native-multi-selectbox`
-
-### Usage 𖣠
-
+```text
+apps/example/                 # Expo SDK 56 TypeScript demo
+packages/multi-selectbox/     # Library source (publishable package name)
+docs/MIGRATION.md             # Migration plan & phase log
 ```
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
-import SelectBox from 'react-native-multi-selectbox'
+
+## Develop (Expo demo)
+
+Requires **Node 20+** and **pnpm 10+**.
+
+```bash
+pnpm install
+pnpm example          # expo start — then press i / a
+pnpm typecheck
+pnpm test
+pnpm lint
+pnpm format           # Prettier write
+```
+
+Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-selectbox": "workspace:*"`.
+
+## Install in your app (consumers)
+
+```bash
+# npm / yarn / pnpm
+npm install react-native-multi-selectbox lodash
+
+# Expo (align SVG with your SDK)
+npx expo install react-native-svg
+
+# React Native CLI
+npm install react-native-svg
+# then follow react-native-svg install docs for your RN version
+```
+
+### Peer dependencies
+
+| Peer               | Notes                                      |
+| ------------------ | ------------------------------------------ |
+| `react`            | ≥ 18                                       |
+| `react-native`     | ≥ 0.73 (Expo SDK 50+ recommended)          |
+| `react-native-svg` | ≥ 13 — use `expo install` in Expo projects |
+| `lodash`           | ≥ 4.17                                     |
+
+## Usage
+
+Options **must** include `id` and `item`.
+
+```tsx
+import { useState } from 'react'
+import { View } from 'react-native'
+import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
 
-// Options data must contain 'item' & 'id' keys
-
-const K_OPTIONS = [
-  {
-    item: 'Juventus',
-    id: 'JUVE',
-  },
-  {
-    item: 'Real Madrid',
-    id: 'RM',
-  },
-  {
-    item: 'Barcelona',
-    id: 'BR',
-  },
-  {
-    item: 'PSG',
-    id: 'PSG',
-  },
-  {
-    item: 'FC Bayern Munich',
-    id: 'FBM',
-  },
-  {
-    item: 'Manchester United FC',
-    id: 'MUN',
-  },
-  {
-    item: 'Manchester City FC',
-    id: 'MCI',
-  },
-  {
-    item: 'Everton FC',
-    id: 'EVE',
-  },
-  {
-    item: 'Tottenham Hotspur FC',
-    id: 'TOT',
-  },
-  {
-    item: 'Chelsea FC',
-    id: 'CHE',
-  },
-  {
-    item: 'Liverpool FC',
-    id: 'LIV',
-  },
-  {
-    item: 'Arsenal FC',
-    id: 'ARS',
-  },
-
-  {
-    item: 'Leicester City FC',
-    id: 'LEI',
-  },
+const K_OPTIONS: SelectOption[] = [
+  { item: 'Juventus', id: 'JUVE' },
+  { item: 'Real Madrid', id: 'RM' },
+  { item: 'Barcelona', id: 'BR' },
 ]
 
-function App() {
-  const [selectedTeam, setSelectedTeam] = useState({})
-  const [selectedTeams, setSelectedTeams] = useState([])
+export function Demo() {
+  const [selectedTeam, setSelectedTeam] = useState<SelectOption | Record<string, never>>({})
+  const [selectedTeams, setSelectedTeams] = useState<SelectOption[]>([])
+
   return (
     <View style={{ margin: 30 }}>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <Text style={{ fontSize: 30, paddingBottom: 20 }}>Demos</Text>
-      </View>
-      <Text style={{ fontSize: 20, paddingBottom: 10 }}>Select Demo</Text>
       <SelectBox
         label="Select single"
         options={K_OPTIONS}
         value={selectedTeam}
-        onChange={onChange()}
-        hideInputFilter={false}
+        onChange={setSelectedTeam}
       />
-      <View style={{ height: 40 }} />
-      <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
       <SelectBox
         label="Select multiple"
         options={K_OPTIONS}
         selectedValues={selectedTeams}
-        onMultiSelect={onMultiChange()}
-        onTapClose={onMultiChange()}
-        isMulti
+        onMultiSelect={(item) => setSelectedTeams((prev) => xorBy(prev, [item], 'id'))}
+        onTapClose={(item) => setSelectedTeams((prev) => xorBy(prev, [item], 'id'))}
+        isMulti={true}
       />
     </View>
   )
-
-  function onMultiChange() {
-    return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
-  }
-
-  function onChange() {
-    return (val) => setSelectedTeam(val)
-  }
 }
-
-export default App
-
-
 ```
 
-| Prop                      |     Type     |                                                                                                                                                        Default Value |
-| ------------------------- | :----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| label                     |    String    |                                                                                                                                                                Label |
-| inputPlaceholder          |    string    |                                                                                                                                                                Label |
-| listEmptyText                     |    String    |                                                                                                                                                                "No results found" |
-| width                     |    string    |                                                                                                                                                               "100%" |
-| viewMargin                |    string    |                                                                                                                                                                "0px" |
-| isMulti                   |   boolean    |                                                                                                                                                                false |
-| hideInputFilter           |   boolean    |                                                                                                                                                                 true |
-| selectedValues            |    array     |                                                                                                                                                                   [] |
-| value                     |    array     |                                                                                                                                                                   [] |
-| selectIcon                |  component   |                                                                                                                                          <Icon name={'downArrow'} /> |
-| labelStyle                | style object |                                                                                                                                                        Default style |
-| containerStyle            | style object |                                                                                                                                                        Default style |
-| inputFilterContainerStyle | style object |                                                                                                                                                        Default style |
-| inputFilterStyle          | style object |                                                                                                                                                        Default style |
-| optionsLabelStyle         | style object |                                                                                                                                                        Default style |
-| optionContainerStyle      | style object |                                                                                                                                                        Default style |
-| multiOptionContainerStyle | style object |                                                                                                                                                        Default style |
-| multiOptionsLabelStyle    | style object |                                                                                                                                                        Default style |
-| multiListEmptyLabelStyle  | style object |                                                                                                                                                        Default style |
-| listEmptyLabelStyle       | style object |                                                                                                                                                        Default style |
-| selectedItemStyle         | style object |                                                                                                                                                        Default style |
-searchInputProps         | object |                                                                                                                                                        Default props |
-multiSelectInputFieldProps         | object |                                                                                                                                                        Default props |
-| listOptionProps          | object |      Default props |
-| arrowIconColor         | color string |                                                                                                                                                        Default primary color |
-| searchIconColor         | color string |                                                                                                                                                        Default primary color |
-| toggleIconColor         | color string |                                                                                                                                                        Default primary color |
-| options                   |    array     | `[{ item: 'Juventus', id: 'JUVE'},{ item: 'Real Madrid', id: 'RM'},{ item: 'Barcelona', id: 'BR'},{ item: 'PSG', id: 'PSG'},{ item: 'FC Bayern Munich', id: 'FBM'}]` |
+### Types
 
-## Want to be a contributor? 👷🏼‍♂️👷🏼‍♀️
+```ts
+import type {
+  SelectOption,
+  SelectBoxProps,
+  SelectBoxSingleProps,
+  SelectBoxMultiProps,
+} from 'react-native-multi-selectbox'
+```
 
-Check-in `develop` branch and submit a new pull-request
+`SelectBoxProps` is a **discriminated union** on `isMulti` (`true` → multi; omit/`false` → single).
 
-## Issues or feature request? ✍🏼
+### Props (overview)
 
-You can submit a request on https://github.com/sauzy34/react-native-multi-selectbox/issues
+| Prop                                              | Description                                                                 |
+| ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                               |
+| `value` / `onChange`                              | Single-select controlled value                                              |
+| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                |
+| `isMulti`                                         | `true` for multi mode                                                       |
+| `hideInputFilter`                                 | Hide search field in the dropdown                                           |
+| `listOptionProps`                                 | Extra props for the options **ScrollView** (safe inside parent ScrollViews) |
+| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                    |
+| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                     |
+| `*Style` props                                    | Label, container, options, chips, empty states, selected text               |
+| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                      |
+| `selectIcon`                                      | Custom dropdown icon node                                                   |
+| `searchInputProps`                                | Extra `TextInput` props for the filter                                      |
 
-## Support & Share 💆🏼‍♂️
+See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
 
-Please star the repository on Github to enhance the reach to more developers.
+## Scripts (root)
+
+| Script                       | Purpose                |
+| ---------------------------- | ---------------------- |
+| `pnpm example`               | Start Expo example     |
+| `pnpm typecheck`             | `tsc` in all packages  |
+| `pnpm test` / `pnpm test:ci` | Jest (library) + smoke |
+| `pnpm lint`                  | ESLint                 |
+| `pnpm format`                | Prettier write         |
+
+## Contributing
+
+1. Use **pnpm** and branch from the active migration branch if applicable.
+2. Library changes go in `packages/multi-selectbox`; exercise them via `pnpm example` and `pnpm test`.
+3. Follow [docs/MIGRATION.md](./docs/MIGRATION.md) for the 2.0 roadmap (Phase 8 = publish).
+
+Issues: https://github.com/sauzy34/react-native-multi-selectbox/issues
+
+## License
+
+MIT — see [LICENSE](./LICENSE).

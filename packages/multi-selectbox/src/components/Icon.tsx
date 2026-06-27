@@ -3,12 +3,7 @@ import { View, type ViewProps } from 'react-native'
 import Svg, { Path, G, Ellipse, Polygon, Circle, type SvgProps } from 'react-native-svg'
 
 export type IconName =
-  | 'downArrow'
-  | 'upArrow'
-  | 'deleteCircle'
-  | 'searchBoxIcon'
-  | 'addCircle'
-  | 'closeCircle'
+  'downArrow' | 'upArrow' | 'deleteCircle' | 'searchBoxIcon' | 'addCircle' | 'closeCircle'
 
 export type IconProps = {
   name: IconName
@@ -68,7 +63,13 @@ function Icon({ name, fill, width, height, viewBox, ...otherProps }: IconProps) 
       height: height || 16,
       viewBox: '0 0 18 16',
       content: (
-        <G fill="none" fillRule="evenodd" stroke={fill || '#0575E6'} strokeWidth="1.2" transform="translate(1.4 1.16)">
+        <G
+          fill="none"
+          fillRule="evenodd"
+          stroke={fill || '#0575E6'}
+          strokeWidth="1.2"
+          transform="translate(1.4 1.16)"
+        >
           <Ellipse cx="5.921" cy="6.178" rx="5.921" ry="6.178" />
           <Path d="M10.812 9.782L15.96 13.9" />
         </G>
@@ -79,7 +80,13 @@ function Icon({ name, fill, width, height, viewBox, ...otherProps }: IconProps) 
       height: 22,
       viewBox: '0 0 22 22',
       content: (
-        <G fill="none" fillRule="evenodd" stroke={fill || '#0575E6'} strokeWidth=".8" transform="translate(1 1)">
+        <G
+          fill="none"
+          fillRule="evenodd"
+          stroke={fill || '#0575E6'}
+          strokeWidth=".8"
+          transform="translate(1 1)"
+        >
           <Circle cx="10" cy="10" r="10" />
           <Path d="M10 3.2v12.903M16.451 9.651H3.55" />
         </G>
@@ -119,7 +126,8 @@ function Icon({ name, fill, width, height, viewBox, ...otherProps }: IconProps) 
         viewBox={viewBox ?? graphic.viewBox}
         x={0}
         y={0}
-        {...otherProps}>
+        {...otherProps}
+      >
         {graphic.content}
       </Svg>
     </View>

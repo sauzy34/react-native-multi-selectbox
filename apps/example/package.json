@@ -12,7 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
     "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
-    "lint": "node -e \"console.log('[@rn-multi-selectbox/example] lint: deferred until Phase 7')\""
+    "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\""
   },
   "dependencies": {
     "expo": "~56.0.12",

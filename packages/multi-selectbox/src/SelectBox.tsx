@@ -148,7 +148,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
             testID={TEST_IDS.option(item.id)}
             hitSlop={hitSlop}
             style={renderItemStyle}
-            onPress={onPressMulti}>
+            onPress={onPressMulti}
+          >
             {renderLabel(item.item)}
           </TouchableOpacity>
           <Toggle iconColor={toggleIconColor} checked={checked} onTouch={onPressMulti} />
@@ -168,7 +169,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
           testID={TEST_IDS.option(item.id)}
           hitSlop={hitSlop}
           style={renderItemStyle}
-          onPress={onPressSingle}>
+          onPress={onPressSingle}
+        >
           {renderLabel(item.item)}
           <View />
         </TouchableOpacity>
@@ -202,12 +204,17 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       multiOptionsLabelStyle,
     ]
     return (
-      <View key={String(item.id)} style={kMultiOptionContainerStyle} testID={TEST_IDS.multiChip(item.id)}>
+      <View
+        key={String(item.id)}
+        style={kMultiOptionContainerStyle}
+        testID={TEST_IDS.multiChip(item.id)}
+      >
         <Text style={kMultiOptionsLabelStyle}>{chipLabel}</Text>
         <TouchableOpacity
           style={{ marginLeft: 15 }}
           hitSlop={hitSlop}
-          onPress={() => onTapClose?.(item)}>
+          onPress={() => onTapClose?.(item)}
+        >
           <Icon name="closeCircle" fill="#fff" width={21} height={21} />
         </TouchableOpacity>
       </View>
@@ -227,7 +234,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         testID={TEST_IDS.multiEmpty}
         style={{ flexGrow: 1, width: '100%' }}
         hitSlop={hitSlop}
-        onPress={toggleOptions}>
+        onPress={toggleOptions}
+      >
         <Text style={kMultiListEmptyLabelStyle}>{inputPlaceholder}</Text>
       </TouchableOpacity>
     )
@@ -344,7 +352,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
                 keyboardShouldPersistTaps={multiKbdTaps}
                 style={multiFieldStyle}
                 contentContainerStyle={[{ alignItems: 'center' }, multiFieldContentStyle]}
-                {...restMultiFieldProps}>
+                {...restMultiFieldProps}
+              >
                 {selectedValues.map(renderChip)}
               </ScrollView>
             )
@@ -352,7 +361,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
             <TouchableOpacity
               testID={TEST_IDS.singleTrigger}
               hitSlop={hitSlop}
-              onPress={toggleOptions}>
+              onPress={toggleOptions}
+            >
               <Text style={kSelectedItemStyleValue}>
                 {selectedItemText || inputPlaceholder || label}
               </Text>
@@ -362,7 +372,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         <TouchableOpacity
           testID={TEST_IDS.dropdownToggle}
           onPress={toggleOptions}
-          hitSlop={hitSlop}>
+          hitSlop={hitSlop}
+        >
           {selectIcon ? (
             selectIcon
           ) : (
@@ -377,7 +388,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
           contentContainerStyle={listContentStyle}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
           nestedScrollEnabled={nestedScrollEnabled}
-          {...restListOptionProps}>
+          {...restListOptionProps}
+        >
           {!hideInputFilter && (
             <View style={kInputFilterContainerStyle}>
               <TextInput

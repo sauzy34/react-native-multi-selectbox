@@ -47,7 +47,7 @@
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --coverage --maxWorkers=2",
     "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until publish pipeline')\"",
-    "lint": "node -e \"console.log('[react-native-multi-selectbox] lint: deferred until Phase 7')\"",
+    "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\"",
     "clean": "rm -rf dist coverage"
   },
   "peerDependencies": {

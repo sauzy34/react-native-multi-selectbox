@@ -21,9 +21,20 @@
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "pnpm -r --if-present run test",
     "test:ci": "pnpm -r --if-present run test:ci",
-    "lint": "pnpm -r --if-present run lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "pnpm -r --if-present run build",
     "clean": "pnpm -r --if-present run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.26.1"
   },
   "keywords": [
     "react-native-select",

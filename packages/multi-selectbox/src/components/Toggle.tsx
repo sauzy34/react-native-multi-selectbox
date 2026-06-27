@@ -14,7 +14,8 @@ function Toggle({ onTouch, checked = false, iconColor = Colors.primary, ...props
     <TouchableOpacity
       onPress={onTouch}
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      {...props}>
+      {...props}
+    >
       <Icon name={checked ? 'deleteCircle' : 'addCircle'} fill={iconColor} />
     </TouchableOpacity>
   )
