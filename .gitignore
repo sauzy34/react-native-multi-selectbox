@@ -1,9 +1,7 @@
 # OSX
-#
 .DS_Store
 
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -21,39 +19,66 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-# Android/IntelliJ
-#
+# Android / IntelliJ
 build/
 .idea
 .gradle
 local.properties
 *.iml
+.cxx/
 
-# node.js
-#
+# Node / package managers
 node_modules/
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Legacy lockfiles (pnpm is the monorepo package manager)
+# Keep pnpm-lock.yaml; ignore accidental npm/yarn locks at root if reintroduced by mistake is optional — we track pnpm-lock.yaml only going forward for the monorepo.
+# Note: legacy lib/yarn.lock may remain until Phase 3 removes lib/
+
+# TypeScript
+*.tsbuildinfo
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native build outputs (CLI remnants + future prebuild)
+android/app/build/
+android/.gradle/
+ios/Pods/
+ios/build/
+*.jsbundle
 
 # BUCK
 buck-out/
-\.buckd/
+.buckd/
 *.keystore
 !debug.keystore
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
-
+# Fastlane
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
 
-# Bundle artifact
-*.jsbundle
+# Testing / coverage
+coverage/
 
-# CocoaPods
-/ios/Pods/
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Turbo / misc
+.turbo
+*.log

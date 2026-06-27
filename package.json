@@ -1,50 +1,30 @@
 {
-  "name": "ReactCore",
-  "version": "0.0.1",
-  "private": false,
-  "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. The idea is to bring out the common user-interface & user-experience on both platforms.",
+  "name": "react-native-multi-selectbox-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo for react-native-multi-selectbox (library) and Expo example app.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sauzy34/react-native-multi-selectbox"
-  },
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint **/*.js --fix",
-    "prettier": "prettier **/*.js"
-  },
-  "dependencies": {
-    "lodash": "^4.17.21",
-    "react": "16.13.1",
-    "react-native": "0.64.1",
-    "react-native-multi-selectbox": "^1.4.1",
-    "react-native-svg": "^12.1.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^1.1.0",
-    "babel-jest": "^25.1.0",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "jest": "^25.1.0",
-    "metro-react-native-babel-preset": "^0.59.0",
-    "prettier": "^2.1.2",
-    "react-test-renderer": "16.13.1"
-  },
-  "jest": {
-    "preset": "react-native"
+    "url": "git+https://github.com/sauzy34/react-native-multi-selectbox.git"
   },
   "bugs": {
     "url": "https://github.com/sauzy34/react-native-multi-selectbox/issues"
   },
   "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
   "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "example": "pnpm --filter @rn-multi-selectbox/example start",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "test": "pnpm -r --if-present run test",
+    "test:ci": "pnpm -r --if-present run test:ci",
+    "lint": "pnpm -r --if-present run lint",
+    "build": "pnpm -r --if-present run build",
+    "clean": "pnpm -r --if-present run clean && rm -rf node_modules"
+  },
   "keywords": [
     "react-native-select",
     "react-native",
@@ -54,8 +34,6 @@
     "picker",
     "select",
     "expo",
-    "expo-picker",
-    "expo-select",
-    "expo-multi-select"
+    "monorepo"
   ]
 }

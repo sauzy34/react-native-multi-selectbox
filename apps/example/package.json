@@ -1,0 +1,13 @@
+{
+  "name": "@rn-multi-selectbox/example",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Expo example app for react-native-multi-selectbox (scaffolded in Phase 2).",
+  "scripts": {
+    "start": "node -e \"console.error('Phase 2 pending: scaffold Expo app in apps/example'); process.exit(1)\"",
+    "typecheck": "node -e \"console.log('[@rn-multi-selectbox/example] typecheck: deferred until Phase 2 Expo scaffold')\"",
+    "test": "node -e \"console.log('[@rn-multi-selectbox/example] test: deferred until Phase 5')\"",
+    "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] test:ci: deferred until Phase 5')\"",
+    "lint": "node -e \"console.log('[@rn-multi-selectbox/example] lint: deferred until Phase 7')\""
+  }
+}

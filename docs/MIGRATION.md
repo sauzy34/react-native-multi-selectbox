@@ -20,7 +20,7 @@ This document is the source of truth for migration decisions. Update the checkli
 | Language | **TypeScript** everywhere (package + example) | Full type-safety; addresses [#46](https://github.com/sauzy34/react-native-multi-selectbox/issues/46) |
 | App framework | **Expo** (managed first) | Replace EOL RN CLI demo; no custom native modules in the library |
 | Migration style | **Greenfield Expo + port library** | Avoid RN 0.64 → current in-place CLI upgrades |
-| Package manager | **npm workspaces** (default; revisit only if needed) | Simple; one lockfile at root |
+| Package manager | **pnpm** workspaces (`pnpm-workspace.yaml`, `packageManager` field) | Fast installs; hoisted linker for RN/Expo Metro |
 | Library runtime deps | Stay **React Native + `react-native-svg`** (not `expo` as a library dependency) | Works in Expo *and* RN CLI consumers |
 | Versioning | **2.0.0** for modern peers + types; keep **1.5.x** on npm | Peer/`svg` major + TS is a breaking line for tooling, not necessarily for JSX API |
 | Public SelectBox API | **Stable for 2.0** (see inventory below) | No redesign; optional keys / selection limits are **2.1+** |
@@ -32,17 +32,21 @@ This document is the source of truth for migration decisions. Update the checkli
 
 ```text
 /
-├── package.json                 # workspaces orchestrator only
-├── package-lock.json
+├── package.json                 # workspaces orchestrator only (private)
+├── pnpm-workspace.yaml
+├── pnpm-lock.yaml
+├── .npmrc                       # node-linker=hoisted (RN/Expo)
+├── packageManager               # pnpm@10.x via package.json field
 ├── tsconfig.base.json
+├── .nvmrc                       # Node 20+
 ├── docs/
 │   ├── MIGRATION.md             # this file
 │   └── QA.md                    # Phase 5/8 device checklist (later)
 ├── apps/
-│   └── example/                 # Expo TypeScript demo (from App.js)
+│   └── example/                 # Expo TypeScript demo (Phase 2 scaffold)
 └── packages/
     └── multi-selectbox/         # publishable react-native-multi-selectbox
-        ├── package.json
+        ├── package.json         # 2.0.0-alpha.0 during migration
         ├── src/
         └── …
 ```
@@ -135,8 +139,8 @@ Must all be true before calling the migration complete (Phase 8):
 
 1. **Expo demo runs:** from repo root (or `apps/example`), `npx expo start` launches the football-teams style demo on iOS Simulator and/or Android emulator without RN CLI.
 2. **Workspace package:** example imports `react-native-multi-selectbox` from **`packages/multi-selectbox`**, not a stale npm 1.x copy for local dev.
-3. **Type-safety:** `npm run typecheck` (or equivalent) passes for **package + example** with `strict` TypeScript; app code uses exported prop types (no `any` in package public surface).
-4. **Tests:** library has automated tests for at least render, single select, multi toggle, options guard, and controlled/preselected values; `npm test` / `npm run test:ci` is green.
+3. **Type-safety:** `pnpm typecheck` passes for **package + example** with `strict` TypeScript; app code uses exported prop types (no `any` in package public surface).
+4. **Tests:** library has automated tests for at least render, single select, multi toggle, options guard, and controlled/preselected values; `pnpm test` / `pnpm test:ci` is green.
 5. **No CLI required for contributors:** README documents Expo workflow; root is not “run `react-native run-ios` on 0.64”.
 6. **Legacy natives removed or clearly orphaned:** `android/` and `ios/` at repo root are deleted **or** explicitly marked obsolete only if still needed for a documented reason (prefer delete after Phase 2–3 green).
 7. **Publish readiness:** package version on 2.0 line can be built/packed; CHANGELOG or MIGRATION notes explain 1.x → 2.0 (peers, TS, install with `expo install react-native-svg`).
@@ -189,11 +193,13 @@ Must all be true before calling the migration complete (Phase 8):
 - [ ] Commit Phase 0 docs (optional; ask to commit anytime)
 
 ### Phase 1 — Monorepo skeleton
-- [ ] Root workspaces `package.json`
-- [ ] `tsconfig.base.json`
-- [ ] Root scripts stubs (`typecheck`, `test`, `example`)
-- [ ] Root `.gitignore` Expo entries
-- [ ] Install lockfile at root
+- [x] Root private orchestrator `package.json` + **pnpm** (`pnpm-workspace.yaml`, `.npmrc`, `packageManager`)
+- [x] `tsconfig.base.json` (strict) + package `tsconfig` extending it
+- [x] Root scripts stubs (`typecheck`, `test`, `test:ci`, `example`, `build`, `lint`, `clean`)
+- [x] Placeholder `apps/example` and `packages/multi-selectbox` workspace packages
+- [x] Root `.gitignore` Expo / pnpm / coverage entries
+- [x] `pnpm-lock.yaml` via `pnpm install`; `pnpm typecheck` green on placeholder
+- [ ] Commit Phase 1 (when requested)
 
 ### Phase 2 — Expo example app
 - [ ] `apps/example` via `create-expo-app` (TypeScript)
@@ -250,7 +256,7 @@ Must all be true before calling the migration complete (Phase 8):
 | Phase | Status | Date | Notes |
 |-------|--------|------|-------|
 | 0 Align & branch | **Done** | 2026-06-27 | Branch `chore/expo-monorepo-migration` @ `bbc901a`; [`docs/MIGRATION.md`](./MIGRATION.md) |
-| 1 Monorepo skeleton | Not started | | |
+| 1 Monorepo skeleton | **Done** | 2026-06-27 | pnpm workspaces; placeholders; strict `tsconfig.base.json` |
 | 2 Expo example | Not started | | |
 | 3 Extract package | Not started | | |
 | 4 TypeScript | Not started | | |
@@ -263,4 +269,15 @@ Must all be true before calling the migration complete (Phase 8):
 
 ## Next action
 
-**Start Phase 1:** monorepo skeleton (root workspaces, `tsconfig.base.json`, scripts, gitignore). Do not delete `android/` / `ios/` yet.
+**Start Phase 2:** scaffold Expo TypeScript app into `apps/example` (replace placeholder), pin SDK versions in this file, port root `App.js` demo. Do not delete `android/` / `ios/` yet.
+
+### Phase 1 commands (verified)
+
+```bash
+pnpm install
+pnpm typecheck   # package tsc + example stub
+pnpm test        # stubs until Phase 5
+pnpm example     # exits 1 until Phase 2 Expo scaffold
+```
+
+**Note:** Root is no longer an installable RN 0.64 app. Legacy CLI trees (`android/`, `ios/`, root `App.js`, `/lib`) remain on disk for porting until later phases remove them. Prefer **pnpm** for all monorepo work; ignore root `yarn.lock` for new installs (legacy artifact).

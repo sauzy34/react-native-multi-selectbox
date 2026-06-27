@@ -1,0 +1,48 @@
+{
+  "name": "react-native-multi-selectbox",
+  "version": "2.0.0-alpha.0",
+  "private": true,
+  "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. Source moves here from /lib in Phase 3.",
+  "license": "MIT",
+  "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sauzy34/react-native-multi-selectbox.git",
+    "directory": "packages/multi-selectbox"
+  },
+  "bugs": {
+    "url": "https://github.com/sauzy34/react-native-multi-selectbox/issues"
+  },
+  "keywords": [
+    "react-native-select",
+    "react-native",
+    "selectbox",
+    "dropdown",
+    "picker",
+    "expo"
+  ],
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.ts",
+  "files": [
+    "src",
+    "lib",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node -e \"console.log('[react-native-multi-selectbox] test: deferred until Phase 5')\"",
+    "test:ci": "node -e \"console.log('[react-native-multi-selectbox] test:ci: deferred until Phase 5')\"",
+    "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until Phase 4')\"",
+    "lint": "node -e \"console.log('[react-native-multi-selectbox] lint: deferred until Phase 7')\"",
+    "clean": "rm -rf lib dist"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-svg": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
