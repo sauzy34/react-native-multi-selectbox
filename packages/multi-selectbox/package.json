@@ -13,6 +13,7 @@
   "bugs": {
     "url": "https://github.com/sauzy34/react-native-multi-selectbox/issues"
   },
+  "homepage": "https://github.com/sauzy34/react-native-multi-selectbox/tree/master/packages/multi-selectbox#readme",
   "keywords": [
     "react-native-select",
     "react-native",
@@ -24,9 +25,16 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "react-native": "src/index.ts",
+  "exports": {
+    ".": {
+      "react-native": "./src/index.ts",
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "src",
-    "lib",
     "README.md"
   ],
   "scripts": {
@@ -35,7 +43,7 @@
     "test:ci": "node -e \"console.log('[react-native-multi-selectbox] test:ci: deferred until Phase 5')\"",
     "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until Phase 4')\"",
     "lint": "node -e \"console.log('[react-native-multi-selectbox] lint: deferred until Phase 7')\"",
-    "clean": "rm -rf lib dist"
+    "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "lodash": "*",

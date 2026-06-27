@@ -7,6 +7,12 @@ Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-p
 
 ![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
 
+
+> **Migration in progress (2.0 / Expo monorepo):** library source lives in [`packages/multi-selectbox`](./packages/multi-selectbox).  
+> Run the demo with **pnpm**: `pnpm install` then `pnpm example` ([`apps/example`](./apps/example), Expo SDK 56).  
+> Plan: [`docs/MIGRATION.md`](./docs/MIGRATION.md). Legacy RN CLI `android/` / `ios/` / root `App.js` are deprecated pending Phase 7 removal. Published **npm 1.5.x** is unchanged until **2.0** ships.
+
+
 ## Getting started
 
 ### How to install 🎹

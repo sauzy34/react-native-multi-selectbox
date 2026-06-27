@@ -2,8 +2,9 @@
 
 **Branch:** `chore/expo-monorepo-migration`  
 **Baseline commit:** `bbc901a` (master / current HEAD at Phase 0 start)  
-**Package today:** `react-native-multi-selectbox@1.5.0` (`lib/`)  
-**Demo today:** RN CLI **0.64.1** / React **16.13.1** (repo root)  
+**Package (source of truth):** `packages/multi-selectbox` @ `2.0.0-alpha.0` (legacy root `/lib` **removed** in Phase 3)  
+**Demo (source of truth):** `apps/example` — Expo **SDK 56** (legacy root CLI demo deprecated)  
+**Published npm still:** **1.5.x** on registry until **2.0** ships  
 **Target release line:** **2.0.0** (beta first)
 
 This document is the source of truth for migration decisions. Update the checklist as phases complete.
@@ -55,7 +56,7 @@ This document is the source of truth for migration decisions. Update the checkli
 
 - [ ] Monorepo with `apps/example` + `packages/multi-selectbox`
 - [ ] Expo TypeScript example app replacing RN CLI demo workflow
-- [ ] Library moved from `lib/` → `packages/multi-selectbox/src` with **strict TypeScript**
+- [x] Library moved from `lib/` → `packages/multi-selectbox/src` (TS implementation = Phase 4; interim `.d.ts` in place)
 - [ ] Exported types: `SelectOption`, discriminated `SelectBoxProps` (single vs multi)
 - [ ] Peers aligned for modern RN / Expo (`react-native-svg` via `expo install` in docs)
 - [ ] Workspace link: example depends on local package (not npm 1.5 for day-to-day dev)
@@ -167,8 +168,8 @@ Must all be true before calling the migration complete (Phase 8):
 | Root `metro.config.js` / `babel.config.js` (CLI) | Phase 2+ | Superseded by Expo configs in `apps/example` |
 | Root RN `0.64` / React `16` dependencies | Phase 1–7 | Root becomes workspace orchestrator |
 | `__tests__/App-test.js` | Phase 5 | Replaced by package tests + optional app smoke |
-| `lib/` package tree | After Phase 3 move verified | Prefer delete; avoid dual sources |
-| `lib/yarn.lock` | With `lib/` | Workspaces own lockfile |
+| `lib/` package tree | **Removed in Phase 3** | — |
+| `lib/yarn.lock` | **Removed in Phase 3** | — |
 | `.buckconfig`, legacy RN template cruft | Phase 7 | Not needed for Expo |
 | Direct npm dependency on published `react-native-multi-selectbox` inside monorepo demo | Phase 3 | Use workspace `*` |
 
@@ -226,17 +227,19 @@ Must all be true before calling the migration complete (Phase 8):
 **Note:** SelectBox **JS was copied** from legacy `/lib` into `packages/multi-selectbox/src` so the example runs against the workspace package. Phase 3 removes the dual `/lib` source; Phase 4 fully TypeScripts implementation (ambient `SelectBox.d.ts` is interim).
 
 ### Phase 3 — Extract library package
-- [x] `packages/multi-selectbox` package.json (from Phase 1)
-- [~] Sources live under `packages/multi-selectbox/src` (copied in Phase 2; **delete `/lib` dual source** still pending)
+- [x] `packages/multi-selectbox` is the **only** library package tree
+- [x] Removed legacy root **`/lib`** (and `lib/yarn.lock`) — no dual source
+- [x] Package `exports` / `files` point at `src` only; README documents monorepo + consumers
 - [x] Example depends on workspace package (`workspace:*`)
-- [ ] Confirm Fast Refresh package → example in interactive session
-- [x] Example does not depend on npm registry 1.x
+- [x] Root README + `App.js` point at `apps/example` / deprecate CLI demo entry
+- [x] `pnpm typecheck` + iOS `expo export` still resolve workspace SelectBox
+- [ ] Interactive Fast Refresh QA (optional local)
 
 ### Phase 4 — TypeScript + full type-safety
 - [~] Interim `SelectBox.d.ts` + `SelectOption` / `SelectBoxProps` (not full discriminated unions yet)
 - [ ] Convert components to TS
 - [x] Export types from entry (`SelectOption`, `SelectBoxProps`)
-- [x] Typecheck package + example clean (Phase 2)
+- [x] Typecheck package + example clean
 - [~] PeerDependencies include `lodash`, `react`, `react-native`, `react-native-svg` (finalize ranges in Phase 4)
 
 ### Phase 5 — Testing architecture
@@ -274,7 +277,7 @@ Must all be true before calling the migration complete (Phase 8):
 | 0 Align & branch | **Done** | 2026-06-27 | Branch `chore/expo-monorepo-migration` @ `bbc901a`; [`docs/MIGRATION.md`](./MIGRATION.md) |
 | 1 Monorepo skeleton | **Done** | 2026-06-27 | pnpm workspaces; placeholders; strict `tsconfig.base.json` |
 | 2 Expo example | **Done** | 2026-06-27 | SDK 56 / RN 0.85.3 / React 19.2.3; iOS `expo export` OK |
-| 3 Extract package | **Partial** | 2026-06-27 | Code in `packages/…/src`; legacy `/lib` still present |
+| 3 Extract package | **Done** | 2026-06-27 | `/lib` deleted; `packages/multi-selectbox` sole source |
 | 4 TypeScript | **Partial** | 2026-06-27 | Ambient `.d.ts` only; JS implementation |
 | 5 Testing | Not started | | |
 | 6 Stability fixes | Not started | | |
@@ -285,15 +288,16 @@ Must all be true before calling the migration complete (Phase 8):
 
 ## Next action
 
-**Start Phase 3 (finish extract):** remove dual source — make `packages/multi-selectbox` the only SelectBox tree, delete or deprecate root `/lib`, document single source of truth. Then Phase 4 full TS conversion. Do not delete `android/` / `ios/` until Phase 7.
+**Start Phase 4:** convert `SelectBox.js` / components to TypeScript, discriminated `SelectBoxProps`, drop reliance on ambient-only types. Do not delete `android/` / `ios/` until Phase 7.
 
-### Phase 2 commands (verified)
+### Phase 3 commands (verified)
 
 ```bash
 pnpm install
 pnpm typecheck
-pnpm example                    # expo start (interactive)
+test ! -d lib                  # legacy library tree must not exist
+pnpm example                   # expo start (interactive)
 pnpm --filter @rn-multi-selectbox/example exec expo export --platform ios --output-dir /tmp/out
 ```
 
-**Note:** Root is not an RN 0.64 app. Legacy CLI (`android/`, `ios/`, root `App.js`) and `/lib` remain until Phase 3/7. Prefer **pnpm** only.
+**Note:** Prefer **pnpm** only. Legacy CLI (`android/`, `ios/`, root `App.js` / `index.js`) remains until Phase 7.

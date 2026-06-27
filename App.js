@@ -1,3 +1,7 @@
+/**
+ * @deprecated Legacy RN CLI demo. Use apps/example (Expo) via `pnpm example`.
+ * This file is retained only until Phase 7 removes CLI-era root app entrypoints.
+ */
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import SelectBox from 'react-native-multi-selectbox'
