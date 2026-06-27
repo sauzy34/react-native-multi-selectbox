@@ -1,5 +1,9 @@
 /**
- * Placeholder entry for Phase 1 monorepo skeleton.
- * Real SelectBox implementation moves from `/lib` in Phase 3 and is typed in Phase 4.
+ * Public entry. Implementation is still JS (ported from `/lib` in Phase 2 for a runnable demo).
+ * Phase 4 converts SelectBox and related modules to TypeScript with full prop types.
  */
-export {}
+import SelectBox from './SelectBox'
+
+export default SelectBox
+export { SelectBox }
+export type { SelectBoxProps, SelectOption } from './SelectBox'

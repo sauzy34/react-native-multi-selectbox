@@ -2,7 +2,7 @@
   "name": "react-native-multi-selectbox",
   "version": "2.0.0-alpha.0",
   "private": true,
-  "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker. Source moves here from /lib in Phase 3.",
+  "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker.",
   "license": "MIT",
   "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
   "repository": {
@@ -38,11 +38,14 @@
     "clean": "rm -rf lib dist"
   },
   "peerDependencies": {
+    "lodash": "*",
     "react": "*",
     "react-native": "*",
     "react-native-svg": "*"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "@types/lodash": "^4.17.20",
+    "@types/react": "~19.2.2",
+    "typescript": "~5.9.2"
   }
 }

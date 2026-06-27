@@ -1,5 +1,27 @@
 # `@rn-multi-selectbox/example`
 
-Placeholder workspace package for the **Expo TypeScript** demo app.
+Expo **SDK 56** TypeScript demo for `react-native-multi-selectbox` (workspace package).
 
-Scaffolding happens in **Phase 2** (`create-expo-app` / Expo SDK pin). Do not treat this folder as a runnable app until Phase 2 is complete.
+## Run
+
+From the monorepo root:
+
+```bash
+pnpm install
+pnpm example
+# or: pnpm --filter @rn-multi-selectbox/example start
+```
+
+Then press `i` / `a` for iOS Simulator / Android emulator, or scan the QR code with Expo Go.
+
+## Stack (pinned at Phase 2)
+
+| Package | Version |
+|---------|---------|
+| expo | ~56.0.12 |
+| react | 19.2.3 |
+| react-native | 0.85.3 |
+| react-native-svg | 15.15.3 (align with `expo install`) |
+| react-native-multi-selectbox | `workspace:*` → `packages/multi-selectbox` |
+
+Metro is configured for the monorepo (`metro.config.js` watchFolders + hoisted `node_modules`).

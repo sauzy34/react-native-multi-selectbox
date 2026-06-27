@@ -4,8 +4,10 @@
     "rootDir": "src",
     "outDir": "lib",
     "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
     "types": []
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js"],
   "exclude": ["**/__tests__", "**/*.test.ts", "**/*.test.tsx", "lib", "dist"]
 }

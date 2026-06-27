@@ -2,12 +2,31 @@
   "name": "@rn-multi-selectbox/example",
   "version": "0.0.0",
   "private": true,
-  "description": "Expo example app for react-native-multi-selectbox (scaffolded in Phase 2).",
+  "description": "Expo TypeScript example for react-native-multi-selectbox",
+  "main": "index.ts",
   "scripts": {
-    "start": "node -e \"console.error('Phase 2 pending: scaffold Expo app in apps/example'); process.exit(1)\"",
-    "typecheck": "node -e \"console.log('[@rn-multi-selectbox/example] typecheck: deferred until Phase 2 Expo scaffold')\"",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node -e \"console.log('[@rn-multi-selectbox/example] test: deferred until Phase 5')\"",
     "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] test:ci: deferred until Phase 5')\"",
     "lint": "node -e \"console.log('[@rn-multi-selectbox/example] lint: deferred until Phase 7')\""
-  }
+  },
+  "dependencies": {
+    "expo": "~56.0.12",
+    "expo-status-bar": "~56.0.4",
+    "lodash": "^4.17.21",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-multi-selectbox": "workspace:*",
+    "react-native-svg": "15.15.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.20",
+    "@types/react": "~19.2.2",
+    "typescript": "~5.9.2"
+  },
+  "packageManager": "pnpm@10.33.0"
 }
