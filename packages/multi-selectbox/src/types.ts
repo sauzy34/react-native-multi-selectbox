@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type {
   DimensionValue,
-  FlatListProps,
+  ScrollViewProps,
   StyleProp,
   TextInputProps,
   TextStyle,
@@ -13,6 +13,15 @@ export type SelectOption = {
   id: string | number
   item: string
 }
+
+/**
+ * Extra props for the options panel (Phase 6: ScrollView, not FlatList).
+ * Prefer `style` / `contentContainerStyle` / `nestedScrollEnabled`.
+ */
+export type OptionsListProps = Omit<ScrollViewProps, 'children'>
+
+/** Extra props for the multi-select chips row (horizontal ScrollView). */
+export type MultiSelectFieldProps = Omit<ScrollViewProps, 'children' | 'horizontal'>
 
 /** Style and chrome props shared by single- and multi-select modes. */
 export type SelectBoxSharedProps = {
@@ -29,9 +38,12 @@ export type SelectBoxSharedProps = {
   searchIconColor?: string
   toggleIconColor?: string
   searchInputProps?: TextInputProps
-  multiSelectInputFieldProps?: Partial<FlatListProps<SelectOption>>
-  listOptionProps?: Partial<FlatListProps<SelectOption>>
+  /** Horizontal chips scroller props (multi mode). */
+  multiSelectInputFieldProps?: MultiSelectFieldProps
+  /** Dropdown options panel props (ScrollView; safe inside parent ScrollViews). */
+  listOptionProps?: OptionsListProps
   inputFilterContainerStyle?: StyleProp<ViewStyle>
+  /** Applied to the filter TextInput (e.g. `{ color: '#fff' }` overrides default text color). */
   inputFilterStyle?: StyleProp<TextStyle>
   optionsLabelStyle?: StyleProp<TextStyle>
   optionContainerStyle?: StyleProp<ViewStyle>
@@ -45,7 +57,7 @@ export type SelectBoxSharedProps = {
 
 export type SelectBoxSingleProps = SelectBoxSharedProps & {
   isMulti?: false
-  /** Selected option in single-select mode. Empty object is treated as no selection. */
+  /** Controlled selected option. Empty object / null / missing `item` = no selection. */
   value?: SelectOption | Record<string, never> | null
   onChange?: (option: SelectOption) => void
   selectedValues?: never
@@ -55,6 +67,7 @@ export type SelectBoxSingleProps = SelectBoxSharedProps & {
 
 export type SelectBoxMultiProps = SelectBoxSharedProps & {
   isMulti: true
+  /** Controlled selected options (defaults to `[]`). */
   selectedValues?: SelectOption[]
   onMultiSelect?: (option: SelectOption) => void
   onTapClose?: (option: SelectOption) => void

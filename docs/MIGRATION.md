@@ -251,11 +251,13 @@ Must all be true before calling the migration complete (Phase 8):
 - [x] Root `pnpm test` / `pnpm test:ci`; `.github/workflows/ci.yml` (typecheck + test:ci)
 
 ### Phase 6 — Stability fixes
-- [ ] Options guard
-- [ ] Controlled selection
-- [ ] ScrollView-friendly list strategy
-- [ ] Style passthrough fixes if in scope
-- [ ] Tests green
+- [x] Options guard (Phase 4 `Array.isArray`; retained)
+- [x] Controlled selection — `value` / `selectedValues` drive UI; parent updates reflected (tested)
+- [x] **ScrollView-friendly lists** — options panel + multi chips use `ScrollView` + `.map()` (no nested `FlatList` / VirtualizedList) — addresses [#62](https://github.com/sauzy34/react-native-multi-selectbox/issues/62) / [#74](https://github.com/sauzy34/react-native-multi-selectbox/issues/74)
+- [x] `listOptionProps` / `multiSelectInputFieldProps` typed as ScrollView props (`OptionsListProps`, `MultiSelectFieldProps`)
+- [x] Style passthrough — `inputFilterStyle` (incl. `color`) wins over defaults; `placeholderTextColor` follows filter color when unset ([#77](https://github.com/sauzy34/react-native-multi-selectbox/issues/77), [#105](https://github.com/sauzy34/react-native-multi-selectbox/issues/105))
+- [x] Clear filter text when closing the options panel
+- [x] Tests green — **14** tests incl. `SelectBox.stability.test.tsx`
 
 ### Phase 7 — Cleanup & DX
 - [ ] Delete CLI `android/` / `ios/` (and other retire list items)
@@ -281,7 +283,7 @@ Must all be true before calling the migration complete (Phase 8):
 | 3 Extract package | **Done** | 2026-06-27 | `/lib` deleted; `packages/multi-selectbox` sole source |
 | 4 TypeScript | **Done** | 2026-06-27 | Full TS modules + discriminated `SelectBoxProps` |
 | 5 Testing | **Done** | 2026-06-27 | 10 Jest tests; ~92% statements on SelectBox |
-| 6 Stability fixes | Not started | | |
+| 6 Stability fixes | **Done** | 2026-06-27 | ScrollView options/chips; filter styles; controlled value tests |
 | 7 Cleanup & DX | Not started | | |
 | 8 Validate & release | Not started | | |
 
@@ -289,16 +291,16 @@ Must all be true before calling the migration complete (Phase 8):
 
 ## Next action
 
-**Start Phase 6:** stability fixes still open beyond guards already in Phase 4 (ScrollView-friendly list strategy vs FlatList, richer controlled-selection semantics if needed, style passthrough). Do not delete `android/` / `ios/` until Phase 7.
+**Start Phase 7:** remove legacy RN CLI trees (`android/`, `ios/`, root `App.js` / `index.js` / CLI configs), Expo-first README, ESLint/Prettier alignment.
 
-### Phase 5 commands (verified)
+### Phase 6 commands (verified)
 
 ```bash
 pnpm install
 pnpm typecheck
-pnpm test          # library Jest + example resolve smoke
-pnpm test:ci       # coverage thresholds on package
+pnpm test          # 14 tests (incl. stability suite)
+pnpm test:ci
 pnpm example
 ```
 
-**Note:** Prefer **pnpm** only. Legacy CLI (`android/`, `ios/`, root `App.js` / `index.js`) remains until Phase 7. `@babel/core` pinned to **7.x** via `pnpm.overrides` for Jest compatibility.
+**Note:** Prefer **pnpm** only. Options UI is **ScrollView-based** (safe under parent ScrollViews for typical option counts). Legacy CLI natives remain until Phase 7.

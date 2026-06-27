@@ -2,12 +2,11 @@ import { memo, useMemo, useState, type ReactElement } from 'react'
 import { isEmpty, find } from 'lodash'
 import {
   View,
-  FlatList,
   Text,
   TouchableOpacity,
   TextInput,
   ScrollView,
-  type ListRenderItem,
+  StyleSheet,
   type StyleProp,
   type TextStyle,
   type ViewStyle,
@@ -34,6 +33,15 @@ const DEFAULT_OPTIONS: SelectOption[] = []
 
 function normalizeOptions(options: SelectOption[] | undefined): SelectOption[] {
   return Array.isArray(options) ? options : DEFAULT_OPTIONS
+}
+
+function readSelectedItemText(
+  value: SelectOption | Record<string, never> | null | undefined,
+): string {
+  if (value && typeof value === 'object' && 'item' in value && typeof value.item === 'string') {
+    return value.item
+  }
+  return ''
 }
 
 function SelectBox(props: SelectBoxProps): ReactElement {
@@ -90,33 +98,44 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     return options.filter((suggestion) => suggestion.item.toLowerCase().includes(q))
   }, [inputValue, options])
 
-  const selectedItemText =
-    value && typeof value === 'object' && 'item' in value && typeof value.item === 'string'
-      ? value.item
-      : ''
+  const selectedItemText = readSelectedItemText(value)
+
+  const toggleOptions = () => {
+    setShowOptions((open) => {
+      const next = !open
+      if (!next) {
+        setInputValue('')
+      }
+      return next
+    })
+  }
 
   function renderLabel(itemLabel: string) {
-    const kOptionsLabelStyle: StyleProp<TextStyle> = {
-      fontSize: 17,
-      color: 'rgba(60, 60, 67, 0.6)',
-      ...(optionsLabelStyle as object),
-    }
+    const kOptionsLabelStyle: StyleProp<TextStyle> = [
+      {
+        fontSize: 17,
+        color: 'rgba(60, 60, 67, 0.6)',
+      },
+      optionsLabelStyle,
+    ]
     return <Text style={kOptionsLabelStyle}>{itemLabel}</Text>
   }
 
-  const renderItem: ListRenderItem<SelectOption> = ({ item }) => {
-    const kOptionContainerStyle: StyleProp<ViewStyle> = {
-      borderColor: '#dadada',
-      borderBottomWidth: 1,
-      width: '100%',
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      paddingVertical: 12,
-      paddingRight: 10,
-      justifyContent: 'space-between',
-      ...(optionContainerStyle as object),
-    }
+  function renderOptionRow(item: SelectOption) {
+    const kOptionContainerStyle: StyleProp<ViewStyle> = [
+      {
+        borderColor: '#dadada',
+        borderBottomWidth: 1,
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingVertical: 12,
+        paddingRight: 10,
+        justifyContent: 'space-between',
+      },
+      optionContainerStyle,
+    ]
 
     if (isMulti) {
       const checked = selectedValues.some((i) => item.id === i.id)
@@ -124,7 +143,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         onMultiSelect?.(item)
       }
       return (
-        <View style={kOptionContainerStyle}>
+        <View key={String(item.id)} style={kOptionContainerStyle}>
           <TouchableOpacity
             testID={TEST_IDS.option(item.id)}
             hitSlop={hitSlop}
@@ -139,11 +158,12 @@ function SelectBox(props: SelectBoxProps): ReactElement {
 
     const onPressSingle = () => {
       setShowOptions(false)
+      setInputValue('')
       onChange?.(item)
     }
 
     return (
-      <View style={kOptionContainerStyle}>
+      <View key={String(item.id)} style={kOptionContainerStyle}>
         <TouchableOpacity
           testID={TEST_IDS.option(item.id)}
           hitSlop={hitSlop}
@@ -156,29 +176,33 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     )
   }
 
-  const renderGroupItem: ListRenderItem<SelectOption> = ({ item }) => {
+  function renderChip(item: SelectOption) {
     const matched = find(options, (o) => o.id === item.id)
     const chipLabel = matched?.item ?? item.item
-    const kMultiOptionContainerStyle: StyleProp<ViewStyle> = {
-      flexDirection: 'row',
-      borderRadius: 20,
-      paddingVertical: 5,
-      paddingRight: 5,
-      paddingLeft: 10,
-      marginRight: 4,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: Colors.primary,
-      flexGrow: 1,
-      ...(multiOptionContainerStyle as object),
-    }
-    const kMultiOptionsLabelStyle: StyleProp<TextStyle> = {
-      fontSize: 10,
-      color: '#fff',
-      ...(multiOptionsLabelStyle as object),
-    }
+    const kMultiOptionContainerStyle: StyleProp<ViewStyle> = [
+      {
+        flexDirection: 'row',
+        borderRadius: 20,
+        paddingVertical: 5,
+        paddingRight: 5,
+        paddingLeft: 10,
+        marginRight: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.primary,
+        flexGrow: 1,
+      },
+      multiOptionContainerStyle,
+    ]
+    const kMultiOptionsLabelStyle: StyleProp<TextStyle> = [
+      {
+        fontSize: 10,
+        color: '#fff',
+      },
+      multiOptionsLabelStyle,
+    ]
     return (
-      <View style={kMultiOptionContainerStyle} testID={TEST_IDS.multiChip(item.id)}>
+      <View key={String(item.id)} style={kMultiOptionContainerStyle} testID={TEST_IDS.multiChip(item.id)}>
         <Text style={kMultiOptionsLabelStyle}>{chipLabel}</Text>
         <TouchableOpacity
           style={{ marginLeft: 15 }}
@@ -190,29 +214,33 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     )
   }
 
-  function multiListEmptyComponent() {
-    const kMultiListEmptyLabelStyle: StyleProp<TextStyle> = {
-      fontSize: 17,
-      color: 'rgba(60, 60, 67, 0.3)',
-      ...(multiListEmptyLabelStyle as object),
-    }
+  function multiListEmpty() {
+    const kMultiListEmptyLabelStyle: StyleProp<TextStyle> = [
+      {
+        fontSize: 17,
+        color: 'rgba(60, 60, 67, 0.3)',
+      },
+      multiListEmptyLabelStyle,
+    ]
     return (
       <TouchableOpacity
         testID={TEST_IDS.multiEmpty}
         style={{ flexGrow: 1, width: '100%' }}
         hitSlop={hitSlop}
-        onPress={() => setShowOptions((open) => !open)}>
+        onPress={toggleOptions}>
         <Text style={kMultiListEmptyLabelStyle}>{inputPlaceholder}</Text>
       </TouchableOpacity>
     )
   }
 
   function optionListEmpty() {
-    const kListEmptyLabelStyle: StyleProp<TextStyle> = {
-      fontSize: 17,
-      color: 'rgba(60, 60, 67, 0.6)',
-      ...(listEmptyLabelStyle as object),
-    }
+    const kListEmptyLabelStyle: StyleProp<TextStyle> = [
+      {
+        fontSize: 17,
+        color: 'rgba(60, 60, 67, 0.6)',
+      },
+      listEmptyLabelStyle,
+    ]
     return (
       <View style={kOptionListViewStyle} testID={TEST_IDS.listEmpty}>
         <Text style={kListEmptyLabelStyle}>{listEmptyText}</Text>
@@ -220,32 +248,59 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     )
   }
 
-  const kLabelStyle: StyleProp<TextStyle> = {
-    fontSize: 12,
-    color: 'rgba(60, 60, 67, 0.6)',
-    paddingBottom: 4,
-    ...(labelStyle as object),
-  }
+  const kLabelStyle: StyleProp<TextStyle> = [
+    {
+      fontSize: 12,
+      color: 'rgba(60, 60, 67, 0.6)',
+      paddingBottom: 4,
+    },
+    labelStyle,
+  ]
 
-  const kContainerStyle: StyleProp<ViewStyle> = {
-    flexDirection: 'row',
-    width: '100%',
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    paddingTop: 6,
-    paddingRight: 20,
-    paddingBottom: 8,
-    ...(containerStyle as object),
-  }
+  const kContainerStyle: StyleProp<ViewStyle> = [
+    {
+      flexDirection: 'row',
+      width: '100%',
+      borderColor: '#ddd',
+      borderBottomWidth: 1,
+      paddingTop: 6,
+      paddingRight: 20,
+      paddingBottom: 8,
+    },
+    containerStyle,
+  ]
 
-  const kSelectedItemStyleValue: StyleProp<TextStyle> = {
-    fontSize: 17,
-    color: isEmpty(selectedItemText) ? 'rgba(60, 60, 67, 0.3)' : '#000',
-    ...(selectedItemStyle as object),
-  }
+  const kSelectedItemStyleValue: StyleProp<TextStyle> = [
+    {
+      fontSize: 17,
+      color: isEmpty(selectedItemText) ? 'rgba(60, 60, 67, 0.3)' : '#000',
+    },
+    selectedItemStyle,
+  ]
 
-  function HeaderComponent() {
-    const kInputFilterContainerStyle: StyleProp<ViewStyle> = {
+  // Defaults first, then inputFilterStyle, then searchInputProps.style so explicit props win in order:
+  // inputFilterStyle must beat hardcoded color; searchInputProps can still override if needed.
+  const kInputFilterStyle: StyleProp<TextStyle> = [
+    {
+      paddingVertical: 14,
+      paddingRight: 8,
+      color: '#000',
+      fontSize: 12,
+      flexGrow: 1,
+    },
+    inputFilterStyle,
+    searchInputProps?.style,
+  ]
+  const flattenedFilterStyle = StyleSheet.flatten(kInputFilterStyle)
+  const placeholderTextColor =
+    searchInputProps?.placeholderTextColor ??
+    (typeof flattenedFilterStyle?.color === 'string' ? flattenedFilterStyle.color : '#000')
+
+  const { style: searchInputStyleIgnored, ...restSearchInputProps } = searchInputProps ?? {}
+  void searchInputStyleIgnored
+
+  const kInputFilterContainerStyle: StyleProp<ViewStyle> = [
+    {
       width: '100%',
       borderBottomWidth: 1,
       borderBottomColor: '#ddd',
@@ -253,40 +308,24 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       alignItems: 'center',
       paddingRight: 18,
       justifyContent: 'space-between',
-      ...(inputFilterContainerStyle as object),
-    }
-    const kInputFilterStyle: StyleProp<TextStyle> = {
-      paddingVertical: 14,
-      paddingRight: 8,
-      color: '#000',
-      fontSize: 12,
-      flexGrow: 1,
-      ...(inputFilterStyle as object),
-    }
-    return (
-      <>
-        {!hideInputFilter && (
-          <View style={kInputFilterContainerStyle}>
-            <TextInput
-              testID={TEST_IDS.filterInput}
-              value={inputValue}
-              placeholder={inputPlaceholder}
-              onChangeText={setInputValue}
-              style={kInputFilterStyle}
-              placeholderTextColor="#000"
-              {...searchInputProps}
-            />
-            <Icon name="searchBoxIcon" fill={searchIconColor} />
-          </View>
-        )}
-        <ScrollView keyboardShouldPersistTaps="always" />
-      </>
-    )
-  }
+    },
+    inputFilterContainerStyle,
+  ]
 
-  const keyExtractor = (o: SelectOption) => String(o.id)
+  const {
+    style: listOptionStyle,
+    contentContainerStyle: listContentStyle,
+    keyboardShouldPersistTaps = 'handled',
+    nestedScrollEnabled = true,
+    ...restListOptionProps
+  } = listOptionProps
 
-  const { style: listOptionStyle, ...restListOptionProps } = listOptionProps
+  const {
+    style: multiFieldStyle,
+    contentContainerStyle: multiFieldContentStyle,
+    keyboardShouldPersistTaps: multiKbdTaps = 'handled',
+    ...restMultiFieldProps
+  } = multiSelectInputFieldProps ?? {}
 
   return (
     <View style={{ width }} testID={TEST_IDS.root}>
@@ -296,20 +335,24 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       <View style={kContainerStyle}>
         <View style={{ paddingRight: 20, flexGrow: 1 }}>
           {isMulti ? (
-            <FlatList
-              data={selectedValues}
-              extraData={{ inputValue, showOptions }}
-              keyExtractor={keyExtractor}
-              renderItem={renderGroupItem}
-              horizontal
-              ListEmptyComponent={multiListEmptyComponent}
-              {...multiSelectInputFieldProps}
-            />
+            selectedValues.length === 0 ? (
+              multiListEmpty()
+            ) : (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyboardShouldPersistTaps={multiKbdTaps}
+                style={multiFieldStyle}
+                contentContainerStyle={[{ alignItems: 'center' }, multiFieldContentStyle]}
+                {...restMultiFieldProps}>
+                {selectedValues.map(renderChip)}
+              </ScrollView>
+            )
           ) : (
             <TouchableOpacity
               testID={TEST_IDS.singleTrigger}
               hitSlop={hitSlop}
-              onPress={() => setShowOptions((open) => !open)}>
+              onPress={toggleOptions}>
               <Text style={kSelectedItemStyleValue}>
                 {selectedItemText || inputPlaceholder || label}
               </Text>
@@ -318,7 +361,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         </View>
         <TouchableOpacity
           testID={TEST_IDS.dropdownToggle}
-          onPress={() => setShowOptions((open) => !open)}
+          onPress={toggleOptions}
           hitSlop={hitSlop}>
           {selectIcon ? (
             selectIcon
@@ -328,22 +371,31 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         </TouchableOpacity>
       </View>
       {showOptions && (
-        <FlatList
+        <ScrollView
           testID={TEST_IDS.optionsList}
-          data={filteredSuggestions}
-          extraData={options}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          numColumns={1}
-          horizontal={false}
-          initialNumToRender={5}
-          maxToRenderPerBatch={20}
-          windowSize={10}
-          ListEmptyComponent={optionListEmpty}
           style={[kOptionsHeight, listOptionStyle]}
-          ListHeaderComponent={HeaderComponent}
-          {...restListOptionProps}
-        />
+          contentContainerStyle={listContentStyle}
+          keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+          nestedScrollEnabled={nestedScrollEnabled}
+          {...restListOptionProps}>
+          {!hideInputFilter && (
+            <View style={kInputFilterContainerStyle}>
+              <TextInput
+                testID={TEST_IDS.filterInput}
+                value={inputValue}
+                placeholder={inputPlaceholder}
+                onChangeText={setInputValue}
+                style={kInputFilterStyle}
+                placeholderTextColor={placeholderTextColor}
+                {...restSearchInputProps}
+              />
+              <Icon name="searchBoxIcon" fill={searchIconColor} />
+            </View>
+          )}
+          {filteredSuggestions.length === 0
+            ? optionListEmpty()
+            : filteredSuggestions.map(renderOptionRow)}
+        </ScrollView>
       )}
     </View>
   )
