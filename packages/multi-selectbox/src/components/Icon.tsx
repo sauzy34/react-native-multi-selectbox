@@ -52,8 +52,8 @@ const GRAPHICS: Record<IconName, GraphicDef> = {
     viewBox: '0 0 22 22',
     content: (fill) => (
       <G fill="none" fillRule="evenodd">
-        <Circle cx="10" cy="10" r="10" fill={fill} />
-        <Path stroke="#FFF" strokeWidth="2" d="M16.451 10.451H3.55" />
+        <Circle cx="10" cy="10" r="10" fill={fill} stroke="none" />
+        <Path stroke="#FFF" strokeWidth="2" fill="none" d="M16.451 10.451H3.55" />
       </G>
     ),
   },
@@ -62,26 +62,30 @@ const GRAPHICS: Record<IconName, GraphicDef> = {
     height: 16,
     viewBox: '0 0 18 16',
     content: (fill) => (
-      <G
-        fill="none"
-        fillRule="evenodd"
-        stroke={fill}
-        strokeWidth="1.2"
-        transform="translate(1.4 1.16)"
-      >
-        <Ellipse cx="5.921" cy="6.178" rx="5.921" ry="6.178" />
-        <Path d="M10.812 9.782L15.96 13.9" />
+      <G fill="none" fillRule="evenodd" transform="translate(1.4 1.16)">
+        <Ellipse
+          cx="5.921"
+          cy="6.178"
+          rx="5.921"
+          ry="6.178"
+          fill="none"
+          stroke={fill}
+          strokeWidth="1.2"
+        />
+        <Path d="M10.812 9.782L15.96 13.9" fill="none" stroke={fill} strokeWidth="1.2" />
       </G>
     ),
   },
+  // Stroked icons must set fill="none" on each shape — RN SVG defaults Circle fill to black,
+  // which shows up when toggling from deleteCircle (solid) to addCircle (outline) on deselect.
   addCircle: {
     width: 22,
     height: 22,
     viewBox: '0 0 22 22',
     content: (fill) => (
-      <G fill="none" fillRule="evenodd" stroke={fill} strokeWidth=".8" transform="translate(1 1)">
-        <Circle cx="10" cy="10" r="10" />
-        <Path d="M10 3.2v12.903M16.451 9.651H3.55" />
+      <G fill="none" fillRule="evenodd" transform="translate(1 1)">
+        <Circle cx="10" cy="10" r="10" fill="none" stroke={fill} strokeWidth="0.8" />
+        <Path d="M10 3.2v12.903M16.451 9.651H3.55" fill="none" stroke={fill} strokeWidth="0.8" />
       </G>
     ),
   },
@@ -90,17 +94,21 @@ const GRAPHICS: Record<IconName, GraphicDef> = {
     height: 20,
     viewBox: '0 0 23 23',
     content: (fill) => (
-      <G id="mobile" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <G id="close" transform="translate(1.000000, 1.000000)" stroke={fill}>
-          <Circle id="Oval" cx="10.5" cy="10.5" r="10.5" />
+      <G fill="none" fillRule="evenodd">
+        <G transform="translate(1.000000, 1.000000)">
+          <Circle cx="10.5" cy="10.5" r="10.5" fill="none" stroke={fill} strokeWidth="1" />
           <Path
             d="M5,10.5 L16.8436214,10.5"
-            id="Path-2"
+            fill="none"
+            stroke={fill}
+            strokeWidth="1"
             transform="translate(10.921811, 10.500000) rotate(-315.000000) translate(-10.921811, -10.500000) "
           />
           <Path
             d="M5,10.5 L16.8436214,10.5"
-            id="Path-2-Copy"
+            fill="none"
+            stroke={fill}
+            strokeWidth="1"
             transform="translate(10.921811, 10.500000) rotate(-585.000000) translate(-10.921811, -10.500000) "
           />
         </G>
