@@ -11,3 +11,5 @@ expo-env.d.ts
 *.orig.*
 npm-debug.*
 web-build/
+
+dist/

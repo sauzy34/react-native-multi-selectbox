@@ -10,19 +10,24 @@
     "android": "expo start --offline --android",
     "ios": "expo start --offline --ios",
     "web": "expo start --offline --web",
+    "web:online": "expo start --web",
+    "export:web": "expo export --platform web",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
     "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
     "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\""
   },
   "dependencies": {
+    "@expo/metro-runtime": "~56.0.15",
     "expo": "~56.0.12",
     "expo-status-bar": "~56.0.4",
     "lodash": "^4.17.21",
     "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-native": "0.85.3",
     "react-native-multi-selectbox": "workspace:*",
-    "react-native-svg": "15.15.4"
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",

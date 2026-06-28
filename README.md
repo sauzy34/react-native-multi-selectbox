@@ -24,14 +24,15 @@ Requires **Node 20+** and **pnpm 10+**.
 
 ```bash
 pnpm install
-pnpm example          # expo start — then press i / a
+pnpm example          # expo start --offline — then press i / a
+pnpm example:web      # browser (react-native-web)
 pnpm typecheck
 pnpm test
 pnpm lint
 pnpm format           # Prettier write
 ```
 
-Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-selectbox": "workspace:*"`.
+Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-selectbox": "workspace:*"`. Web needs `react-dom` / `react-native-web` (already in the example package).
 
 ## Install in your app (consumers)
 
@@ -133,7 +134,9 @@ See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/typ
 
 | Script                       | Purpose                |
 | ---------------------------- | ---------------------- |
-| `pnpm example`               | Start Expo example     |
+| `pnpm example`               | Start Expo example (offline) |
+| `pnpm example:web`           | Start Expo web demo        |
+| `pnpm example:export:web`    | Static `expo export -p web` |
 | `pnpm typecheck`             | `tsc` in all packages  |
 | `pnpm test` / `pnpm test:ci` | Jest (library) + smoke |
 | `pnpm lint`                  | ESLint                 |

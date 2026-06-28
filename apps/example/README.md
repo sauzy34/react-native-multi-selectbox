@@ -15,22 +15,38 @@ pnpm install
 pnpm example              # expo start --offline (avoids Expo API GraphQL errors)
 # pnpm example:online     # talks to Expo servers (account / updates / telemetry)
 # pnpm example:clear      # --offline -c clears Metro cache
+# pnpm example:web        # browser demo (react-native-web)
+# pnpm example:web:online
+# pnpm example:export:web # static web export smoke
 ```
 
-Then press `i` / `a` for iOS Simulator / Android emulator, or scan the QR code with Expo Go.
+Then press `i` / `a` for iOS Simulator / Android emulator, **`w` for web**, or open the Metro URL in a browser when using `pnpm example:web`.
+
+### Web
+
+Web depends on **`react-dom`**, **`react-native-web`**, and **`@expo/metro-runtime`** (SDK-aligned via `expo install`).
+
+```bash
+pnpm example:web
+# → http://localhost:8081 (or the URL Expo prints)
+```
+
+QA checklist: single + multi select, filter, chips, icon colors on deselect, options panel scroll.
 
 ### `UnexpectedServerData` / “No returned query result”
 
-That comes from **Expo CLI calling Expo’s backend** (not from SelectBox). Default `pnpm example` uses **`--offline`** so Metro starts without those GraphQL calls. If you need online mode and still see it: retry later, check network/VPN, or run `pnpm example:clear`.
+That comes from **Expo CLI calling Expo’s backend** (not from SelectBox). Default `pnpm example` / `example:web` use **`--offline`** so Metro starts without those GraphQL calls. If you need online mode and still see it: retry later, check network/VPN, or run `pnpm example:clear`.
 
-## Stack (pinned at Phase 2)
+## Stack (pinned)
 
-| Package                      | Version                                    |
-| ---------------------------- | ------------------------------------------ |
-| expo                         | ~56.0.12                                   |
-| react                        | 19.2.3                                     |
-| react-native                 | 0.85.3                                     |
-| react-native-svg             | 15.15.3 (align with `expo install`)        |
+| Package | Version |
+| ------- | ------- |
+| expo | ~56.0.12 |
+| react / react-dom | 19.2.3 |
+| react-native | 0.85.3 |
+| react-native-web | ^0.21.2 |
+| react-native-svg | 15.15.4 |
+| @expo/metro-runtime | ~56.0.15 |
 | react-native-multi-selectbox | `workspace:*` → `packages/multi-selectbox` |
 
 Metro is configured for the monorepo (`metro.config.js` watchFolders + hoisted `node_modules`).

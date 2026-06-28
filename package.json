@@ -19,7 +19,10 @@
   "scripts": {
     "example": "pnpm --filter @rn-multi-selectbox/example start",
     "example:online": "pnpm --filter @rn-multi-selectbox/example start:online",
+    "example:web": "pnpm --filter @rn-multi-selectbox/example web",
+    "example:web:online": "pnpm --filter @rn-multi-selectbox/example web:online",
     "example:clear": "pnpm --filter @rn-multi-selectbox/example exec expo start --offline -c",
+    "example:export:web": "pnpm --filter @rn-multi-selectbox/example export:web",
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "pnpm -r --if-present run test",
     "test:ci": "pnpm -r --if-present run test:ci",
