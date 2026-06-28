@@ -1,16 +1,21 @@
-import { memo, useMemo, useState, type ReactElement } from 'react'
+import { memo, useCallback, useMemo, useState, type ReactElement } from 'react'
 import { Text, View, type StyleProp, type TextStyle } from 'react-native'
 import Colors from './constants/Colors'
-import { SelectField } from './components/SelectBox/SelectField'
-import { OptionsPanel } from './components/SelectBox/OptionsPanel'
+import SelectField from './components/SelectBox/SelectField'
+import OptionsPanel from './components/SelectBox/OptionsPanel'
 import {
+  EMPTY_OBJECT,
   EMPTY_OPTIONS,
+  buildOptionLabelById,
+  buildSelectedIdSet,
   filterOptions,
   normalizeOptions,
   readSelectedItemText,
 } from './utils/options'
 import { TEST_IDS } from './testIDs'
-import type { SelectBoxProps, SelectOption } from './types'
+import type { OptionsListProps, SelectBoxProps, SelectOption } from './types'
+
+const EMPTY_ID_SET: ReadonlySet<string | number> = new Set()
 
 function SelectBox(props: SelectBoxProps): ReactElement {
   const {
@@ -38,7 +43,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     toggleIconColor = Colors.primary,
     searchInputProps,
     multiSelectInputFieldProps,
-    listOptionProps = {},
+    listOptionProps,
   } = props
 
   const options = normalizeOptions(optionsProp)
@@ -58,6 +63,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     ? (props as Extract<SelectBoxProps, { isMulti: true }>).onTapClose
     : undefined
 
+  const resolvedListOptionProps = (listOptionProps ?? EMPTY_OBJECT) as OptionsListProps
+
   const [inputValue, setInputValue] = useState('')
   const [showOptions, setShowOptions] = useState(false)
 
@@ -66,9 +73,16 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     [inputValue, options],
   )
 
+  const selectedIdSet = useMemo(
+    () => (isMulti ? buildSelectedIdSet(selectedValues) : EMPTY_ID_SET),
+    [isMulti, selectedValues],
+  )
+
+  const optionLabelById = useMemo(() => buildOptionLabelById(options), [options])
+
   const selectedItemText = readSelectedItemText(value)
 
-  const toggleOptions = () => {
+  const toggleOptions = useCallback(() => {
     setShowOptions((open) => {
       const next = !open
       if (!next) {
@@ -76,17 +90,20 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       }
       return next
     })
-  }
+  }, [])
 
-  const handleSelectOption = (item: SelectOption) => {
-    if (isMulti) {
-      onMultiSelect?.(item)
-      return
-    }
-    setShowOptions(false)
-    setInputValue('')
-    onChange?.(item)
-  }
+  const handleSelectOption = useCallback(
+    (item: SelectOption) => {
+      if (isMulti) {
+        onMultiSelect?.(item)
+        return
+      }
+      setShowOptions(false)
+      setInputValue('')
+      onChange?.(item)
+    },
+    [isMulti, onChange, onMultiSelect],
+  )
 
   const fieldLabelStyle: StyleProp<TextStyle> = [
     {
@@ -112,7 +129,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         arrowIconColor={arrowIconColor}
         containerStyle={containerStyle}
         selectedItemStyle={selectedItemStyle}
-        options={options}
+        optionLabelById={optionLabelById}
         selectedValues={selectedValues}
         multiOptionContainerStyle={multiOptionContainerStyle}
         multiOptionsLabelStyle={multiOptionsLabelStyle}
@@ -124,7 +141,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
       {showOptions && (
         <OptionsPanel
           options={filteredSuggestions}
-          selectedValues={selectedValues}
+          selectedIdSet={selectedIdSet}
           isMulti={Boolean(isMulti)}
           inputValue={inputValue}
           onChangeInput={setInputValue}
@@ -139,7 +156,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
           optionsLabelStyle={optionsLabelStyle}
           optionContainerStyle={optionContainerStyle}
           listEmptyLabelStyle={listEmptyLabelStyle}
-          listOptionProps={listOptionProps}
+          listOptionProps={resolvedListOptionProps}
           onSelectOption={handleSelectOption}
         />
       )}

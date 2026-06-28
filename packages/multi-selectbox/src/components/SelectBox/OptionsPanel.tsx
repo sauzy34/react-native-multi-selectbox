@@ -1,17 +1,22 @@
-import type { ReactElement } from 'react'
-import { ScrollView, type StyleProp, type TextStyle, type ViewStyle } from 'react-native'
+import { memo, type ReactElement } from 'react'
+import {
+  ScrollView,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle,
+  type TextInputProps,
+} from 'react-native'
 import { optionsPanelStyle } from '../../constants/layout'
-import { isOptionSelected } from '../../utils/options'
 import { TEST_IDS } from '../../testIDs'
 import type { OptionsListProps, SelectOption } from '../../types'
 import { OptionsListEmpty } from './EmptyStates'
-import { FilterInput } from './FilterInput'
-import { OptionRow } from './OptionRow'
-import type { TextInputProps } from 'react-native'
+import FilterInput from './FilterInput'
+import OptionRow from './OptionRow'
 
 export type OptionsPanelProps = {
   options: SelectOption[]
-  selectedValues: SelectOption[]
+  /** Precomputed selected ids for O(1) checked state (multi). */
+  selectedIdSet: ReadonlySet<string | number>
   isMulti: boolean
   inputValue: string
   onChangeInput: (text: string) => void
@@ -30,9 +35,9 @@ export type OptionsPanelProps = {
   onSelectOption: (item: SelectOption) => void
 }
 
-export function OptionsPanel({
+function OptionsPanel({
   options,
-  selectedValues,
+  selectedIdSet,
   isMulti,
   inputValue,
   onChangeInput,
@@ -47,7 +52,7 @@ export function OptionsPanel({
   optionsLabelStyle,
   optionContainerStyle,
   listEmptyLabelStyle,
-  listOptionProps = {},
+  listOptionProps,
   onSelectOption,
 }: OptionsPanelProps): ReactElement {
   const {
@@ -56,7 +61,7 @@ export function OptionsPanel({
     keyboardShouldPersistTaps = 'handled',
     nestedScrollEnabled = true,
     ...restListOptionProps
-  } = listOptionProps
+  } = listOptionProps ?? {}
 
   return (
     <ScrollView
@@ -86,7 +91,7 @@ export function OptionsPanel({
             key={String(item.id)}
             item={item}
             isMulti={isMulti}
-            checked={isMulti ? isOptionSelected(selectedValues, item) : false}
+            checked={isMulti ? selectedIdSet.has(item.id) : false}
             toggleIconColor={toggleIconColor}
             optionsLabelStyle={optionsLabelStyle}
             optionContainerStyle={optionContainerStyle}
@@ -97,3 +102,5 @@ export function OptionsPanel({
     </ScrollView>
   )
 }
+
+export default memo(OptionsPanel)

@@ -1,5 +1,4 @@
-import type { ReactElement } from 'react'
-import { find } from 'lodash'
+import { memo, type ReactElement } from 'react'
 import {
   ScrollView,
   Text,
@@ -17,7 +16,8 @@ import type { MultiSelectFieldProps, SelectOption } from '../../types'
 import { MultiEmptyPlaceholder } from './EmptyStates'
 
 export type MultiChipsRowProps = {
-  options: SelectOption[]
+  /** id → display label (from full options catalog). */
+  optionLabelById: ReadonlyMap<string | number, string>
   selectedValues: SelectOption[]
   inputPlaceholder: string
   multiOptionContainerStyle?: StyleProp<ViewStyle> | undefined
@@ -72,8 +72,8 @@ function Chip({
   )
 }
 
-export function MultiChipsRow({
-  options,
+function MultiChipsRow({
+  optionLabelById,
   selectedValues,
   inputPlaceholder,
   multiOptionContainerStyle,
@@ -110,8 +110,7 @@ export function MultiChipsRow({
       {...restMultiFieldProps}
     >
       {selectedValues.map((item) => {
-        const matched = find(options, (o) => o.id === item.id)
-        const chipLabel = matched?.item ?? item.item
+        const chipLabel = optionLabelById.get(item.id) ?? item.item
         return (
           <Chip
             key={String(item.id)}
@@ -126,3 +125,5 @@ export function MultiChipsRow({
     </ScrollView>
   )
 }
+
+export default memo(MultiChipsRow)

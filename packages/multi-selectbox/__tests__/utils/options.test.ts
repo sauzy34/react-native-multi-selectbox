@@ -1,4 +1,6 @@
 import {
+  buildOptionLabelById,
+  buildSelectedIdSet,
   filterOptions,
   isOptionSelected,
   normalizeOptions,
@@ -40,5 +42,21 @@ describe('options utils', () => {
   it('isOptionSelected matches by id', () => {
     expect(isOptionSelected([{ id: 'a', item: 'Alpha' }], sample[0]!)).toBe(true)
     expect(isOptionSelected([{ id: 'a', item: 'Alpha' }], sample[1]!)).toBe(false)
+  })
+
+  it('buildSelectedIdSet supports O(1) has()', () => {
+    const set = buildSelectedIdSet([
+      { id: 'a', item: 'Alpha' },
+      { id: 2, item: 'Two' },
+    ])
+    expect(set.has('a')).toBe(true)
+    expect(set.has(2)).toBe(true)
+    expect(set.has('missing')).toBe(false)
+  })
+
+  it('buildOptionLabelById maps ids to labels', () => {
+    const map = buildOptionLabelById(sample)
+    expect(map.get('a')).toBe('Alpha')
+    expect(map.get('b')).toBe('Beta')
   })
 })
