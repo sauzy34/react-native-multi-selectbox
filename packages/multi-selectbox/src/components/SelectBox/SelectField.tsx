@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react'
+import { memo, type ReactElement, type ReactNode } from 'react'
 import { isEmpty } from 'lodash'
 import {
   Text,
@@ -13,7 +13,7 @@ import { hitSlop } from '../../constants/layout'
 import Icon from '../Icon'
 import { TEST_IDS } from '../../testIDs'
 import type { MultiSelectFieldProps, SelectOption } from '../../types'
-import { MultiChipsRow } from './MultiChipsRow'
+import MultiChipsRow from './MultiChipsRow'
 
 export type SelectFieldProps = {
   isMulti: boolean
@@ -25,7 +25,7 @@ export type SelectFieldProps = {
   arrowIconColor?: string | undefined
   containerStyle?: StyleProp<ViewStyle> | undefined
   selectedItemStyle?: StyleProp<TextStyle> | undefined
-  options: SelectOption[]
+  optionLabelById: ReadonlyMap<string | number, string>
   selectedValues: SelectOption[]
   multiOptionContainerStyle?: StyleProp<ViewStyle> | undefined
   multiOptionsLabelStyle?: StyleProp<TextStyle> | undefined
@@ -35,7 +35,7 @@ export type SelectFieldProps = {
   onToggleOpen: () => void
 }
 
-export function SelectField({
+function SelectField({
   isMulti,
   label,
   inputPlaceholder,
@@ -45,7 +45,7 @@ export function SelectField({
   arrowIconColor = Colors.primary,
   containerStyle,
   selectedItemStyle,
-  options,
+  optionLabelById,
   selectedValues,
   multiOptionContainerStyle,
   multiOptionsLabelStyle,
@@ -80,7 +80,7 @@ export function SelectField({
       <View style={{ paddingRight: 20, flexGrow: 1 }}>
         {isMulti ? (
           <MultiChipsRow
-            options={options}
+            optionLabelById={optionLabelById}
             selectedValues={selectedValues}
             inputPlaceholder={inputPlaceholder}
             multiOptionContainerStyle={multiOptionContainerStyle}
@@ -110,3 +110,5 @@ export function SelectField({
     </View>
   )
 }
+
+export default memo(SelectField)

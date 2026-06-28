@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { memo, type ReactElement } from 'react'
 import {
   Text,
   TouchableOpacity,
@@ -22,7 +22,7 @@ export type OptionRowProps = {
   onPress: (item: SelectOption) => void
 }
 
-export function OptionRow({
+function OptionRow({
   item,
   isMulti,
   checked = false,
@@ -83,3 +83,18 @@ export function OptionRow({
     </View>
   )
 }
+
+function optionRowPropsAreEqual(prev: OptionRowProps, next: OptionRowProps): boolean {
+  return (
+    prev.item.id === next.item.id &&
+    prev.item.item === next.item.item &&
+    prev.isMulti === next.isMulti &&
+    prev.checked === next.checked &&
+    prev.toggleIconColor === next.toggleIconColor &&
+    prev.optionsLabelStyle === next.optionsLabelStyle &&
+    prev.optionContainerStyle === next.optionContainerStyle &&
+    prev.onPress === next.onPress
+  )
+}
+
+export default memo(OptionRow, optionRowPropsAreEqual)

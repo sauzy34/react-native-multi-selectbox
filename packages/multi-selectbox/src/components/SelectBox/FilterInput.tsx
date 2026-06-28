@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { memo, type ReactElement } from 'react'
 import {
   TextInput,
   StyleSheet,
@@ -21,7 +21,7 @@ export type FilterInputProps = {
   searchInputProps?: TextInputProps | undefined
 }
 
-export function FilterInput({
+function FilterInput({
   value,
   onChangeText,
   placeholder,
@@ -77,3 +77,5 @@ export function FilterInput({
     </View>
   )
 }
+
+export default memo(FilterInput)
