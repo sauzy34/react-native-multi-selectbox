@@ -4,9 +4,9 @@ import Colors from '../constants/Colors'
 import Icon from './Icon'
 
 export type ToggleProps = {
-  onTouch?: () => void
-  checked?: boolean
-  iconColor?: string
+  onTouch?: (() => void) | undefined
+  checked?: boolean | undefined
+  iconColor?: string | undefined
 } & Omit<TouchableOpacityProps, 'onPress'>
 
 function Toggle({ onTouch, checked = false, iconColor = Colors.primary, ...props }: ToggleProps) {
