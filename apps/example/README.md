@@ -39,14 +39,14 @@ That comes from **Expo CLI calling Expo’s backend** (not from SelectBox). Defa
 
 ## Stack (pinned)
 
-| Package | Version |
-| ------- | ------- |
-| expo | ~56.0.12 |
-| react / react-dom | 19.2.3 |
-| react-native | 0.85.3 |
-| react-native-web | ^0.21.2 |
-| react-native-svg | 15.15.4 |
-| @expo/metro-runtime | ~56.0.15 |
+| Package                      | Version                                    |
+| ---------------------------- | ------------------------------------------ |
+| expo                         | ~56.0.12                                   |
+| react / react-dom            | 19.2.3                                     |
+| react-native                 | 0.85.3                                     |
+| react-native-web             | ^0.21.2                                    |
+| react-native-svg             | 15.15.4                                    |
+| @expo/metro-runtime          | ~56.0.15                                   |
 | react-native-multi-selectbox | `workspace:*` → `packages/multi-selectbox` |
 
 Metro is configured for the monorepo (`metro.config.js` watchFolders + hoisted `node_modules`).

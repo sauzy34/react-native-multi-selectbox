@@ -132,15 +132,15 @@ See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/typ
 
 ## Scripts (root)
 
-| Script                       | Purpose                |
-| ---------------------------- | ---------------------- |
+| Script                       | Purpose                      |
+| ---------------------------- | ---------------------------- |
 | `pnpm example`               | Start Expo example (offline) |
-| `pnpm example:web`           | Start Expo web demo        |
-| `pnpm example:export:web`    | Static `expo export -p web` |
-| `pnpm typecheck`             | `tsc` in all packages  |
-| `pnpm test` / `pnpm test:ci` | Jest (library) + smoke |
-| `pnpm lint`                  | ESLint                 |
-| `pnpm format`                | Prettier write         |
+| `pnpm example:web`           | Start Expo web demo          |
+| `pnpm example:export:web`    | Static `expo export -p web`  |
+| `pnpm typecheck`             | `tsc` in all packages        |
+| `pnpm test` / `pnpm test:ci` | Jest (library) + smoke       |
+| `pnpm lint`                  | ESLint                       |
+| `pnpm format`                | Prettier write               |
 
 ## Contributing
 
