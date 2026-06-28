@@ -5,10 +5,7 @@ module.exports = {
   testMatch: ['<rootDir>/__tests__/**/*.(test|spec).(ts|tsx)'],
   setupFilesAfterEnv: ['<rootDir>/__tests__/test-utils/setup.ts'],
   clearMocks: true,
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/testIDs.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/testIDs.ts'],
   coverageThreshold: {
     global: {
       statements: 45,
