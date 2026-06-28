@@ -18,6 +18,8 @@
   },
   "scripts": {
     "example": "pnpm --filter @rn-multi-selectbox/example start",
+    "example:online": "pnpm --filter @rn-multi-selectbox/example start:online",
+    "example:clear": "pnpm --filter @rn-multi-selectbox/example exec expo start --offline -c",
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "pnpm -r --if-present run test",
     "test:ci": "pnpm -r --if-present run test:ci",
