@@ -4,15 +4,24 @@ Expo **SDK 56** TypeScript demo for `react-native-multi-selectbox` (workspace pa
 
 ## Run
 
-From the monorepo root:
+Use the **migration monorepo tip** (not `master` / RN CLI era):
 
 ```bash
+# this worktree if master is locked elsewhere:
+git fetch origin chore/expo-monorepo-migration
+git checkout -f origin/chore/expo-monorepo-migration
+
 pnpm install
-pnpm example
-# or: pnpm --filter @rn-multi-selectbox/example start
+pnpm example              # expo start --offline (avoids Expo API GraphQL errors)
+# pnpm example:online     # talks to Expo servers (account / updates / telemetry)
+# pnpm example:clear      # --offline -c clears Metro cache
 ```
 
 Then press `i` / `a` for iOS Simulator / Android emulator, or scan the QR code with Expo Go.
+
+### `UnexpectedServerData` / “No returned query result”
+
+That comes from **Expo CLI calling Expo’s backend** (not from SelectBox). Default `pnpm example` uses **`--offline`** so Metro starts without those GraphQL calls. If you need online mode and still see it: retry later, check network/VPN, or run `pnpm example:clear`.
 
 ## Stack (pinned at Phase 2)
 
