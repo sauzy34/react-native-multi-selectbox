@@ -1,4 +1,4 @@
-import type { SelectOption } from '../types'
+import type { SelectOption } from '../../src/types'
 
 export const OPTIONS = [
   { id: 'JUVE', item: 'Juventus' },

@@ -2,14 +2,11 @@
 module.exports = {
   preset: '@react-native/jest-preset',
   rootDir: __dirname,
-  testMatch: ['<rootDir>/src/**/*.(test|spec).(ts|tsx)'],
-  setupFilesAfterEnv: ['<rootDir>/src/test-utils/setup.ts'],
+  testMatch: ['<rootDir>/__tests__/**/*.(test|spec).(ts|tsx)'],
+  setupFilesAfterEnv: ['<rootDir>/__tests__/test-utils/setup.ts'],
   clearMocks: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
-    '!src/**/*.test.{ts,tsx}',
-    '!src/**/*.spec.{ts,tsx}',
-    '!src/test-utils/**',
     '!src/testIDs.ts',
   ],
   coverageThreshold: {

@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react-native'
 import { OPTIONS_MUTABLE } from './test-utils/fixtures'
 import { renderSelectBox } from './test-utils/renderSelectBox'
-import { TEST_IDS } from './testIDs'
+import { TEST_IDS } from '../src/testIDs'
 
 describe('SelectBox render', () => {
   it('renders label and root test id', () => {
@@ -29,7 +29,7 @@ describe('SelectBox render', () => {
 
   it('renders inside a ScrollView parent without throwing', () => {
     const { ScrollView } = require('react-native')
-    const SelectBox = require('./SelectBox').default
+    const SelectBox = require('../src/SelectBox').default
     const { render } = require('@testing-library/react-native')
 
     expect(() =>

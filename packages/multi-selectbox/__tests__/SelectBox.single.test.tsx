@@ -1,8 +1,8 @@
 import { fireEvent, screen } from '@testing-library/react-native'
 import { OPTIONS_MUTABLE } from './test-utils/fixtures'
 import { renderSelectBox } from './test-utils/renderSelectBox'
-import { TEST_IDS } from './testIDs'
-import type { SelectOption } from './types'
+import { TEST_IDS } from '../src/testIDs'
+import type { SelectOption } from '../src/types'
 
 describe('SelectBox single select', () => {
   it('opens options and calls onChange with the selected option', () => {

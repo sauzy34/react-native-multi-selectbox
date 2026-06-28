@@ -1,10 +1,10 @@
 import { createElement } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react-native'
 import { ScrollView } from 'react-native'
-import SelectBox from './SelectBox'
+import SelectBox from '../src/SelectBox'
 import { OPTIONS_MUTABLE } from './test-utils/fixtures'
 import { renderSelectBox } from './test-utils/renderSelectBox'
-import { TEST_IDS } from './testIDs'
+import { TEST_IDS } from '../src/testIDs'
 
 describe('SelectBox stability (Phase 6)', () => {
   it('uses ScrollView for the options panel (not FlatList) so nesting is safe', () => {

@@ -35,11 +35,7 @@
   },
   "files": [
     "src",
-    "README.md",
-    "!src/**/*.test.tsx",
-    "!src/**/*.test.ts",
-    "!src/test-utils/**",
-    "!jest.config.js"
+    "README.md"
   ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
