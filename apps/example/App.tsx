@@ -132,6 +132,12 @@ export default function App() {
   ])
   const [channels, setChannels] = useState<SelectOption[]>([{ id: 'email', item: 'Email' }])
   const [tags, setTags] = useState<SelectOption[]>([])
+  /** Count of open dropdowns — disables page ScrollView while any panel is open. */
+  const [openDropdowns, setOpenDropdowns] = useState(0)
+
+  const onDropdownOpenChange = (open: boolean) => {
+    setOpenDropdowns((n) => Math.max(0, n + (open ? 1 : -1)))
+  }
 
   const countryLabel = 'item' in country && country.item ? country.item : ''
   const timezoneLabel = 'item' in timezone && timezone.item ? timezone.item : ''
@@ -147,6 +153,7 @@ export default function App() {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        scrollEnabled={openDropdowns === 0}
       >
         <View style={styles.hero}>
           <View style={styles.badge}>
@@ -170,6 +177,7 @@ export default function App() {
             options={COUNTRIES}
             value={country}
             onChange={setCountry}
+            onOpenChange={onDropdownOpenChange}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}
             selectedItemStyle={styles.selectedText}
@@ -190,6 +198,7 @@ export default function App() {
             options={TIMEZONES}
             value={timezone}
             onChange={setTimezone}
+            onOpenChange={onDropdownOpenChange}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}
             selectedItemStyle={styles.selectedText}
@@ -210,6 +219,7 @@ export default function App() {
             options={DEPARTMENTS}
             value={department}
             onChange={setDepartment}
+            onOpenChange={onDropdownOpenChange}
             hideInputFilter
             arrowIconColor={theme.accent}
             selectedItemStyle={styles.selectedText}
@@ -232,6 +242,7 @@ export default function App() {
             onMultiSelect={(item) => setSkills((prev) => toggleById(prev, item))}
             onTapClose={(item) => setSkills((prev) => toggleById(prev, item))}
             isMulti
+            onOpenChange={onDropdownOpenChange}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}
             toggleIconColor={theme.accent}
@@ -256,6 +267,7 @@ export default function App() {
             onMultiSelect={(item) => setChannels((prev) => toggleById(prev, item))}
             onTapClose={(item) => setChannels((prev) => toggleById(prev, item))}
             isMulti
+            onOpenChange={onDropdownOpenChange}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}
             toggleIconColor={theme.accent}
@@ -280,6 +292,7 @@ export default function App() {
             onMultiSelect={(item) => setTags((prev) => toggleById(prev, item))}
             onTapClose={(item) => setTags((prev) => toggleById(prev, item))}
             isMulti
+            onOpenChange={onDropdownOpenChange}
             virtualized={false}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}

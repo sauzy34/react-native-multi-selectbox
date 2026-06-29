@@ -47,6 +47,11 @@ export type SelectBoxSharedProps = {
   toggleIconColor?: string
   searchInputProps?: TextInputProps
   /**
+   * Called when the options panel opens or closes. Use with a parent ScrollView:
+   * `scrollEnabled={!anyDropdownOpen}` to avoid fighting the options list scroll.
+   */
+  onOpenChange?: (open: boolean) => void
+  /**
    * When true (default), options use a vertical FlatList with maxHeight + nestedScrollEnabled
    * for better performance on large lists. May log RN’s nested VirtualizedList warning if the
    * SelectBox sits in a parent ScrollView with the same orientation — set to false to use

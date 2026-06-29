@@ -46,4 +46,20 @@ describe('SelectBox single select', () => {
     fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
     expect(screen.queryByTestId(TEST_IDS.filterInput)).toBeNull()
   })
+
+  it('notifies onOpenChange when opening and closing', () => {
+    const onOpenChange = jest.fn()
+    renderSelectBox({
+      label: 'Team',
+      options: OPTIONS_MUTABLE,
+      onChange: jest.fn(),
+      onOpenChange,
+    })
+
+    fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
+    expect(onOpenChange).toHaveBeenLastCalledWith(true)
+
+    fireEvent.press(screen.getByTestId(TEST_IDS.option('JUVE')))
+    expect(onOpenChange).toHaveBeenLastCalledWith(false)
+  })
 })

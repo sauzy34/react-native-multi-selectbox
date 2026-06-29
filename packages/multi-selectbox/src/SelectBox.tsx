@@ -46,6 +46,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     listOptionProps,
     listScrollViewProps,
     virtualized = true,
+    onOpenChange,
   } = props
 
   const options = normalizeOptions(optionsProp)
@@ -84,15 +85,32 @@ function SelectBox(props: SelectBoxProps): ReactElement {
 
   const selectedItemText = readSelectedItemText(value)
 
+  const setOpen = useCallback(
+    (next: boolean) => {
+      setShowOptions((prev) => {
+        if (prev === next) {
+          return prev
+        }
+        if (!next) {
+          setInputValue('')
+        }
+        onOpenChange?.(next)
+        return next
+      })
+    },
+    [onOpenChange],
+  )
+
   const toggleOptions = useCallback(() => {
     setShowOptions((open) => {
       const next = !open
       if (!next) {
         setInputValue('')
       }
+      onOpenChange?.(next)
       return next
     })
-  }, [])
+  }, [onOpenChange])
 
   const handleSelectOption = useCallback(
     (item: SelectOption) => {
@@ -100,11 +118,10 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         onMultiSelect?.(item)
         return
       }
-      setShowOptions(false)
-      setInputValue('')
+      setOpen(false)
       onChange?.(item)
     },
-    [isMulti, onChange, onMultiSelect],
+    [isMulti, onChange, onMultiSelect, setOpen],
   )
 
   const fieldLabelStyle: StyleProp<TextStyle> = [
