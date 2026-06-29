@@ -4,11 +4,13 @@ Expo **SDK 56** TypeScript demo for `react-native-multi-selectbox` (workspace pa
 
 ## Hosted demo (GitHub Pages)
 
-After CI deploys from `master` / `main` / `chore/expo-monorepo-migration`:
+After CI deploys from **`master` / `main`**:
 
 **https://sauzy34.github.io/react-native-multi-selectbox/**
 
-Enable once in the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**. Export uses `EXPO_BASE_URL=/react-native-multi-selectbox` (see `app.config.js` + `.github/workflows/ci.yml`).
+Enable once: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+The `github-pages` environment only allows deploys from branches permitted under **Settings → Environments → github-pages → Deployment branches and tags** (default: protected / selected branches — usually just the default branch). Feature branches like `chore/expo-monorepo-migration` are blocked unless you set **No restriction** (or add that branch) and extend the `if` in `.github/workflows/ci.yml`. Export uses `EXPO_BASE_URL=/react-native-multi-selectbox` (`app.config.js`).
 
 ## Run
 
