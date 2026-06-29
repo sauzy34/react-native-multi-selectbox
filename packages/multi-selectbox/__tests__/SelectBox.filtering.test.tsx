@@ -33,3 +33,27 @@ describe('SelectBox filtering', () => {
     expect(screen.getByTestId(TEST_IDS.listEmpty)).toHaveTextContent('No clubs found')
   })
 })
+
+it('shows clear control when filter has text and clears on press', () => {
+  renderSelectBox({
+    label: 'Team',
+    options: OPTIONS_MUTABLE,
+    onChange: jest.fn(),
+  })
+
+  fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
+  expect(screen.getByTestId(TEST_IDS.filterSearchIcon)).toBeTruthy()
+  expect(screen.queryByTestId(TEST_IDS.filterClear)).toBeNull()
+
+  fireEvent.changeText(screen.getByTestId(TEST_IDS.filterInput), 'real')
+  expect(screen.queryByTestId(TEST_IDS.filterSearchIcon)).toBeNull()
+  expect(screen.getByTestId(TEST_IDS.filterClear)).toBeTruthy()
+  expect(screen.getByTestId(TEST_IDS.option('RM'))).toBeTruthy()
+  expect(screen.queryByTestId(TEST_IDS.option('JUVE'))).toBeNull()
+
+  fireEvent.press(screen.getByTestId(TEST_IDS.filterClear))
+  expect(screen.getByTestId(TEST_IDS.filterInput).props.value).toBe('')
+  expect(screen.getByTestId(TEST_IDS.filterSearchIcon)).toBeTruthy()
+  expect(screen.getByTestId(TEST_IDS.option('JUVE'))).toBeTruthy()
+  expect(screen.getByTestId(TEST_IDS.option('RM'))).toBeTruthy()
+})

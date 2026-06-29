@@ -2,6 +2,7 @@ import { memo, type ReactElement } from 'react'
 import {
   TextInput,
   StyleSheet,
+  TouchableOpacity,
   View,
   type StyleProp,
   type TextInputProps,
@@ -9,6 +10,7 @@ import {
   type ViewStyle,
 } from 'react-native'
 import Icon from '../Icon'
+import { hitSlop } from '../../constants/layout'
 import { TEST_IDS } from '../../testIDs'
 
 export type FilterInputProps = {
@@ -31,6 +33,7 @@ function FilterInput({
   searchInputProps,
 }: FilterInputProps): ReactElement {
   const { style: searchInputStyle, ...restSearchInputProps } = searchInputProps ?? {}
+  const hasQuery = value.length > 0
 
   const inputStyle: StyleProp<TextStyle> = [
     {
@@ -39,6 +42,8 @@ function FilterInput({
       color: '#000',
       fontSize: 12,
       flexGrow: 1,
+      flexShrink: 1,
+      minWidth: 0,
     },
     inputFilterStyle,
     searchInputStyle,
@@ -56,11 +61,13 @@ function FilterInput({
       borderBottomColor: '#ddd',
       flexDirection: 'row',
       alignItems: 'center',
-      paddingRight: 18,
+      paddingRight: 12,
       justifyContent: 'space-between',
     },
     inputFilterContainerStyle,
   ]
+
+  const clear = () => onChangeText('')
 
   return (
     <View style={containerStyle}>
@@ -73,7 +80,21 @@ function FilterInput({
         placeholderTextColor={placeholderTextColor}
         {...restSearchInputProps}
       />
-      <Icon name="searchBoxIcon" fill={searchIconColor} />
+      {hasQuery ? (
+        <TouchableOpacity
+          testID={TEST_IDS.filterClear}
+          onPress={clear}
+          hitSlop={hitSlop}
+          accessibilityRole="button"
+          accessibilityLabel="Clear search"
+        >
+          <Icon name="closeCircle" fill={searchIconColor} width={20} height={20} />
+        </TouchableOpacity>
+      ) : (
+        <View pointerEvents="none" testID={TEST_IDS.filterSearchIcon}>
+          <Icon name="searchBoxIcon" fill={searchIconColor} />
+        </View>
+      )}
     </View>
   )
 }

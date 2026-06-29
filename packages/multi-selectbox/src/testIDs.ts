@@ -5,6 +5,8 @@ export const TEST_IDS = {
   singleTrigger: 'selectbox-single-trigger',
   dropdownToggle: 'selectbox-dropdown-toggle',
   filterInput: 'selectbox-filter-input',
+  filterClear: 'selectbox-filter-clear',
+  filterSearchIcon: 'selectbox-filter-search-icon',
   optionsList: 'selectbox-options-list',
   option: (id: string | number) => `selectbox-option-${id}`,
   multiChip: (id: string | number) => `selectbox-chip-${id}`,
