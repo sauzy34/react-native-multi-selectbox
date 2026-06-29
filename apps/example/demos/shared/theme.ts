@@ -1,0 +1,173 @@
+import { StyleSheet } from 'react-native'
+
+export const theme = {
+  bg: '#F4F5F7',
+  card: '#FFFFFF',
+  text: '#111827',
+  muted: '#6B7280',
+  border: '#E5E7EB',
+  accent: '#4F46E5',
+  accentSoft: '#EEF2FF',
+  accentText: '#3730A3',
+}
+
+/** Shared layout / card styles used by both host demos. */
+export const demoStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: theme.bg,
+  },
+  content: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 48,
+    flexGrow: 1,
+  },
+  hero: {
+    marginBottom: 12,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: theme.accentSoft,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 999,
+    marginBottom: 12,
+  },
+  badgeText: {
+    color: theme.accentText,
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: theme.text,
+    letterSpacing: -0.4,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: theme.muted,
+    maxWidth: 520,
+  },
+  sectionHeader: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.muted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.7,
+    marginTop: 8,
+    marginBottom: 10,
+  },
+  card: {
+    backgroundColor: theme.card,
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.border,
+    shadowColor: '#111827',
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+  },
+  cardEyebrow: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: theme.accent,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: 6,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.text,
+    marginBottom: 6,
+  },
+  cardDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: theme.muted,
+    marginBottom: 14,
+  },
+  cardBody: {
+    gap: 12,
+  },
+  fieldUnderline: {
+    borderBottomColor: theme.border,
+    paddingTop: 4,
+  },
+  selectedText: {
+    fontSize: 16,
+    color: theme.text,
+    fontWeight: '500',
+  },
+  optionText: {
+    fontSize: 15,
+    color: theme.text,
+  },
+  chip: {
+    backgroundColor: theme.accent,
+    borderRadius: 999,
+    paddingVertical: 6,
+    paddingLeft: 12,
+    paddingRight: 6,
+    marginRight: 6,
+  },
+  chipLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  summary: {
+    marginTop: 4,
+    paddingTop: 12,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: theme.border,
+  },
+  summaryLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.muted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    marginBottom: 4,
+  },
+  summaryValue: {
+    fontSize: 14,
+    color: theme.text,
+    lineHeight: 20,
+  },
+  footer: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: theme.muted,
+    marginTop: 8,
+  },
+  callout: {
+    backgroundColor: theme.accentSoft,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#C7D2FE',
+  },
+  calloutTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.accentText,
+    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  calloutBody: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: theme.accentText,
+  },
+})

@@ -33,9 +33,18 @@ pnpm example:web
 
 QA checklist: single + multi select, filter, chips, icon colors on deselect, options panel scroll.
 
-### Scrolling layout
+### Scrolling hosts (separate demo files)
 
-The demo screen is a **`SectionList`** (not an outer `ScrollView`). Each demo card is a section row; every `SelectBox` uses **`virtualized={false}`** so the options panel is not a second vertical VirtualizedList inside the list. That matches React Native’s guidance and avoids nested-list warnings / gesture fights — see the library README section *Hosting SelectBox in scrolling screens*.
+The app chrome lets you switch patterns; each host is its own file so you can copy the one that fits:
+
+| File | Host | When to use |
+| ---- | ---- | ----------- |
+| [`demos/SectionListHostDemo.tsx`](./demos/SectionListHostDemo.tsx) | `SectionList` | Preferred for long screens (same idea with `FlatList`) |
+| [`demos/ScrollViewHostDemo.tsx`](./demos/ScrollViewHostDemo.tsx) | `ScrollView` | Simple / short–medium forms |
+
+Shared catalogs and chrome live under [`demos/shared/`](./demos/shared/) (`data.ts`, `theme.ts`, `ui.tsx`). Entry: [`App.tsx`](./App.tsx).
+
+In **both** hosts every `SelectBox` uses **`virtualized={false}`** so options are not a second vertical VirtualizedList under the page scroll. Default `virtualized={true}` is for layouts with **no** vertical scroll parent. Library docs: *Hosting SelectBox in scrolling screens*.
 
 ### `UnexpectedServerData` / “No returned query result”
 

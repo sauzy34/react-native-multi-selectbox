@@ -40,8 +40,9 @@ React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionLis
 
 ### Recommended (RN-correct)
 
-1. **Make the screen a `FlatList` or `SectionList`** — each field or card is a row / section item. Do **not** wrap the form in an outer vertical `ScrollView`. The Expo demo does this: [`apps/example/App.tsx`](../../apps/example/App.tsx).
-2. When SelectBox is rendered **as a list row** (inside `FlatList` / `SectionList`) **or** inside a **vertical `ScrollView`**, set **`virtualized={false}`** so options use a bounded `ScrollView` + `.map()` instead of a second VirtualizedList:
+1. **Make the screen a `FlatList` or `SectionList`** — each field or card is a row / section item (preferred for long screens). Demo: [`apps/example/demos/SectionListHostDemo.tsx`](../../apps/example/demos/SectionListHostDemo.tsx).
+2. **Or use a vertical `ScrollView`** for simpler forms — still set **`virtualized={false}`** on every SelectBox. Demo: [`apps/example/demos/ScrollViewHostDemo.tsx`](../../apps/example/demos/ScrollViewHostDemo.tsx).
+3. When SelectBox is rendered **as a list row** (inside `FlatList` / `SectionList`) **or** inside a **vertical `ScrollView`**, set **`virtualized={false}`** so options use a bounded `ScrollView` + `.map()` instead of a second VirtualizedList:
 
 ```tsx
 // Screen owns scrolling (FlatList / SectionList / ScrollView).
@@ -49,7 +50,9 @@ React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionLis
 <SelectBox virtualized={false} options={OPTIONS} onChange={...} />
 ```
 
-3. Keep the default **`virtualized={true}`** only when SelectBox is **not** under another vertical scroll parent (e.g. a short fixed layout, modal body that is not a `ScrollView` / list, single field on screen).
+4. Keep the default **`virtualized={true}`** only when SelectBox is **not** under another vertical scroll parent (e.g. a short fixed layout, modal body that is not a `ScrollView` / list, single field on screen).
+
+Switch hosts in the Expo app tabs (`apps/example/App.tsx`).
 
 | Host                                              | Suggested `virtualized`                          |
 | ------------------------------------------------- | ------------------------------------------------ |

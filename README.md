@@ -130,11 +130,11 @@ See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/typ
 
 RN warns when a vertical `FlatList` / `SectionList` is nested inside a vertical `ScrollView` (or another VirtualizedList). SelectBox options default to a `FlatList` (`virtualized={true}`).
 
-1. **Prefer `FlatList` / `SectionList` for the screen** — each field or card is a row (see [`apps/example/App.tsx`](./apps/example/App.tsx)). Do not wrap SelectBox in an outer vertical `ScrollView` when you can avoid it.
-2. When SelectBox is a **list row** or lives in a **vertical `ScrollView`**, set **`virtualized={false}`** so options are a bounded `ScrollView` + `.map()`, not a second VirtualizedList.
+1. **Prefer `FlatList` / `SectionList` for long screens** — each field or card is a row ([`demos/SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx)).
+2. **`ScrollView` is fine for simpler forms** — still set `virtualized={false}` on every SelectBox ([`demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)).
 3. Use default **`virtualized={true}`** only when there is no other vertical scroll parent (short fixed layout / non-scrolling modal).
 
-Details: [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
+The Expo app (`apps/example/App.tsx`) tabs between both hosts. Details: [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
 
 ## Scripts (root)
 
