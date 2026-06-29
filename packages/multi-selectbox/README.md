@@ -34,15 +34,16 @@ import SelectBox, {
 
 Options must include `id` and `item`.
 
-## Lists & nested ScrollViews
+## Options presentation (anchored overlay)
 
-By default options render in a **vertical `FlatList`** with a **max height** and **`nestedScrollEnabled`**. If the SelectBox sits inside a **parent vertical ScrollView**, RN may log a nested VirtualizedList warning. To avoid it:
+Options open in an **anchored overlay** (`Modal` + `measureInWindow` on the field), not inline inside a parent `ScrollView`. That avoids nested VirtualizedList issues while keeping a **FlatList** by default.
 
-```tsx
-<SelectBox virtualized={false} options={OPTIONS} onChange={...} />
-```
+- Tap the dimmed backdrop or chevron to close.
+- Panel flips **above** the field when there is more room above.
+- `virtualized={false}` still switches the panel body to ScrollView+map (escape hatch).
+- Multi chips stay in the field row (horizontal ScrollView).
 
-Multi chips use a **horizontal ScrollView** (content-sized chips).
+A future **bottom sheet** can replace `AnchoredOptionsOverlay` without rewriting `OptionsPanel`.
 
 ## Develop
 

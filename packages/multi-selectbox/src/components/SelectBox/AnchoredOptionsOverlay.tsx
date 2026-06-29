@@ -82,11 +82,7 @@ function AnchoredOptionsOverlay({
           height: panelLayout.height,
         }
       : styles.panelFallback,
-    Platform.select({
-      ios: styles.shadowIos,
-      android: styles.shadowAndroid,
-      default: {},
-    }),
+    Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos,
   ]
 
   return (
@@ -129,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(17, 24, 39, 0.12)',
   },
   panelBase: {
