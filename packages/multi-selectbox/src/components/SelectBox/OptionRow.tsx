@@ -7,8 +7,8 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native'
-import Toggle from '../Toggle'
-import { hitSlop, optionLabelPressStyle } from '../../constants/layout'
+import Colors from '../../constants/Colors'
+import Icon from '../Icon'
 import { TEST_IDS } from '../../testIDs'
 import type { SelectOption } from '../../types'
 
@@ -41,46 +41,48 @@ function OptionRow({
       backgroundColor: '#fff',
       paddingVertical: 12,
       paddingRight: 10,
+      paddingLeft: 0,
       justifyContent: 'space-between',
     },
     optionContainerStyle,
   ]
 
   const labelStyle: StyleProp<TextStyle> = [
-    { fontSize: 17, color: 'rgba(60, 60, 67, 0.6)' },
+    {
+      fontSize: 17,
+      color: 'rgba(60, 60, 67, 0.6)',
+      flex: 1,
+      flexShrink: 1,
+      paddingRight: 12,
+    },
     optionsLabelStyle,
   ]
 
   const handlePress = () => onPress(item)
+  const iconColor = toggleIconColor ?? Colors.primary
 
-  if (isMulti) {
-    return (
-      <View style={containerStyle}>
-        <TouchableOpacity
-          testID={TEST_IDS.option(item.id)}
-          hitSlop={hitSlop}
-          style={optionLabelPressStyle}
-          onPress={handlePress}
-        >
-          <Text style={labelStyle}>{item.item}</Text>
-        </TouchableOpacity>
-        <Toggle iconColor={toggleIconColor} checked={checked} onTouch={handlePress} />
-      </View>
-    )
-  }
-
+  // Entire row is pressable (not only the label text).
   return (
-    <View style={containerStyle}>
-      <TouchableOpacity
-        testID={TEST_IDS.option(item.id)}
-        hitSlop={hitSlop}
-        style={optionLabelPressStyle}
-        onPress={handlePress}
-      >
-        <Text style={labelStyle}>{item.item}</Text>
-        <View />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      testID={TEST_IDS.option(item.id)}
+      style={containerStyle}
+      onPress={handlePress}
+      activeOpacity={0.65}
+      accessibilityRole="button"
+      accessibilityState={isMulti ? { checked } : undefined}
+    >
+      <Text style={labelStyle}>{item.item}</Text>
+      {isMulti ? (
+        <View pointerEvents="none">
+          <Icon
+            name={checked ? 'deleteCircle' : 'addCircle'}
+            fill={iconColor}
+            width={22}
+            height={22}
+          />
+        </View>
+      ) : null}
+    </TouchableOpacity>
   )
 }
 
