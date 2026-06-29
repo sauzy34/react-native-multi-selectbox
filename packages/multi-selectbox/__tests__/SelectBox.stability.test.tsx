@@ -6,8 +6,8 @@ import { OPTIONS_MUTABLE } from './test-utils/fixtures'
 import { renderSelectBox } from './test-utils/renderSelectBox'
 import { TEST_IDS } from '../src/testIDs'
 
-describe('SelectBox stability (Phase 6)', () => {
-  it('uses ScrollView for the options panel (not FlatList) so nesting is safe', () => {
+describe('SelectBox stability', () => {
+  it('uses FlatList for the options panel by default (virtualized)', () => {
     renderSelectBox({
       label: 'Team',
       options: OPTIONS_MUTABLE,
@@ -16,7 +16,23 @@ describe('SelectBox stability (Phase 6)', () => {
 
     fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
     const panel = screen.getByTestId(TEST_IDS.optionsList)
+    // FlatList renders as RCTScrollView / VirtualizedList host in RN test renderer
+    expect(panel).toBeTruthy()
+    expect(panel.props.data).toEqual(OPTIONS_MUTABLE)
+  })
+
+  it('uses ScrollView when virtualized={false} (nested ScrollView-safe, no VL data prop)', () => {
+    renderSelectBox({
+      label: 'Team',
+      options: OPTIONS_MUTABLE,
+      virtualized: false,
+      onChange: jest.fn(),
+    })
+
+    fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
+    const panel = screen.getByTestId(TEST_IDS.optionsList)
     expect(panel.type).toBe('RCTScrollView')
+    expect(panel.props.data).toBeUndefined()
   })
 
   it('applies inputFilterStyle color on the filter TextInput', () => {
@@ -60,11 +76,29 @@ describe('SelectBox stability (Phase 6)', () => {
     expect(screen.getByTestId(TEST_IDS.singleTrigger)).toHaveTextContent('Real Madrid')
   })
 
-  it('renders options inside an outer ScrollView and still selects', () => {
+  it('renders options inside an outer ScrollView and still selects (virtualized default)', () => {
     const onChange = jest.fn()
     const { getByTestId } = render(
       <ScrollView>
         <SelectBox label="Nested" options={OPTIONS_MUTABLE} onChange={onChange} />
+      </ScrollView>,
+    )
+
+    fireEvent.press(getByTestId(TEST_IDS.dropdownToggle))
+    fireEvent.press(getByTestId(TEST_IDS.option('JUVE')))
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ id: 'JUVE' }))
+  })
+
+  it('renders options inside an outer ScrollView with virtualized={false}', () => {
+    const onChange = jest.fn()
+    const { getByTestId } = render(
+      <ScrollView>
+        <SelectBox
+          label="Nested"
+          options={OPTIONS_MUTABLE}
+          virtualized={false}
+          onChange={onChange}
+        />
       </ScrollView>,
     )
 

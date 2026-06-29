@@ -1,9 +1,10 @@
-import { memo, type ReactElement } from 'react'
+import { memo, useCallback, type ReactElement } from 'react'
 import {
-  ScrollView,
+  FlatList,
   Text,
   TouchableOpacity,
   View,
+  type ListRenderItem,
   type StyleProp,
   type TextStyle,
   type ViewStyle,
@@ -16,7 +17,6 @@ import type { MultiSelectFieldProps, SelectOption } from '../../types'
 import { MultiEmptyPlaceholder } from './EmptyStates'
 
 export type MultiChipsRowProps = {
-  /** id → display label (from full options catalog). */
   optionLabelById: ReadonlyMap<string | number, string>
   selectedValues: SelectOption[]
   inputPlaceholder: string
@@ -97,32 +97,43 @@ function MultiChipsRow({
     style: multiFieldStyle,
     contentContainerStyle: multiFieldContentStyle,
     keyboardShouldPersistTaps: multiKbdTaps = 'handled',
+    nestedScrollEnabled = true,
     ...restMultiFieldProps
   } = multiSelectInputFieldProps ?? {}
 
+  const renderItem: ListRenderItem<SelectOption> = useCallback(
+    ({ item }) => {
+      const chipLabel = optionLabelById.get(item.id) ?? item.item
+      return (
+        <Chip
+          item={item}
+          label={chipLabel}
+          multiOptionContainerStyle={multiOptionContainerStyle}
+          multiOptionsLabelStyle={multiOptionsLabelStyle}
+          onTapClose={onTapClose}
+        />
+      )
+    },
+    [optionLabelById, multiOptionContainerStyle, multiOptionsLabelStyle, onTapClose],
+  )
+
+  const keyExtractor = useCallback((item: SelectOption) => String(item.id), [])
+
+  // Horizontal FlatList: different orientation than a typical vertical parent ScrollView,
+  // so RN’s “same orientation” nesting warning usually does not apply.
   return (
-    <ScrollView
+    <FlatList
       horizontal
+      data={selectedValues}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
       showsHorizontalScrollIndicator={false}
       keyboardShouldPersistTaps={multiKbdTaps}
+      nestedScrollEnabled={nestedScrollEnabled}
       style={multiFieldStyle}
       contentContainerStyle={[{ alignItems: 'center' }, multiFieldContentStyle]}
       {...restMultiFieldProps}
-    >
-      {selectedValues.map((item) => {
-        const chipLabel = optionLabelById.get(item.id) ?? item.item
-        return (
-          <Chip
-            key={String(item.id)}
-            item={item}
-            label={chipLabel}
-            multiOptionContainerStyle={multiOptionContainerStyle}
-            multiOptionsLabelStyle={multiOptionsLabelStyle}
-            onTapClose={onTapClose}
-          />
-        )
-      })}
-    </ScrollView>
+    />
   )
 }
 

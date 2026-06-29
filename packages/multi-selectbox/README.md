@@ -38,3 +38,15 @@ pnpm install   # repo root
 pnpm typecheck
 pnpm example
 ```
+
+## Lists & nested ScrollViews
+
+By default options render in a **vertical `FlatList`** with a **max height** and **`nestedScrollEnabled`**, so large lists stay performant. If the SelectBox sits inside a **parent vertical ScrollView**, React Native may log a nested VirtualizedList warning (scroll usually still works).
+
+To avoid that warning and trade virtualization for simplicity:
+
+```tsx
+<SelectBox virtualized={false} options={OPTIONS} onChange={...} />
+```
+
+Multi chips use a **horizontal** FlatList (different orientation than a typical page ScrollView).

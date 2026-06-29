@@ -44,6 +44,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     searchInputProps,
     multiSelectInputFieldProps,
     listOptionProps,
+    listScrollViewProps,
+    virtualized = true,
   } = props
 
   const options = normalizeOptions(optionsProp)
@@ -156,7 +158,9 @@ function SelectBox(props: SelectBoxProps): ReactElement {
           optionsLabelStyle={optionsLabelStyle}
           optionContainerStyle={optionContainerStyle}
           listEmptyLabelStyle={listEmptyLabelStyle}
+          virtualized={virtualized}
           listOptionProps={resolvedListOptionProps}
+          listScrollViewProps={listScrollViewProps}
           onSelectOption={handleSelectOption}
         />
       )}

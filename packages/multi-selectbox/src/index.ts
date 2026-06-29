@@ -11,6 +11,7 @@ export type {
   SelectBoxMultiProps,
   SelectOption,
   OptionsListProps,
+  OptionsScrollViewProps,
   MultiSelectFieldProps,
 } from './types'
 export { TEST_IDS } from './testIDs'
