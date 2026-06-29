@@ -54,11 +54,11 @@ React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionLis
 
 Switch hosts in the Expo app tabs (`apps/example/App.tsx`).
 
-| Host                                              | Suggested `virtualized`                          |
-| ------------------------------------------------- | ------------------------------------------------ |
-| `FlatList` / `SectionList` row                    | `false`                                          |
-| Vertical `ScrollView`                             | `false`                                          |
-| Non-scrolling `View` / modal without list scroll  | `true` (default, better for large option lists)  |
+| Host                                             | Suggested `virtualized`                         |
+| ------------------------------------------------ | ----------------------------------------------- |
+| `FlatList` / `SectionList` row                   | `false`                                         |
+| Vertical `ScrollView`                            | `false`                                         |
+| Non-scrolling `View` / modal without list scroll | `true` (default, better for large option lists) |
 
 Multi chips use a **horizontal `ScrollView`** (content-sized chips) — that orientation does not conflict with a vertical page list.
 

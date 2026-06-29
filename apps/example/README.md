@@ -37,14 +37,14 @@ QA checklist: single + multi select, filter, chips, icon colors on deselect, opt
 
 The app chrome lets you switch patterns; each host is its own file so you can copy the one that fits:
 
-| File | Host | When to use |
-| ---- | ---- | ----------- |
+| File                                                               | Host          | When to use                                            |
+| ------------------------------------------------------------------ | ------------- | ------------------------------------------------------ |
 | [`demos/SectionListHostDemo.tsx`](./demos/SectionListHostDemo.tsx) | `SectionList` | Preferred for long screens (same idea with `FlatList`) |
-| [`demos/ScrollViewHostDemo.tsx`](./demos/ScrollViewHostDemo.tsx) | `ScrollView` | Simple / short–medium forms |
+| [`demos/ScrollViewHostDemo.tsx`](./demos/ScrollViewHostDemo.tsx)   | `ScrollView`  | Simple / short–medium forms                            |
 
 Shared catalogs and chrome live under [`demos/shared/`](./demos/shared/) (`data.ts`, `theme.ts`, `ui.tsx`). Entry: [`App.tsx`](./App.tsx).
 
-In **both** hosts every `SelectBox` uses **`virtualized={false}`** so options are not a second vertical VirtualizedList under the page scroll. Default `virtualized={true}` is for layouts with **no** vertical scroll parent. Library docs: *Hosting SelectBox in scrolling screens*.
+In **both** hosts every `SelectBox` uses **`virtualized={false}`** so options are not a second vertical VirtualizedList under the page scroll. Default `virtualized={true}` is for layouts with **no** vertical scroll parent. Library docs: _Hosting SelectBox in scrolling screens_.
 
 ### `UnexpectedServerData` / “No returned query result”
 

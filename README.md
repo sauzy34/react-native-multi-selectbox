@@ -108,21 +108,21 @@ import type {
 
 ### Props (overview)
 
-| Prop                                              | Description                                                             |
-| ------------------------------------------------- | ----------------------------------------------------------------------- |
-| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                           |
-| `value` / `onChange`                              | Single-select controlled value                                          |
-| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                            |
-| `isMulti`                                         | `true` for multi mode                                                   |
-| `hideInputFilter`                                 | Hide search field in the dropdown                                       |
+| Prop                                              | Description                                                                                                                                     |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                                                                                                   |
+| `value` / `onChange`                              | Single-select controlled value                                                                                                                  |
+| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                                                                                    |
+| `isMulti`                                         | `true` for multi mode                                                                                                                           |
+| `hideInputFilter`                                 | Hide search field in the dropdown                                                                                                               |
 | `virtualized`                                     | `true` (default): options `FlatList`; `false`: options ScrollView — use `false` inside `FlatList` / `SectionList` / vertical `ScrollView` hosts |
-| `listOptionProps`                                 | Extra props for the options **FlatList** (when virtualized)             |
-| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                |
-| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                 |
-| `*Style` props                                    | Label, container, options, chips, empty states, selected text           |
-| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                  |
-| `selectIcon`                                      | Custom dropdown icon node                                               |
-| `searchInputProps`                                | Extra `TextInput` props for the filter                                  |
+| `listOptionProps`                                 | Extra props for the options **FlatList** (when virtualized)                                                                                     |
+| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                                                                                        |
+| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                                                                                         |
+| `*Style` props                                    | Label, container, options, chips, empty states, selected text                                                                                   |
+| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                                                                                          |
+| `selectIcon`                                      | Custom dropdown icon node                                                                                                                       |
+| `searchInputProps`                                | Extra `TextInput` props for the filter                                                                                                          |
 
 See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
 

@@ -183,10 +183,7 @@ export default function SectionListHostDemo() {
                 optionsLabelStyle={demoStyles.optionText}
                 containerStyle={demoStyles.fieldUnderline}
               />
-              <SelectionSummary
-                label="Selected"
-                value={channels.map((c) => c.item).join(', ')}
-              />
+              <SelectionSummary label="Selected" value={channels.map((c) => c.item).join(', ')} />
             </DemoCard>
           )
         case 'tags':
@@ -258,9 +255,7 @@ export default function SectionListHostDemo() {
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}
       ListHeaderComponent={listHeader}
-      ListFooterComponent={
-        <Text style={demoStyles.footer}>demos/SectionListHostDemo.tsx</Text>
-      }
+      ListFooterComponent={<Text style={demoStyles.footer}>demos/SectionListHostDemo.tsx</Text>}
       contentContainerStyle={demoStyles.content}
       stickySectionHeadersEnabled={false}
       keyboardShouldPersistTaps="handled"
