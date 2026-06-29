@@ -2,6 +2,14 @@
 
 Expo **SDK 56** TypeScript demo for `react-native-multi-selectbox` (workspace package).
 
+## Hosted demo (GitHub Pages)
+
+After CI deploys from `master` / `main` / `chore/expo-monorepo-migration`:
+
+**https://sauzy34.github.io/react-native-multi-selectbox/**
+
+Enable once in the repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**. Export uses `EXPO_BASE_URL=/react-native-multi-selectbox` (see `app.config.js` + `.github/workflows/ci.yml`).
+
 ## Run
 
 Use the **migration monorepo tip** (not `master` / RN CLI era):

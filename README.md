@@ -34,6 +34,8 @@ pnpm format           # Prettier write
 
 Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-selectbox": "workspace:*"`. Web needs `react-dom` / `react-native-web` (already in the example package).
 
+**Hosted web demo (GitHub Pages):** [sauzy34.github.io/react-native-multi-selectbox](https://sauzy34.github.io/react-native-multi-selectbox/) — deployed by CI on push (`build-web-demo` / `deploy-pages`). Enable **Settings → Pages → Source: GitHub Actions** once if the site 404s.
+
 ## Install in your app (consumers)
 
 ```bash
