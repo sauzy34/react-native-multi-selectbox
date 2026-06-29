@@ -270,7 +270,7 @@ export default function App() {
         <DemoCard
           eyebrow="Multi select · in a scrolling form"
           title="Project tags"
-          description="Nested in this page ScrollView. Uses virtualized={false} to avoid VirtualizedList nesting warnings."
+          description="Nested in this page ScrollView. Options open in an anchored overlay (not inside the ScrollView), so FlatList is safe."
         >
           <SelectBox
             label="Tags"
@@ -280,7 +280,6 @@ export default function App() {
             onMultiSelect={(item) => setTags((prev) => toggleById(prev, item))}
             onTapClose={(item) => setTags((prev) => toggleById(prev, item))}
             isMulti
-            virtualized={false}
             arrowIconColor={theme.accent}
             searchIconColor={theme.accent}
             toggleIconColor={theme.accent}

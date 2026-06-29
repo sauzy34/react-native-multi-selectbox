@@ -107,3 +107,29 @@ describe('SelectBox stability', () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ id: 'JUVE' }))
   })
 })
+
+it('opens options in an overlay (not inline under the field)', () => {
+  renderSelectBox({
+    label: 'Team',
+    options: OPTIONS_MUTABLE,
+    onChange: jest.fn(),
+  })
+
+  expect(screen.queryByTestId(TEST_IDS.optionsOverlay)).toBeNull()
+  fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
+  expect(screen.getByTestId(TEST_IDS.optionsOverlay)).toBeTruthy()
+  expect(screen.getByTestId(TEST_IDS.optionsOverlayBackdrop)).toBeTruthy()
+  expect(screen.getByTestId(TEST_IDS.optionsList)).toBeTruthy()
+})
+
+it('closes overlay when backdrop is pressed', () => {
+  renderSelectBox({
+    label: 'Team',
+    options: OPTIONS_MUTABLE,
+    onChange: jest.fn(),
+  })
+
+  fireEvent.press(screen.getByTestId(TEST_IDS.dropdownToggle))
+  fireEvent.press(screen.getByTestId(TEST_IDS.optionsOverlayBackdrop))
+  expect(screen.queryByTestId(TEST_IDS.optionsOverlay)).toBeNull()
+})

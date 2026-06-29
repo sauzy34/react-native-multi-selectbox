@@ -12,4 +12,8 @@ export const TEST_IDS = {
   multiChip: (id: string | number) => `selectbox-chip-${id}`,
   multiEmpty: 'selectbox-multi-empty',
   listEmpty: 'selectbox-list-empty',
+  optionsOverlay: 'selectbox-options-overlay',
+  optionsOverlayRoot: 'selectbox-options-overlay-root',
+  optionsOverlayBackdrop: 'selectbox-options-overlay-backdrop',
+  optionsOverlayPanel: 'selectbox-options-overlay-panel',
 } as const
