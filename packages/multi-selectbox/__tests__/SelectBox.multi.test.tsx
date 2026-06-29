@@ -38,7 +38,7 @@ describe('SelectBox multi select', () => {
 
     const touchables = screen.UNSAFE_getAllByType(TouchableOpacity)
     const closeBtn = touchables.find(
-      (n) => (n.props.style as { marginLeft?: number } | undefined)?.marginLeft === 15,
+      (n) => (n.props.style as { marginLeft?: number } | undefined)?.marginLeft === 10,
     )
     expect(closeBtn).toBeDefined()
     fireEvent.press(closeBtn!)
