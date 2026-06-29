@@ -1,5 +1,4 @@
 import { memo, type ReactElement, type ReactNode } from 'react'
-import { isEmpty } from 'lodash'
 import {
   Text,
   TouchableOpacity,
@@ -70,7 +69,7 @@ function SelectField({
   const valueStyle: StyleProp<TextStyle> = [
     {
       fontSize: 17,
-      color: isEmpty(selectedItemText) ? 'rgba(60, 60, 67, 0.3)' : '#000',
+      color: selectedItemText.length === 0 ? 'rgba(60, 60, 67, 0.3)' : '#000',
     },
     selectedItemStyle,
   ]

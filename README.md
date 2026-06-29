@@ -37,25 +37,17 @@ Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-s
 ## Install in your app (consumers)
 
 ```bash
-# npm / yarn / pnpm
-npm install react-native-multi-selectbox lodash
-
-# Expo (align SVG with your SDK)
-npx expo install react-native-svg
-
-# React Native CLI
-npm install react-native-svg
-# then follow react-native-svg install docs for your RN version
+npm install react-native-multi-selectbox
 ```
 
 ### Peer dependencies
 
-| Peer               | Notes                                      |
-| ------------------ | ------------------------------------------ |
-| `react`            | ≥ 18                                       |
-| `react-native`     | ≥ 0.73 (Expo SDK 50+ recommended)          |
-| `react-native-svg` | ≥ 13 — use `expo install` in Expo projects |
-| `lodash`           | ≥ 4.17                                     |
+| Peer           | Notes                             |
+| -------------- | --------------------------------- |
+| `react`        | ≥ 18                              |
+| `react-native` | ≥ 0.73 (Expo SDK 50+ recommended) |
+
+Icons use built-in text glyphs — **no** `lodash` or `react-native-svg`.
 
 ## Usage
 
@@ -65,13 +57,16 @@ Options **must** include `id` and `item`.
 import { useState } from 'react'
 import { View } from 'react-native'
 import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
 
 const K_OPTIONS: SelectOption[] = [
   { item: 'Juventus', id: 'JUVE' },
   { item: 'Real Madrid', id: 'RM' },
   { item: 'Barcelona', id: 'BR' },
 ]
+
+function toggleById(list: SelectOption[], item: SelectOption): SelectOption[] {
+  return list.some((x) => x.id === item.id) ? list.filter((x) => x.id !== item.id) : [...list, item]
+}
 
 export function Demo() {
   const [selectedTeam, setSelectedTeam] = useState<SelectOption | Record<string, never>>({})
@@ -89,8 +84,8 @@ export function Demo() {
         label="Select multiple"
         options={K_OPTIONS}
         selectedValues={selectedTeams}
-        onMultiSelect={(item) => setSelectedTeams((prev) => xorBy(prev, [item], 'id'))}
-        onTapClose={(item) => setSelectedTeams((prev) => xorBy(prev, [item], 'id'))}
+        onMultiSelect={(item) => setSelectedTeams((prev) => toggleById(prev, item))}
+        onTapClose={(item) => setSelectedTeams((prev) => toggleById(prev, item))}
         isMulti={true}
       />
     </View>
@@ -113,20 +108,21 @@ import type {
 
 ### Props (overview)
 
-| Prop                                              | Description                                                                 |
-| ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                               |
-| `value` / `onChange`                              | Single-select controlled value                                              |
-| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                |
-| `isMulti`                                         | `true` for multi mode                                                       |
-| `hideInputFilter`                                 | Hide search field in the dropdown                                           |
-| `listOptionProps`                                 | Extra props for the options **ScrollView** (safe inside parent ScrollViews) |
-| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                    |
-| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                     |
-| `*Style` props                                    | Label, container, options, chips, empty states, selected text               |
-| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                      |
-| `selectIcon`                                      | Custom dropdown icon node                                                   |
-| `searchInputProps`                                | Extra `TextInput` props for the filter                                      |
+| Prop                                              | Description                                                             |
+| ------------------------------------------------- | ----------------------------------------------------------------------- |
+| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                           |
+| `value` / `onChange`                              | Single-select controlled value                                          |
+| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                            |
+| `isMulti`                                         | `true` for multi mode                                                   |
+| `hideInputFilter`                                 | Hide search field in the dropdown                                       |
+| `virtualized`                                     | `true` (default): options `FlatList`; `false`: ScrollView (nested-safe) |
+| `listOptionProps`                                 | Extra props for the options **FlatList** (when virtualized)             |
+| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                |
+| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                 |
+| `*Style` props                                    | Label, container, options, chips, empty states, selected text           |
+| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                  |
+| `selectIcon`                                      | Custom dropdown icon node                                               |
+| `searchInputProps`                                | Extra `TextInput` props for the filter                                  |
 
 See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
 

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
 
 const K_OPTIONS: SelectOption[] = [
   { item: 'Juventus', id: 'JUVE' },
@@ -20,6 +19,10 @@ const K_OPTIONS: SelectOption[] = [
   { item: 'Leicester City FC', id: 'LEI' },
 ]
 
+function toggleById(list: SelectOption[], item: SelectOption): SelectOption[] {
+  return list.some((x) => x.id === item.id) ? list.filter((x) => x.id !== item.id) : [...list, item]
+}
+
 export default function App() {
   const [selectedTeam, setSelectedTeam] = useState<SelectOption | Record<string, never>>({})
   const [selectedTeams, setSelectedTeams] = useState<SelectOption[]>([])
@@ -29,7 +32,7 @@ export default function App() {
   }
 
   const onMultiChange = (item: SelectOption) => {
-    setSelectedTeams((prev) => xorBy(prev, [item], 'id'))
+    setSelectedTeams((prev) => toggleById(prev, item))
   }
 
   return (

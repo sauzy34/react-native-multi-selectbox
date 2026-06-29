@@ -15,7 +15,5 @@ module.exports = {
     },
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
-  transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|react-native-svg|lodash)/)',
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(react-native|@react-native)/)'],
 }

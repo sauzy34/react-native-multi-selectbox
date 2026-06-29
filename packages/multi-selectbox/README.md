@@ -1,17 +1,20 @@
 # react-native-multi-selectbox
 
-Platform-independent (Android / iOS / Expo) Selectbox | Picker | Multi-select.
+Platform-independent (Android / iOS / Expo / web) Selectbox | Picker | Multi-select.
 
-> **Source of truth:** `packages/multi-selectbox` (TypeScript, Phase 4).  
-> Demo: monorepo `pnpm example` → `apps/example` (Expo SDK 56).
+> **Source of truth:** `packages/multi-selectbox` (TypeScript).  
+> Demo: monorepo `pnpm example` / `pnpm example:web` → `apps/example` (Expo SDK 56).
 
 ## Install (consumers)
 
 ```bash
-npm install react-native-multi-selectbox lodash
-npx expo install react-native-svg   # Expo
-# or: npm install react-native-svg  # RN CLI
+npm install react-native-multi-selectbox
+# peers only:
+#   react >= 18
+#   react-native >= 0.73
 ```
+
+No `lodash` or `react-native-svg` required — icons use built-in text glyphs.
 
 ## Types
 
@@ -31,22 +34,22 @@ import SelectBox, {
 
 Options must include `id` and `item`.
 
-## Develop
-
-```bash
-pnpm install   # repo root
-pnpm typecheck
-pnpm example
-```
-
 ## Lists & nested ScrollViews
 
-By default options render in a **vertical `FlatList`** with a **max height** and **`nestedScrollEnabled`**, so large lists stay performant. If the SelectBox sits inside a **parent vertical ScrollView**, React Native may log a nested VirtualizedList warning (scroll usually still works).
-
-To avoid that warning and trade virtualization for simplicity:
+By default options render in a **vertical `FlatList`** with a **max height** and **`nestedScrollEnabled`**. If the SelectBox sits inside a **parent vertical ScrollView**, RN may log a nested VirtualizedList warning. To avoid it:
 
 ```tsx
 <SelectBox virtualized={false} options={OPTIONS} onChange={...} />
 ```
 
-Multi chips use a **horizontal** FlatList (different orientation than a typical page ScrollView).
+Multi chips use a **horizontal ScrollView** (content-sized chips).
+
+## Develop
+
+```bash
+pnpm install   # repo root
+pnpm typecheck
+pnpm test
+pnpm example
+pnpm example:web
+```
