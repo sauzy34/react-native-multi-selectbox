@@ -1,5 +1,12 @@
-import { useState, type ReactNode } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import {
+  SectionList,
+  StyleSheet,
+  Text,
+  View,
+  type SectionListData,
+  type SectionListRenderItem,
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
 
@@ -119,6 +126,26 @@ function SelectionSummary({ label, value }: { label: string; value: string }) {
   )
 }
 
+type DemoId =
+  | 'country'
+  | 'timezone'
+  | 'department'
+  | 'skills'
+  | 'channels'
+  | 'tags'
+
+type DemoItem = { id: DemoId }
+
+type DemoSection = {
+  title: string
+  data: DemoItem[]
+}
+
+/**
+ * Screen uses SectionList (not ScrollView) so the page owns virtualization.
+ * SelectBoxes use virtualized={false} because they are list rows — avoids a second
+ * vertical VirtualizedList inside SectionList (RN nesting rules).
+ */
 export default function App() {
   const [country, setCountry] = useState<SelectOption | Record<string, never>>({})
   const [timezone, setTimezone] = useState<SelectOption | Record<string, never>>({
@@ -140,160 +167,238 @@ export default function App() {
   const channelsLabel = channels.map((c) => c.item).join(', ')
   const tagsLabel = tags.map((t) => t.item).join(', ')
 
+  const sections = useMemo<DemoSection[]>(
+    () => [
+      {
+        title: 'Single select',
+        data: [{ id: 'country' }, { id: 'timezone' }, { id: 'department' }],
+      },
+      {
+        title: 'Multi select',
+        data: [{ id: 'skills' }, { id: 'channels' }, { id: 'tags' }],
+      },
+    ],
+    [],
+  )
+
+  const renderItem = useCallback<SectionListRenderItem<DemoItem, DemoSection>>(
+    ({ item }) => {
+      switch (item.id) {
+        case 'country':
+          return (
+            <DemoCard
+              eyebrow="Single select"
+              title="Country of residence"
+              description="Searchable dropdown for one value — common on profiles and checkout forms."
+            >
+              <SelectBox
+                label="Country"
+                inputPlaceholder="Search countries…"
+                options={COUNTRIES}
+                value={country}
+                onChange={setCountry}
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                searchIconColor={theme.accent}
+                selectedItemStyle={styles.selectedText}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={countryLabel} />
+            </DemoCard>
+          )
+        case 'timezone':
+          return (
+            <DemoCard
+              eyebrow="Single select · preselected"
+              title="Preferred timezone"
+              description="Controlled value with an initial selection (UTC). Change it to see updates below."
+            >
+              <SelectBox
+                label="Timezone"
+                inputPlaceholder="Find a timezone…"
+                options={TIMEZONES}
+                value={timezone}
+                onChange={setTimezone}
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                searchIconColor={theme.accent}
+                selectedItemStyle={styles.selectedText}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={timezoneLabel} />
+            </DemoCard>
+          )
+        case 'department':
+          return (
+            <DemoCard
+              eyebrow="Single select · no search"
+              title="Department"
+              description="Hide the filter when the list is short using hideInputFilter."
+            >
+              <SelectBox
+                label="Department"
+                inputPlaceholder="Choose department"
+                options={DEPARTMENTS}
+                value={department}
+                onChange={setDepartment}
+                hideInputFilter
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                selectedItemStyle={styles.selectedText}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={departmentLabel} />
+            </DemoCard>
+          )
+        case 'skills':
+          return (
+            <DemoCard
+              eyebrow="Multi select · preselected chips"
+              title="Skills"
+              description="Toggle skills in the list or remove chips. Parent state uses a small toggle-by-id helper (no lodash)."
+            >
+              <SelectBox
+                label="Skills"
+                inputPlaceholder="Add skills…"
+                options={SKILLS}
+                selectedValues={skills}
+                onMultiSelect={(opt) => setSkills((prev) => toggleById(prev, opt))}
+                onTapClose={(opt) => setSkills((prev) => toggleById(prev, opt))}
+                isMulti
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                searchIconColor={theme.accent}
+                toggleIconColor={theme.accent}
+                multiOptionContainerStyle={styles.chip}
+                multiOptionsLabelStyle={styles.chipLabel}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={skillsLabel} />
+            </DemoCard>
+          )
+        case 'channels':
+          return (
+            <DemoCard
+              eyebrow="Multi select"
+              title="Notification channels"
+              description="Choose how the product may reach the user. Short list with search still enabled."
+            >
+              <SelectBox
+                label="Channels"
+                inputPlaceholder="Select channels…"
+                options={NOTIFICATION_CHANNELS}
+                selectedValues={channels}
+                onMultiSelect={(opt) => setChannels((prev) => toggleById(prev, opt))}
+                onTapClose={(opt) => setChannels((prev) => toggleById(prev, opt))}
+                isMulti
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                searchIconColor={theme.accent}
+                toggleIconColor={theme.accent}
+                multiOptionContainerStyle={styles.chip}
+                multiOptionsLabelStyle={styles.chipLabel}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={channelsLabel} />
+            </DemoCard>
+          )
+        case 'tags':
+          return (
+            <DemoCard
+              eyebrow="Multi select · SectionList row"
+              title="Project tags"
+              description="This screen is a SectionList (not ScrollView). virtualized={false} keeps options off a second VirtualizedList."
+            >
+              <SelectBox
+                label="Tags"
+                inputPlaceholder="Search tags…"
+                options={PROJECT_TAGS}
+                selectedValues={tags}
+                onMultiSelect={(opt) => setTags((prev) => toggleById(prev, opt))}
+                onTapClose={(opt) => setTags((prev) => toggleById(prev, opt))}
+                isMulti
+                virtualized={false}
+                arrowIconColor={theme.accent}
+                searchIconColor={theme.accent}
+                toggleIconColor={theme.accent}
+                multiOptionContainerStyle={styles.chip}
+                multiOptionsLabelStyle={styles.chipLabel}
+                optionsLabelStyle={styles.optionText}
+                containerStyle={styles.fieldUnderline}
+              />
+              <SelectionSummary label="Selected" value={tagsLabel} />
+            </DemoCard>
+          )
+        default:
+          return null
+      }
+    },
+    [
+      country,
+      countryLabel,
+      timezone,
+      timezoneLabel,
+      department,
+      departmentLabel,
+      skills,
+      skillsLabel,
+      channels,
+      channelsLabel,
+      tags,
+      tagsLabel,
+    ],
+  )
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: SectionListData<DemoItem, DemoSection> }) => (
+      <Text style={styles.sectionHeader}>{section.title}</Text>
+    ),
+    [],
+  )
+
+  const listHeader = useMemo(
+    () => (
+      <View style={styles.hero}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>react-native-multi-selectbox</Text>
+        </View>
+        <Text style={styles.title}>Component demos</Text>
+        <Text style={styles.subtitle}>
+          Screen is a SectionList (RN-correct host for scrolling forms). Each SelectBox uses
+          virtualized=false as a list row so options are not a nested VirtualizedList.
+        </Text>
+      </View>
+    ),
+    [],
+  )
+
+  const listFooter = useMemo(
+    () => <Text style={styles.footer}>Workspace package · pnpm example / example:web</Text>,
+    [],
+  )
+
+  const keyExtractor = useCallback((item: DemoItem) => item.id, [])
+
   return (
     <View style={styles.root}>
       <StatusBar style="dark" />
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
+      <SectionList
+        sections={sections}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        ListHeaderComponent={listHeader}
+        ListFooterComponent={listFooter}
+        contentContainerStyle={styles.listContent}
+        stickySectionHeadersEnabled={false}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.hero}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>react-native-multi-selectbox</Text>
-          </View>
-          <Text style={styles.title}>Component demos</Text>
-          <Text style={styles.subtitle}>
-            Practical single- and multi-select patterns with sample product data. Built with Expo
-            SDK 56 and the workspace package.
-          </Text>
-        </View>
-
-        <DemoCard
-          eyebrow="Single select"
-          title="Country of residence"
-          description="Searchable dropdown for one value — common on profiles and checkout forms."
-        >
-          <SelectBox
-            label="Country"
-            inputPlaceholder="Search countries…"
-            options={COUNTRIES}
-            value={country}
-            onChange={setCountry}
-            arrowIconColor={theme.accent}
-            searchIconColor={theme.accent}
-            selectedItemStyle={styles.selectedText}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={countryLabel} />
-        </DemoCard>
-
-        <DemoCard
-          eyebrow="Single select · preselected"
-          title="Preferred timezone"
-          description="Controlled value with an initial selection (UTC). Change it to see updates below."
-        >
-          <SelectBox
-            label="Timezone"
-            inputPlaceholder="Find a timezone…"
-            options={TIMEZONES}
-            value={timezone}
-            onChange={setTimezone}
-            arrowIconColor={theme.accent}
-            searchIconColor={theme.accent}
-            selectedItemStyle={styles.selectedText}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={timezoneLabel} />
-        </DemoCard>
-
-        <DemoCard
-          eyebrow="Single select · no search"
-          title="Department"
-          description="Hide the filter when the list is short using hideInputFilter."
-        >
-          <SelectBox
-            label="Department"
-            inputPlaceholder="Choose department"
-            options={DEPARTMENTS}
-            value={department}
-            onChange={setDepartment}
-            hideInputFilter
-            arrowIconColor={theme.accent}
-            selectedItemStyle={styles.selectedText}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={departmentLabel} />
-        </DemoCard>
-
-        <DemoCard
-          eyebrow="Multi select · preselected chips"
-          title="Skills"
-          description="Toggle skills in the list or remove chips. Parent state uses a small toggle-by-id helper (no lodash)."
-        >
-          <SelectBox
-            label="Skills"
-            inputPlaceholder="Add skills…"
-            options={SKILLS}
-            selectedValues={skills}
-            onMultiSelect={(item) => setSkills((prev) => toggleById(prev, item))}
-            onTapClose={(item) => setSkills((prev) => toggleById(prev, item))}
-            isMulti
-            arrowIconColor={theme.accent}
-            searchIconColor={theme.accent}
-            toggleIconColor={theme.accent}
-            multiOptionContainerStyle={styles.chip}
-            multiOptionsLabelStyle={styles.chipLabel}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={skillsLabel} />
-        </DemoCard>
-
-        <DemoCard
-          eyebrow="Multi select"
-          title="Notification channels"
-          description="Choose how the product may reach the user. Short list with search still enabled."
-        >
-          <SelectBox
-            label="Channels"
-            inputPlaceholder="Select channels…"
-            options={NOTIFICATION_CHANNELS}
-            selectedValues={channels}
-            onMultiSelect={(item) => setChannels((prev) => toggleById(prev, item))}
-            onTapClose={(item) => setChannels((prev) => toggleById(prev, item))}
-            isMulti
-            arrowIconColor={theme.accent}
-            searchIconColor={theme.accent}
-            toggleIconColor={theme.accent}
-            multiOptionContainerStyle={styles.chip}
-            multiOptionsLabelStyle={styles.chipLabel}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={channelsLabel} />
-        </DemoCard>
-
-        <DemoCard
-          eyebrow="Multi select · in a scrolling form"
-          title="Project tags"
-          description="Nested in this page ScrollView. Uses virtualized={false} to avoid VirtualizedList nesting warnings."
-        >
-          <SelectBox
-            label="Tags"
-            inputPlaceholder="Search tags…"
-            options={PROJECT_TAGS}
-            selectedValues={tags}
-            onMultiSelect={(item) => setTags((prev) => toggleById(prev, item))}
-            onTapClose={(item) => setTags((prev) => toggleById(prev, item))}
-            isMulti
-            virtualized={false}
-            arrowIconColor={theme.accent}
-            searchIconColor={theme.accent}
-            toggleIconColor={theme.accent}
-            multiOptionContainerStyle={styles.chip}
-            multiOptionsLabelStyle={styles.chipLabel}
-            optionsLabelStyle={styles.optionText}
-            containerStyle={styles.fieldUnderline}
-          />
-          <SelectionSummary label="Selected" value={tagsLabel} />
-        </DemoCard>
-
-        <Text style={styles.footer}>Workspace package · pnpm example / example:web</Text>
-      </ScrollView>
+      />
     </View>
   )
 }
@@ -303,14 +408,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.bg,
   },
-  scrollContent: {
+  listContent: {
     paddingHorizontal: 20,
     paddingTop: 56,
     paddingBottom: 48,
     flexGrow: 1,
   },
   hero: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   badge: {
     alignSelf: 'flex-start',
@@ -339,6 +444,15 @@ const styles = StyleSheet.create({
     color: theme.muted,
     maxWidth: 520,
   },
+  sectionHeader: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.muted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.7,
+    marginTop: 8,
+    marginBottom: 10,
+  },
   card: {
     backgroundColor: theme.card,
     borderRadius: 16,
@@ -346,7 +460,6 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.border,
-    // subtle elevation on native
     shadowColor: '#111827',
     shadowOpacity: 0.06,
     shadowRadius: 12,

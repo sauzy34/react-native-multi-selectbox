@@ -48,9 +48,11 @@ export type SelectBoxSharedProps = {
   searchInputProps?: TextInputProps
   /**
    * When true (default), options use a vertical FlatList with maxHeight + nestedScrollEnabled
-   * for better performance on large lists. May log RN’s nested VirtualizedList warning if the
-   * SelectBox sits in a parent ScrollView with the same orientation — set to false to use
-   * ScrollView+map instead (no virtualization, no that warning).
+   * (better for large option lists when SelectBox is not under another vertical scroll parent).
+   *
+   * Prefer hosting forms in FlatList / SectionList (not an outer vertical ScrollView). When
+   * SelectBox is a list row or sits in a vertical ScrollView, set `virtualized={false}` so
+   * options use ScrollView+map and you avoid RN’s nested VirtualizedList warning / gesture fights.
    */
   virtualized?: boolean
   /** Horizontal chips list props (multi mode). */

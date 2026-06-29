@@ -115,7 +115,7 @@ import type {
 | `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                            |
 | `isMulti`                                         | `true` for multi mode                                                   |
 | `hideInputFilter`                                 | Hide search field in the dropdown                                       |
-| `virtualized`                                     | `true` (default): options `FlatList`; `false`: ScrollView (nested-safe) |
+| `virtualized`                                     | `true` (default): options `FlatList`; `false`: options ScrollView — use `false` inside `FlatList` / `SectionList` / vertical `ScrollView` hosts |
 | `listOptionProps`                                 | Extra props for the options **FlatList** (when virtualized)             |
 | `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                |
 | `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                 |
@@ -125,6 +125,16 @@ import type {
 | `searchInputProps`                                | Extra `TextInput` props for the filter                                  |
 
 See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
+
+### Scrolling hosts (avoid nested VirtualizedList)
+
+RN warns when a vertical `FlatList` / `SectionList` is nested inside a vertical `ScrollView` (or another VirtualizedList). SelectBox options default to a `FlatList` (`virtualized={true}`).
+
+1. **Prefer `FlatList` / `SectionList` for the screen** — each field or card is a row (see [`apps/example/App.tsx`](./apps/example/App.tsx)). Do not wrap SelectBox in an outer vertical `ScrollView` when you can avoid it.
+2. When SelectBox is a **list row** or lives in a **vertical `ScrollView`**, set **`virtualized={false}`** so options are a bounded `ScrollView` + `.map()`, not a second VirtualizedList.
+3. Use default **`virtualized={true}`** only when there is no other vertical scroll parent (short fixed layout / non-scrolling modal).
+
+Details: [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
 
 ## Scripts (root)
 

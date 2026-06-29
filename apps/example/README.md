@@ -33,6 +33,10 @@ pnpm example:web
 
 QA checklist: single + multi select, filter, chips, icon colors on deselect, options panel scroll.
 
+### Scrolling layout
+
+The demo screen is a **`SectionList`** (not an outer `ScrollView`). Each demo card is a section row; every `SelectBox` uses **`virtualized={false}`** so the options panel is not a second vertical VirtualizedList inside the list. That matches React Native’s guidance and avoids nested-list warnings / gesture fights — see the library README section *Hosting SelectBox in scrolling screens*.
+
 ### `UnexpectedServerData` / “No returned query result”
 
 That comes from **Expo CLI calling Expo’s backend** (not from SelectBox). Default `pnpm example` / `example:web` use **`--offline`** so Metro starts without those GraphQL calls. If you need online mode and still see it: retry later, check network/VPN, or run `pnpm example:clear`.

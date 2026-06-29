@@ -34,15 +34,30 @@ import SelectBox, {
 
 Options must include `id` and `item`.
 
-## Lists & nested ScrollViews
+## Hosting SelectBox in scrolling screens
 
-By default options render in a **vertical `FlatList`** with a **max height** and **`nestedScrollEnabled`**. If the SelectBox sits inside a **parent vertical ScrollView**, RN may log a nested VirtualizedList warning. To avoid it:
+React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionList`) is nested inside a vertical **`ScrollView`** (or another VirtualizedList). SelectBox options default to a **`FlatList`** (`virtualized={true}`) with a max height and `nestedScrollEnabled`.
+
+### Recommended (RN-correct)
+
+1. **Make the screen a `FlatList` or `SectionList`** — each field or card is a row / section item. Do **not** wrap the form in an outer vertical `ScrollView`. The Expo demo does this: [`apps/example/App.tsx`](../../apps/example/App.tsx).
+2. When SelectBox is rendered **as a list row** (inside `FlatList` / `SectionList`) **or** inside a **vertical `ScrollView`**, set **`virtualized={false}`** so options use a bounded `ScrollView` + `.map()` instead of a second VirtualizedList:
 
 ```tsx
+// Screen owns scrolling (FlatList / SectionList / ScrollView).
+// Options must not be another vertical VirtualizedList.
 <SelectBox virtualized={false} options={OPTIONS} onChange={...} />
 ```
 
-Multi chips use a **horizontal ScrollView** (content-sized chips).
+3. Keep the default **`virtualized={true}`** only when SelectBox is **not** under another vertical scroll parent (e.g. a short fixed layout, modal body that is not a `ScrollView` / list, single field on screen).
+
+| Host                                              | Suggested `virtualized`                          |
+| ------------------------------------------------- | ------------------------------------------------ |
+| `FlatList` / `SectionList` row                    | `false`                                          |
+| Vertical `ScrollView`                             | `false`                                          |
+| Non-scrolling `View` / modal without list scroll  | `true` (default, better for large option lists)  |
+
+Multi chips use a **horizontal `ScrollView`** (content-sized chips) — that orientation does not conflict with a vertical page list.
 
 ## Develop
 

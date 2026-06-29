@@ -19,7 +19,7 @@ export type OptionsPanelProps = {
   options: SelectOption[]
   selectedIdSet: ReadonlySet<string | number>
   isMulti: boolean
-  /** Prefer FlatList (virtualized) when true; ScrollView+map when false (nested ScrollView safe, no VL warning). */
+  /** Prefer FlatList when true; ScrollView+map when false (use false under FlatList/SectionList/ScrollView hosts). */
   virtualized?: boolean | undefined
   inputValue: string
   onChangeInput: (text: string) => void
@@ -149,8 +149,7 @@ function OptionsPanel({
     ...restListOptionProps
   } = listOptionProps ?? {}
 
-  // Bounded height (optionsPanelStyle.maxHeight) + nestedScrollEnabled lets FlatList own
-  // its scroll viewport inside a parent ScrollView. RN may still warn; use virtualized={false} to silence.
+  // Bounded height + nestedScrollEnabled. Prefer virtualized={false} under FlatList/SectionList/ScrollView hosts.
   return (
     <FlatList
       testID={TEST_IDS.optionsList}
