@@ -28,11 +28,8 @@ export type OptionsListProps = Omit<
 /** Extra props when options render as a non-virtualized ScrollView (`virtualized={false}`). */
 export type OptionsScrollViewProps = Omit<ScrollViewProps, 'children'>
 
-/** Extra props for the multi-select chips row (horizontal FlatList by default). */
-export type MultiSelectFieldProps = Omit<
-  FlatListProps<SelectOption>,
-  'data' | 'renderItem' | 'keyExtractor' | 'horizontal' | 'ListEmptyComponent'
->
+/** Extra props for the multi-select chips row (horizontal ScrollView). */
+export type MultiSelectFieldProps = Omit<ScrollViewProps, 'children' | 'horizontal'>
 
 /** Style and chrome props shared by single- and multi-select modes. */
 export type SelectBoxSharedProps = {

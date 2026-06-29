@@ -77,7 +77,7 @@ function SelectField({
 
   return (
     <View style={rowStyle}>
-      <View style={{ paddingRight: 20, flexGrow: 1 }}>
+      <View style={{ paddingRight: 20, flex: 1, flexGrow: 1, flexShrink: 1, minWidth: 0 }}>
         {isMulti ? (
           <MultiChipsRow
             optionLabelById={optionLabelById}
