@@ -1,10 +1,8 @@
-import { memo, useCallback, useMemo, useRef, useState, type ReactElement } from 'react'
+import { memo, useCallback, useMemo, useState, type ReactElement } from 'react'
 import { Text, View, type StyleProp, type TextStyle } from 'react-native'
 import Colors from './constants/Colors'
 import SelectField from './components/SelectBox/SelectField'
-import AnchoredOptionsOverlay, {
-  type AnchorRect,
-} from './components/SelectBox/AnchoredOptionsOverlay'
+import OptionsPanel from './components/SelectBox/OptionsPanel'
 import {
   EMPTY_OBJECT,
   EMPTY_OPTIONS,
@@ -16,7 +14,6 @@ import {
 } from './utils/options'
 import { TEST_IDS } from './testIDs'
 import type { OptionsListProps, SelectBoxProps, SelectOption } from './types'
-import type { OptionsPanelProps } from './components/SelectBox/OptionsPanel'
 
 const EMPTY_ID_SET: ReadonlySet<string | number> = new Set()
 
@@ -72,8 +69,6 @@ function SelectBox(props: SelectBoxProps): ReactElement {
 
   const [inputValue, setInputValue] = useState('')
   const [showOptions, setShowOptions] = useState(false)
-  const [anchor, setAnchor] = useState<AnchorRect | null>(null)
-  const fieldRef = useRef<View>(null)
 
   const filteredSuggestions = useMemo(
     () => filterOptions(options, inputValue),
@@ -89,34 +84,15 @@ function SelectBox(props: SelectBoxProps): ReactElement {
 
   const selectedItemText = readSelectedItemText(value)
 
-  const measureAnchor = useCallback((cb?: (rect: AnchorRect | null) => void) => {
-    const node = fieldRef.current
-    if (!node || typeof node.measureInWindow !== 'function') {
-      cb?.(null)
-      return
-    }
-    node.measureInWindow((x, y, w, h) => {
-      const rect = { x, y, width: w, height: h }
-      setAnchor(rect)
-      cb?.(rect)
-    })
-  }, [])
-
-  const closeOptions = useCallback(() => {
-    setShowOptions(false)
-    setInputValue('')
-  }, [])
-
   const toggleOptions = useCallback(() => {
     setShowOptions((open) => {
-      if (open) {
+      const next = !open
+      if (!next) {
         setInputValue('')
-        return false
       }
-      measureAnchor()
-      return true
+      return next
     })
-  }, [measureAnchor])
+  }, [])
 
   const handleSelectOption = useCallback(
     (item: SelectOption) => {
@@ -124,34 +100,12 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         onMultiSelect?.(item)
         return
       }
-      closeOptions()
+      setShowOptions(false)
+      setInputValue('')
       onChange?.(item)
     },
-    [isMulti, onChange, onMultiSelect, closeOptions],
+    [isMulti, onChange, onMultiSelect],
   )
-
-  const panelProps: OptionsPanelProps = {
-    options: filteredSuggestions,
-    selectedIdSet,
-    isMulti: Boolean(isMulti),
-    inputValue,
-    onChangeInput: setInputValue,
-    inputPlaceholder,
-    hideInputFilter,
-    listEmptyText,
-    searchIconColor,
-    toggleIconColor,
-    inputFilterStyle,
-    inputFilterContainerStyle,
-    searchInputProps,
-    optionsLabelStyle,
-    optionContainerStyle,
-    listEmptyLabelStyle,
-    virtualized,
-    listOptionProps: resolvedListOptionProps,
-    listScrollViewProps,
-    onSelectOption: handleSelectOption,
-  }
 
   const fieldLabelStyle: StyleProp<TextStyle> = [
     {
@@ -168,7 +122,6 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         {label}
       </Text>
       <SelectField
-        ref={fieldRef}
         isMulti={Boolean(isMulti)}
         label={label}
         inputPlaceholder={inputPlaceholder}
@@ -187,12 +140,30 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         onTapClose={onTapClose}
         onToggleOpen={toggleOptions}
       />
-      <AnchoredOptionsOverlay
-        visible={showOptions}
-        anchor={anchor}
-        onRequestClose={closeOptions}
-        panelProps={panelProps}
-      />
+      {showOptions && (
+        <OptionsPanel
+          options={filteredSuggestions}
+          selectedIdSet={selectedIdSet}
+          isMulti={Boolean(isMulti)}
+          inputValue={inputValue}
+          onChangeInput={setInputValue}
+          inputPlaceholder={inputPlaceholder}
+          hideInputFilter={hideInputFilter}
+          listEmptyText={listEmptyText}
+          searchIconColor={searchIconColor}
+          toggleIconColor={toggleIconColor}
+          inputFilterStyle={inputFilterStyle}
+          inputFilterContainerStyle={inputFilterContainerStyle}
+          searchInputProps={searchInputProps}
+          optionsLabelStyle={optionsLabelStyle}
+          optionContainerStyle={optionContainerStyle}
+          listEmptyLabelStyle={listEmptyLabelStyle}
+          virtualized={virtualized}
+          listOptionProps={resolvedListOptionProps}
+          listScrollViewProps={listScrollViewProps}
+          onSelectOption={handleSelectOption}
+        />
+      )}
     </View>
   )
 }

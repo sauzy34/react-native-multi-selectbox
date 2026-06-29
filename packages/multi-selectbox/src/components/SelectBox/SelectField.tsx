@@ -1,4 +1,4 @@
-import { forwardRef, memo, type ReactElement, type ReactNode } from 'react'
+import { memo, type ReactElement, type ReactNode } from 'react'
 import {
   Text,
   TouchableOpacity,
@@ -34,28 +34,25 @@ export type SelectFieldProps = {
   onToggleOpen: () => void
 }
 
-const SelectField = forwardRef<View, SelectFieldProps>(function SelectField(
-  {
-    isMulti,
-    label,
-    inputPlaceholder,
-    selectedItemText,
-    showOptions,
-    selectIcon,
-    arrowIconColor = Colors.primary,
-    containerStyle,
-    selectedItemStyle,
-    optionLabelById,
-    selectedValues,
-    multiOptionContainerStyle,
-    multiOptionsLabelStyle,
-    multiListEmptyLabelStyle,
-    multiSelectInputFieldProps,
-    onTapClose,
-    onToggleOpen,
-  },
-  ref,
-): ReactElement {
+function SelectField({
+  isMulti,
+  label,
+  inputPlaceholder,
+  selectedItemText,
+  showOptions,
+  selectIcon,
+  arrowIconColor = Colors.primary,
+  containerStyle,
+  selectedItemStyle,
+  optionLabelById,
+  selectedValues,
+  multiOptionContainerStyle,
+  multiOptionsLabelStyle,
+  multiListEmptyLabelStyle,
+  multiSelectInputFieldProps,
+  onTapClose,
+  onToggleOpen,
+}: SelectFieldProps): ReactElement {
   const rowStyle: StyleProp<ViewStyle> = [
     {
       flexDirection: 'row',
@@ -78,7 +75,7 @@ const SelectField = forwardRef<View, SelectFieldProps>(function SelectField(
   ]
 
   return (
-    <View ref={ref} style={rowStyle} collapsable={false}>
+    <View style={rowStyle}>
       <View style={{ paddingRight: 20, flex: 1, flexGrow: 1, flexShrink: 1, minWidth: 0 }}>
         {isMulti ? (
           <MultiChipsRow
@@ -111,6 +108,6 @@ const SelectField = forwardRef<View, SelectFieldProps>(function SelectField(
       </TouchableOpacity>
     </View>
   )
-})
+}
 
 export default memo(SelectField)
