@@ -2,7 +2,7 @@
  * Example entry: switch between host patterns.
  *
  * - demos/SectionListHostDemo.tsx — SectionList (preferred for long screens)
- * - demos/ScrollViewHostDemo.tsx  — ScrollView (simple forms; always virtualized={false})
+ * - demos/ScrollViewHostDemo.tsx  — ScrollView (simple forms; library default virtualized)
  */
 import { useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'

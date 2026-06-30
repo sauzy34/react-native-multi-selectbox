@@ -17,8 +17,8 @@ export type SelectOption = {
 
 /**
  * Extra props for the options panel list.
- * When `virtualized` is true (default), this is a vertical FlatList (bounded height + nestedScrollEnabled).
- * When `virtualized` is false, this is a ScrollView (no VirtualizedList nesting warning).
+ * When `virtualized` is true, this is a vertical FlatList (bounded height + nestedScrollEnabled).
+ * When `virtualized` is false (default), this is a ScrollView (nested-host safe).
  */
 export type OptionsListProps = Omit<
   FlatListProps<SelectOption>,
@@ -47,19 +47,17 @@ export type SelectBoxSharedProps = {
   toggleIconColor?: string
   searchInputProps?: TextInputProps
   /**
-   * When true (default), options use a vertical FlatList with maxHeight + nestedScrollEnabled
-   * (better for large option lists when SelectBox is not under another vertical scroll parent).
-   *
-   * Prefer hosting forms in FlatList / SectionList (not an outer vertical ScrollView). When
-   * SelectBox is a list row or sits in a vertical ScrollView, set `virtualized={false}` so
-   * options use ScrollView+map and you avoid RN’s nested VirtualizedList warning / gesture fights.
+   * When false (default), options use a bounded ScrollView + `.map()` — safe inside vertical
+   * ScrollView / FlatList / SectionList hosts (no nested VirtualizedList warning).
+   * Set `true` for large option lists when SelectBox is **not** under another vertical scroll
+   * parent (standalone field / non-scrolling modal) to use FlatList + windowing.
    */
   virtualized?: boolean
   /** Horizontal chips list props (multi mode). */
   multiSelectInputFieldProps?: MultiSelectFieldProps
-  /** Dropdown options list props (FlatList when virtualized, else ignored for item rendering). */
+  /** Dropdown options list props (FlatList when `virtualized={true}`). */
   listOptionProps?: OptionsListProps
-  /** Used only when `virtualized={false}` for the options panel ScrollView. */
+  /** Options panel ScrollView props when `virtualized` is false (default). */
   listScrollViewProps?: OptionsScrollViewProps
   inputFilterContainerStyle?: StyleProp<ViewStyle>
   /** Applied to the filter TextInput (e.g. `{ color: '#fff' }` overrides default text color). */

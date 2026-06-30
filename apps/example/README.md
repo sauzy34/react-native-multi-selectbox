@@ -54,7 +54,9 @@ The app chrome lets you switch patterns; each host is its own file so you can co
 
 Shared catalogs and chrome live under [`demos/shared/`](./demos/shared/) (`data.ts`, `theme.ts`, `ui.tsx`). Entry: [`App.tsx`](./App.tsx).
 
-In **both** hosts every `SelectBox` uses **`virtualized={false}`** so options are not a second vertical VirtualizedList under the page scroll. Default `virtualized={true}` is for layouts with **no** vertical scroll parent. Library docs: _Hosting SelectBox in scrolling screens_.
+Library default is **`virtualized={false}`** (host-safe). Demos follow that default under `SectionList` / `ScrollView` hosts; set `virtualized` only if you opt into windowed options. Library docs: _Hosting SelectBox in scrolling screens_.
+
+`pnpm test` / `test:ci` runs `scripts/smoke-demos.mjs` (App host wiring regression).
 
 ### `UnexpectedServerData` / “No returned query result”
 

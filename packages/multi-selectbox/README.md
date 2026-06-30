@@ -36,29 +36,28 @@ Options must include `id` and `item`.
 
 ## Hosting SelectBox in scrolling screens
 
-React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionList`) is nested inside a vertical **`ScrollView`** (or another VirtualizedList). SelectBox options default to a **`FlatList`** (`virtualized={true}`) with a max height and `nestedScrollEnabled`.
+React Native warns when a **vertical VirtualizedList** (`FlatList` / `SectionList`) is nested inside a vertical **`ScrollView`** (or another VirtualizedList).
+
+**Default `virtualized={false}`** renders options in a bounded **`ScrollView` + `.map()`** — safe under `ScrollView` / `FlatList` / `SectionList` hosts.
 
 ### Recommended (RN-correct)
 
 1. **Make the screen a `FlatList` or `SectionList`** — each field or card is a row / section item (preferred for long screens). Demo: [`apps/example/demos/SectionListHostDemo.tsx`](../../apps/example/demos/SectionListHostDemo.tsx).
-2. **Or use a vertical `ScrollView`** for simpler forms — still set **`virtualized={false}`** on every SelectBox. Demo: [`apps/example/demos/ScrollViewHostDemo.tsx`](../../apps/example/demos/ScrollViewHostDemo.tsx).
-3. When SelectBox is rendered **as a list row** (inside `FlatList` / `SectionList`) **or** inside a **vertical `ScrollView`**, set **`virtualized={false}`** so options use a bounded `ScrollView` + `.map()` instead of a second VirtualizedList:
+2. **Or use a vertical `ScrollView`** for simpler forms. Demo: [`apps/example/demos/ScrollViewHostDemo.tsx`](../../apps/example/demos/ScrollViewHostDemo.tsx).
+3. Opt into **`virtualized={true}`** only when SelectBox is **not** under another vertical scroll parent and the option list is large (windowed `FlatList`):
 
 ```tsx
-// Screen owns scrolling (FlatList / SectionList / ScrollView).
-// Options must not be another vertical VirtualizedList.
-<SelectBox virtualized={false} options={OPTIONS} onChange={...} />
+// Large option list, no outer vertical ScrollView / list host:
+<SelectBox virtualized options={OPTIONS} onChange={...} />
 ```
-
-4. Keep the default **`virtualized={true}`** only when SelectBox is **not** under another vertical scroll parent (e.g. a short fixed layout, modal body that is not a `ScrollView` / list, single field on screen).
 
 Switch hosts in the Expo app tabs (`apps/example/App.tsx`).
 
-| Host                                             | Suggested `virtualized`                         |
-| ------------------------------------------------ | ----------------------------------------------- |
-| `FlatList` / `SectionList` row                   | `false`                                         |
-| Vertical `ScrollView`                            | `false`                                         |
-| Non-scrolling `View` / modal without list scroll | `true` (default, better for large option lists) |
+| Host                                             | Suggested `virtualized`                |
+| ------------------------------------------------ | -------------------------------------- |
+| `FlatList` / `SectionList` row                   | `false` (default)                      |
+| Vertical `ScrollView`                            | `false` (default)                      |
+| Non-scrolling `View` / modal without list scroll | `true` (opt-in for large option lists) |
 
 Multi chips use a **horizontal `ScrollView`** (content-sized chips) — that orientation does not conflict with a vertical page list.
 

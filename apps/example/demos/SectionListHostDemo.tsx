@@ -1,8 +1,8 @@
 /**
  * RN-preferred host for long scrolling screens: SectionList (or FlatList).
  *
- * The list owns page scrolling. Each SelectBox is a row and must use
- * `virtualized={false}` so options are not a second vertical VirtualizedList.
+ * The list owns page scrolling. Library default virtualized={false} keeps options off
+ * a second vertical VirtualizedList inside section rows.
  *
  * See also: ScrollViewHostDemo.tsx
  */
@@ -76,7 +76,6 @@ export default function SectionListHostDemo() {
                 options={COUNTRIES}
                 value={country}
                 onChange={setCountry}
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 searchIconColor={theme.accent}
                 selectedItemStyle={demoStyles.selectedText}
@@ -99,7 +98,6 @@ export default function SectionListHostDemo() {
                 options={TIMEZONES}
                 value={timezone}
                 onChange={setTimezone}
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 searchIconColor={theme.accent}
                 selectedItemStyle={demoStyles.selectedText}
@@ -123,7 +121,6 @@ export default function SectionListHostDemo() {
                 value={department}
                 onChange={setDepartment}
                 hideInputFilter
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 selectedItemStyle={demoStyles.selectedText}
                 optionsLabelStyle={demoStyles.optionText}
@@ -147,7 +144,6 @@ export default function SectionListHostDemo() {
                 onMultiSelect={(opt) => setSkills((prev) => toggleById(prev, opt))}
                 onTapClose={(opt) => setSkills((prev) => toggleById(prev, opt))}
                 isMulti
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 searchIconColor={theme.accent}
                 toggleIconColor={theme.accent}
@@ -174,7 +170,6 @@ export default function SectionListHostDemo() {
                 onMultiSelect={(opt) => setChannels((prev) => toggleById(prev, opt))}
                 onTapClose={(opt) => setChannels((prev) => toggleById(prev, opt))}
                 isMulti
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 searchIconColor={theme.accent}
                 toggleIconColor={theme.accent}
@@ -191,7 +186,7 @@ export default function SectionListHostDemo() {
             <DemoCard
               eyebrow="Multi select · list row"
               title="Project tags"
-              description="Same pattern as other rows: SectionList host + virtualized={false}."
+              description="Same pattern as other rows: SectionList host + default virtualized."
             >
               <SelectBox
                 label="Tags"
@@ -201,7 +196,6 @@ export default function SectionListHostDemo() {
                 onMultiSelect={(opt) => setTags((prev) => toggleById(prev, opt))}
                 onTapClose={(opt) => setTags((prev) => toggleById(prev, opt))}
                 isMulti
-                virtualized={false}
                 arrowIconColor={theme.accent}
                 searchIconColor={theme.accent}
                 toggleIconColor={theme.accent}
@@ -235,7 +229,7 @@ export default function SectionListHostDemo() {
         </View>
         <Text style={demoStyles.title}>SectionList host</Text>
         <Text style={demoStyles.subtitle}>
-          Preferred for long screens: the list owns scrolling. Each SelectBox is a row with
+          Preferred for long screens: the list owns scrolling. Each SelectBox is a row with default
           virtualized=false so options are not a nested VirtualizedList.
         </Text>
         <HostCallout

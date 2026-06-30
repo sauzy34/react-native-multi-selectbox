@@ -1,7 +1,6 @@
 {
   "name": "react-native-multi-selectbox",
   "version": "2.0.0-alpha.0",
-  "private": true,
   "description": "Platform independent (Android / iOS) Selectbox | Picker | Multi-select | Multi-picker.",
   "license": "MIT",
   "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
@@ -22,18 +21,20 @@
     "picker",
     "expo"
   ],
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "react-native": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "react-native": "./src/index.ts",
   "exports": {
     ".": {
       "react-native": "./src/index.ts",
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
+    "dist",
     "src",
     "README.md"
   ],
@@ -42,9 +43,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --coverage --maxWorkers=2",
-    "build": "node -e \"console.log('[react-native-multi-selectbox] build: deferred until publish pipeline')\"",
+    "build": "tsc -p tsconfig.build.json",
     "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\"",
-    "clean": "rm -rf dist coverage"
+    "clean": "rm -rf dist coverage",
+    "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

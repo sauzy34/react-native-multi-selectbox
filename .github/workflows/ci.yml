@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master, main, chore/expo-monorepo-migration]
+    branches: [master, main]
   pull_request:
     branches: [master, main]
 
@@ -31,6 +31,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
+      - run: pnpm --filter react-native-multi-selectbox build
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm test:ci

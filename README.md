@@ -110,31 +110,31 @@ import type {
 
 ### Props (overview)
 
-| Prop                                              | Description                                                                                                                                     |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                                                                                                   |
-| `value` / `onChange`                              | Single-select controlled value                                                                                                                  |
-| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                                                                                    |
-| `isMulti`                                         | `true` for multi mode                                                                                                                           |
-| `hideInputFilter`                                 | Hide search field in the dropdown                                                                                                               |
-| `virtualized`                                     | `true` (default): options `FlatList`; `false`: options ScrollView — use `false` inside `FlatList` / `SectionList` / vertical `ScrollView` hosts |
-| `listOptionProps`                                 | Extra props for the options **FlatList** (when virtualized)                                                                                     |
-| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                                                                                        |
-| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                                                                                         |
-| `*Style` props                                    | Label, container, options, chips, empty states, selected text                                                                                   |
-| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                                                                                          |
-| `selectIcon`                                      | Custom dropdown icon node                                                                                                                       |
-| `searchInputProps`                                | Extra `TextInput` props for the filter                                                                                                          |
+| Prop                                              | Description                                                                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                                                                                  |
+| `value` / `onChange`                              | Single-select controlled value                                                                                                 |
+| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                                                                   |
+| `isMulti`                                         | `true` for multi mode                                                                                                          |
+| `hideInputFilter`                                 | Hide search field in the dropdown                                                                                              |
+| `virtualized`                                     | `false` (default): options ScrollView (host-safe); `true`: options `FlatList` for large lists without a vertical scroll parent |
+| `listOptionProps`                                 | Extra props for the options **FlatList** (when `virtualized={true}`)                                                           |
+| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                                                                       |
+| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                                                                        |
+| `*Style` props                                    | Label, container, options, chips, empty states, selected text                                                                  |
+| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                                                                         |
+| `selectIcon`                                      | Custom dropdown icon node                                                                                                      |
+| `searchInputProps`                                | Extra `TextInput` props for the filter                                                                                         |
 
 See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
 
 ### Scrolling hosts (avoid nested VirtualizedList)
 
-RN warns when a vertical `FlatList` / `SectionList` is nested inside a vertical `ScrollView` (or another VirtualizedList). SelectBox options default to a `FlatList` (`virtualized={true}`).
+RN warns when a vertical `FlatList` / `SectionList` is nested inside a vertical `ScrollView` (or another VirtualizedList). SelectBox defaults to **`virtualized={false}`** (options `ScrollView` — host-safe).
 
 1. **Prefer `FlatList` / `SectionList` for long screens** — each field or card is a row ([`demos/SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx)).
-2. **`ScrollView` is fine for simpler forms** — still set `virtualized={false}` on every SelectBox ([`demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)).
-3. Use default **`virtualized={true}`** only when there is no other vertical scroll parent (short fixed layout / non-scrolling modal).
+2. **`ScrollView` is fine for simpler forms** ([`demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)).
+3. Opt into **`virtualized={true}`** only when there is no other vertical scroll parent and you want windowed options.
 
 The Expo app (`apps/example/App.tsx`) tabs between both hosts. Details: [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
 

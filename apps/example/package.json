@@ -13,8 +13,8 @@
     "web:online": "expo start --web",
     "export:web": "expo export --platform web",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
-    "test:ci": "node -e \"console.log('[@rn-multi-selectbox/example] smoke: use pnpm example + package Jest suite')\"",
+    "test": "node ./scripts/smoke-demos.mjs",
+    "test:ci": "node ./scripts/smoke-demos.mjs",
     "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\""
   },
   "dependencies": {

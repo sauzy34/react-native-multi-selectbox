@@ -1,9 +1,9 @@
 /**
  * Familiar form host: vertical ScrollView.
  *
- * Simple for short/medium forms, but RN warns if SelectBox options use the default
- * FlatList (virtualized={true}) inside a vertical ScrollView. Always pass
- * `virtualized={false}` in this layout so options are ScrollView + map.
+ * Simple for short/medium forms. Library default virtualized={false} keeps options as
+ * ScrollView + map (safe under this host). Opt into virtualized only for large lists
+ * without an outer vertical scroll parent.
  *
  * See also: SectionListHostDemo.tsx (preferred for long screens).
  */
@@ -50,8 +50,8 @@ export default function ScrollViewHostDemo() {
         </View>
         <Text style={demoStyles.title}>ScrollView host</Text>
         <Text style={demoStyles.subtitle}>
-          Classic form layout. Keep every SelectBox on virtualized=false so options are not a
-          VirtualizedList nested inside this ScrollView (RN warning + scroll fights).
+          Classic form layout. Default virtualized=false keeps options off a VirtualizedList nested
+          inside this ScrollView.
         </Text>
         <HostCallout
           title="Copy this pattern when"
@@ -72,7 +72,6 @@ export default function ScrollViewHostDemo() {
           options={COUNTRIES}
           value={country}
           onChange={setCountry}
-          virtualized={false}
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           selectedItemStyle={demoStyles.selectedText}
@@ -93,7 +92,6 @@ export default function ScrollViewHostDemo() {
           options={TIMEZONES}
           value={timezone}
           onChange={setTimezone}
-          virtualized={false}
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           selectedItemStyle={demoStyles.selectedText}
@@ -115,7 +113,6 @@ export default function ScrollViewHostDemo() {
           value={department}
           onChange={setDepartment}
           hideInputFilter
-          virtualized={false}
           arrowIconColor={theme.accent}
           selectedItemStyle={demoStyles.selectedText}
           optionsLabelStyle={demoStyles.optionText}
@@ -139,7 +136,6 @@ export default function ScrollViewHostDemo() {
           onMultiSelect={(opt) => setSkills((prev) => toggleById(prev, opt))}
           onTapClose={(opt) => setSkills((prev) => toggleById(prev, opt))}
           isMulti
-          virtualized={false}
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           toggleIconColor={theme.accent}
@@ -164,7 +160,6 @@ export default function ScrollViewHostDemo() {
           onMultiSelect={(opt) => setChannels((prev) => toggleById(prev, opt))}
           onTapClose={(opt) => setChannels((prev) => toggleById(prev, opt))}
           isMulti
-          virtualized={false}
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           toggleIconColor={theme.accent}
@@ -179,7 +174,7 @@ export default function ScrollViewHostDemo() {
       <DemoCard
         eyebrow="Multi select · ScrollView host"
         title="Project tags"
-        description="virtualized={false} is required here — default FlatList options would nest under ScrollView."
+        description="Uses library default (virtualized=false) under a ScrollView host."
       >
         <SelectBox
           label="Tags"
@@ -189,7 +184,6 @@ export default function ScrollViewHostDemo() {
           onMultiSelect={(opt) => setTags((prev) => toggleById(prev, opt))}
           onTapClose={(opt) => setTags((prev) => toggleById(prev, opt))}
           isMulti
-          virtualized={false}
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           toggleIconColor={theme.accent}
