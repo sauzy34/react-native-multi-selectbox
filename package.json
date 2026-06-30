@@ -53,10 +53,5 @@
     "select",
     "expo",
     "monorepo"
-  ],
-  "pnpm": {
-    "overrides": {
-      "@babel/core": "7.26.10"
-    }
-  }
+  ]
 }
