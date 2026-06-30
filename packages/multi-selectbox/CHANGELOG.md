@@ -5,6 +5,29 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2026-06-30
+
+### Fixed
+
+- Multi-select chips with **`hideChipClose`**: equal horizontal padding so labels are visually centered (no longer left-heavy when the × control is omitted)
+
+### Documentation / examples
+
+- Reverted long copy-paste examples from the package README (table of 2.0.2+ controls remains)
+- Added interactive **APIs** tab in the Expo example: [`apps/example/demos/AdditionalApisDemo.tsx`](./apps/example/demos/AdditionalApisDemo.tsx)
+  - `activeOptionsLabelStyle`, `maxSelected`, `optionIdKey` / `optionLabelKey`, `optionsAlign`, `optionsMaxHeight`
+  - `defaultOpen` / `onOpenChange`, `editable` / `hideDropdownIcon`, `hideChipClose`, `renderMultiChipLeading`
+- Example app chrome: SectionList | ScrollView | **APIs** tabs
+- Smoke tests assert Additional APIs demo coverage
+
+### Upgrade
+
+```bash
+npm install react-native-multi-selectbox@2.0.3
+```
+
+Live demo (after Pages deploy from `master`): https://sauzy34.github.io/react-native-multi-selectbox/
+
 ## [2.0.2] - 2026-06-30
 
 ### Added
@@ -70,6 +93,7 @@ Major rewrite: TypeScript library in a pnpm monorepo with an Expo example app. P
 
 Last line published from the pre-monorepo / JavaScript package layout. See npm history for 1.x details.
 
+[2.0.3]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v1.5.0...v2.0.0
