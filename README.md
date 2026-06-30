@@ -48,7 +48,7 @@ Source for the demo app: [`apps/example`](./apps/example) · host patterns: [`Se
 - Opt-in **`virtualized`** `FlatList` for very large option lists when there is no vertical scroll parent
 - Peers: **`react`** and **`react-native`** — icons use built-in text glyphs
 
-> **2.0** lives in this monorepo (`packages/multi-selectbox`). Published **1.5.x** remains on npm until you install / publish **2.0** (alpha or stable). Migration notes: [docs/MIGRATION.md](./docs/MIGRATION.md).
+> **2.0** is the current release line (`packages/multi-selectbox`). See [CHANGELOG.md](./CHANGELOG.md) for 1.x → 2.0 notes and [docs/MIGRATION.md](./docs/MIGRATION.md) for the monorepo layout.
 
 ---
 
@@ -373,7 +373,7 @@ React Native guidance on nested lists: [VirtualizedList](https://reactnative.dev
 1. Use **pnpm** from the repo root.
 2. Change the library under [`packages/multi-selectbox`](./packages/multi-selectbox); exercise with `pnpm example` / `pnpm example:web` and `pnpm test`.
 3. Keep Prettier/ESLint clean (`pnpm format` / `pnpm lint`).
-4. See [docs/MIGRATION.md](./docs/MIGRATION.md) for the 2.0 roadmap (publish / changelog as Phase 8).
+4. See [CHANGELOG.md](./CHANGELOG.md) and [docs/MIGRATION.md](./docs/MIGRATION.md) for release notes and layout.
 
 PRs and issues welcome: [github.com/sauzy34/react-native-multi-selectbox](https://github.com/sauzy34/react-native-multi-selectbox).
 

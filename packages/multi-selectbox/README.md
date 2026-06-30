@@ -2,8 +2,9 @@
 
 Platform-independent (Android / iOS / Expo / web) Selectbox | Picker | Multi-select.
 
-> **Source of truth:** `packages/multi-selectbox` (TypeScript).  
-> Demo: monorepo `pnpm example` / `pnpm example:web` → `apps/example` (Expo SDK 56).
+> **Source of truth:** this package (TypeScript).  
+> **Demo:** [sauzy34.github.io/react-native-multi-selectbox](https://sauzy34.github.io/react-native-multi-selectbox/) · monorepo `pnpm example` / `pnpm example:web`  
+> **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ## Install (consumers)
 
