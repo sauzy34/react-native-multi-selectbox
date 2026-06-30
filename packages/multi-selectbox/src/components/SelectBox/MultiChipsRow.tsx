@@ -47,13 +47,13 @@ function Chip({
   renderMultiChipLeading?: ((option: SelectOption) => ReactNode) | undefined
   onTapClose?: ((item: SelectOption) => void) | undefined
 }): ReactElement {
+  // With close control: tighter right padding (icon has its own margin).
+  // Without close: equal horizontal padding so the label reads centered in the pill.
   const containerStyle: StyleProp<ViewStyle> = [
     {
       flexDirection: 'row',
       borderRadius: 20,
       paddingVertical: 5,
-      paddingRight: hideChipClose ? 10 : 5,
-      paddingLeft: 10,
       marginRight: 4,
       alignItems: 'center',
       justifyContent: 'center',
@@ -61,11 +61,20 @@ function Chip({
       flexGrow: 0,
       flexShrink: 0,
       alignSelf: 'center',
+      ...(hideChipClose ? { paddingHorizontal: 12 } : { paddingLeft: 10, paddingRight: 5 }),
     },
     multiOptionContainerStyle,
+    // Re-assert balanced padding after consumer styles (often set paddingRight for the × case).
+    hideChipClose ? { paddingHorizontal: 12, paddingLeft: 12, paddingRight: 12 } : null,
   ]
   const labelStyle: StyleProp<TextStyle> = [
-    { fontSize: 10, color: '#fff', flexShrink: 0 },
+    {
+      fontSize: 10,
+      color: '#fff',
+      flexShrink: 0,
+      textAlign: hideChipClose && !renderMultiChipLeading ? 'center' : 'left',
+      includeFontPadding: false,
+    },
     multiOptionsLabelStyle,
   ]
 

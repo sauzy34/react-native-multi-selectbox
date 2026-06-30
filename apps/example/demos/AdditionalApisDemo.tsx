@@ -293,7 +293,7 @@ export default function AdditionalApisDemo() {
           arrowIconColor={theme.accent}
           searchIconColor={theme.accent}
           toggleIconColor={theme.accent}
-          multiOptionContainerStyle={demoStyles.chip}
+          multiOptionContainerStyle={demoStyles.chipNoClose}
           multiOptionsLabelStyle={demoStyles.chipLabel}
           containerStyle={demoStyles.fieldUnderline}
         />

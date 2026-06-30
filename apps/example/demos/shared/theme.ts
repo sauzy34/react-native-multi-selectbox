@@ -119,6 +119,14 @@ export const demoStyles = StyleSheet.create({
     paddingRight: 6,
     marginRight: 6,
   },
+  /** Symmetric padding when chips omit the close control (`hideChipClose`). */
+  chipNoClose: {
+    backgroundColor: theme.accent,
+    borderRadius: 999,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    marginRight: 6,
+  },
   chipLabel: {
     fontSize: 12,
     fontWeight: '600',
