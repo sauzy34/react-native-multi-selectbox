@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/npm/l/react-native-multi-selectbox.svg?style=flat-square)](./LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/sauzy34/react-native-multi-selectbox/ci.yml?branch=master&style=flat-square&label=CI)](https://github.com/sauzy34/react-native-multi-selectbox/actions/workflows/ci.yml)
 
-Cross-platform **select** / **multi-select** / **picker** for **React Native** and **Expo** (iOS, Android, web). Shared UI, TypeScript-first API, no `lodash` or `react-native-svg`.
+Cross-platform **select** / **multi-select** / **picker** for **React Native** and **Expo** (iOS, Android, web). Shared UI and a TypeScript-first API.
 
 ### Live demo
 
@@ -46,7 +46,7 @@ Source for the demo app: [`apps/example`](./apps/example) · host patterns: [`Se
 - Multi-select **chips** with remove / toggle affordances
 - **Host-safe by default:** `virtualized={false}` uses a bounded options `ScrollView` (avoids nested VirtualizedList warnings under forms)
 - Opt-in **`virtualized`** `FlatList` for very large option lists when there is no vertical scroll parent
-- Peers: **`react`** and **`react-native` only** — icons are text glyphs
+- Peers: **`react`** and **`react-native`** — icons use built-in text glyphs
 
 > **2.0** lives in this monorepo (`packages/multi-selectbox`). Published **1.5.x** remains on npm until you install / publish **2.0** (alpha or stable). Migration notes: [docs/MIGRATION.md](./docs/MIGRATION.md).
 
@@ -143,7 +143,7 @@ export function TimezoneField() {
 
 ### Multi select
 
-Use `isMulti`, `selectedValues`, `onMultiSelect`, and `onTapClose` (chip remove). Parent owns the list; a small toggle-by-id helper avoids lodash:
+Use `isMulti`, `selectedValues`, `onMultiSelect`, and `onTapClose` (chip remove). Parent owns the list — for example with a small toggle-by-id helper:
 
 ```tsx
 import { useState } from 'react'

@@ -126,7 +126,7 @@ export default function ScrollViewHostDemo() {
       <DemoCard
         eyebrow="Multi select · preselected chips"
         title="Skills"
-        description="Toggle skills in the list or remove chips (toggle-by-id helper, no lodash)."
+        description="Toggle skills in the list or remove chips (toggle-by-id helper)."
       >
         <SelectBox
           label="Skills"

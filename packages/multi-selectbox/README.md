@@ -14,7 +14,7 @@ npm install react-native-multi-selectbox
 #   react-native >= 0.73
 ```
 
-No `lodash` or `react-native-svg` required — icons use built-in text glyphs.
+Icons use built-in text glyphs.
 
 ## Types
 
