@@ -51,8 +51,9 @@ The app chrome lets you switch patterns; each host is its own file so you can co
 | ------------------------------------------------------------------ | ------------- | ------------------------------------------------------ |
 | [`demos/SectionListHostDemo.tsx`](./demos/SectionListHostDemo.tsx) | `SectionList` | Preferred for long screens (same idea with `FlatList`) |
 | [`demos/ScrollViewHostDemo.tsx`](./demos/ScrollViewHostDemo.tsx)   | `ScrollView`  | Simple / short–medium forms                            |
+| [`demos/AdditionalApisDemo.tsx`](./demos/AdditionalApisDemo.tsx)   | API cards     | 2.0.2+ controls (`maxSelected`, keys, chips, …)        |
 
-Shared catalogs and chrome live under [`demos/shared/`](./demos/shared/) (`data.ts`, `theme.ts`, `ui.tsx`). Entry: [`App.tsx`](./App.tsx).
+Shared catalogs and chrome live under [`demos/shared/`](./demos/shared/) (`data.ts`, `theme.ts`, `ui.tsx`). Entry: [`App.tsx`](./App.tsx) (tabs: SectionList / ScrollView / **APIs**).
 
 Library default is **`virtualized={false}`** (host-safe). Demos follow that default under `SectionList` / `ScrollView` hosts; set `virtualized` only if you opt into windowed options. Library docs: _Hosting SelectBox in scrolling screens_.
 
