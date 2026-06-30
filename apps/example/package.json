@@ -1,0 +1,35 @@
+{
+  "name": "@rn-multi-selectbox/example",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Expo TypeScript example for react-native-multi-selectbox",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start --offline",
+    "start:online": "expo start",
+    "android": "expo start --offline --android",
+    "ios": "expo start --offline --ios",
+    "web": "expo start --offline --web",
+    "web:online": "expo start --web",
+    "export:web": "expo export --platform web",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node ./scripts/smoke-demos.mjs",
+    "test:ci": "node ./scripts/smoke-demos.mjs",
+    "lint": "node -e \"console.log('Run pnpm lint from the monorepo root')\""
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~56.0.15",
+    "expo": "~56.0.12",
+    "expo-status-bar": "~56.0.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-multi-selectbox": "workspace:*",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~5.9.2"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

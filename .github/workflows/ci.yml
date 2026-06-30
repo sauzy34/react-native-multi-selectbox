@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+# Least privilege for quality; pages permissions only on deploy jobs.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Do not set `version` here — package.json `packageManager` already pins pnpm@10.33.0.
+      # Setting both makes pnpm/action-setup@v4 fail with "Multiple versions of pnpm specified".
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm --filter react-native-multi-selectbox build
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm test:ci
+
+  # Static Expo web demo → GitHub Pages (project site).
+  # URL: https://sauzy34.github.io/react-native-multi-selectbox/
+  # Enable once: repo Settings → Pages → Build and deployment → Source: GitHub Actions
+  #
+  # Only master/main: the github-pages environment defaults to “Protected branches only”
+  # (or selected branches), which rejects feature branches like chore/expo-monorepo-migration.
+  # To deploy from another branch: Settings → Environments → github-pages →
+  # “Deployment branches and tags” → No restriction (or add that branch), then extend `if` below.
+  build-web-demo:
+    needs: quality
+    if: >
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Export Expo web (GitHub Pages base path)
+        working-directory: apps/example
+        env:
+          # Project Pages serve under /<repo>/ — required so JS/CSS resolve correctly.
+          EXPO_BASE_URL: /react-native-multi-selectbox
+        run: pnpm export:web
+
+      # Avoid Jekyll ignoring paths like _expo on some Pages setups.
+      - run: touch apps/example/dist/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/example/dist
+
+  deploy-pages:
+    needs: build-web-demo
+    if: >
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
