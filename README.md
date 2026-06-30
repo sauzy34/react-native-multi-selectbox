@@ -1,163 +1,384 @@
 # react-native-multi-selectbox
 
-[![npm version](https://badge.fury.io/js/react-native-multi-selectbox.svg)](https://badge.fury.io/js/react-native-multi-selectbox)
+[![npm version](https://img.shields.io/npm/v/react-native-multi-selectbox.svg?style=flat-square)](https://www.npmjs.com/package/react-native-multi-selectbox)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-multi-selectbox.svg?style=flat-square)](https://www.npmjs.com/package/react-native-multi-selectbox)
+[![license](https://img.shields.io/npm/l/react-native-multi-selectbox.svg?style=flat-square)](./LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/sauzy34/react-native-multi-selectbox/ci.yml?branch=master&style=flat-square&label=CI)](https://github.com/sauzy34/react-native-multi-selectbox/actions/workflows/ci.yml)
 
-Platform-independent (Android / iOS / **Expo**) select box, multi-select, and picker with a shared UI.
+Cross-platform **select** / **multi-select** / **picker** for **React Native** and **Expo** (iOS, Android, web). Shared UI, TypeScript-first API, no `lodash` or `react-native-svg`.
 
-![demo](https://raw.githubusercontent.com/sauzy34/react-native-multi-selectbox/master/demo.gif)
+### Live demo
 
-> **2.0 is developed in this monorepo** (`packages/multi-selectbox`, TypeScript).  
-> **npm 1.5.x** remains the last published line until **2.0** ships (see [docs/MIGRATION.md](./docs/MIGRATION.md)).
+**Try the interactive Expo web demos (SectionList + ScrollView hosts):**
 
-## Monorepo layout
+### [sauzy34.github.io/react-native-multi-selectbox](https://sauzy34.github.io/react-native-multi-selectbox/)
 
-```text
-apps/example/                 # Expo SDK 56 TypeScript demo
-packages/multi-selectbox/     # Library source (publishable package name)
-docs/MIGRATION.md             # Migration plan & phase log
-```
+Source for the demo app: [`apps/example`](./apps/example) · host patterns: [`SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx) · [`ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)
 
-## Develop (Expo demo)
+---
 
-Requires **Node 20+** and **pnpm 10+**.
+## Table of contents
 
-```bash
-pnpm install
-pnpm example          # expo start --offline — then press i / a
-pnpm example:web      # browser (react-native-web)
-pnpm typecheck
-pnpm test
-pnpm lint
-pnpm format           # Prettier write
-```
+- [Features](#features)
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Examples](#examples)
+  - [Single select](#single-select)
+  - [Multi select](#multi-select)
+  - [Hide search / filter](#hide-search--filter)
+  - [Styling & colors](#styling--colors)
+  - [Large option lists](#large-option-lists)
+- [Scrolling hosts](#scrolling-hosts)
+- [Props](#props)
+- [Types](#types)
+- [Monorepo & development](#monorepo--development)
+- [References](#references)
+- [Contributing](#contributing)
+- [License](#license)
 
-Demo app: [`apps/example`](./apps/example) — depends on `"react-native-multi-selectbox": "workspace:*"`. Web needs `react-dom` / `react-native-web` (already in the example package).
+---
 
-**Hosted web demo (GitHub Pages):** [sauzy34.github.io/react-native-multi-selectbox](https://sauzy34.github.io/react-native-multi-selectbox/) — deployed by CI on push to **`master` / `main`** (`build-web-demo` / `deploy-pages`). Enable **Settings → Pages → Source: GitHub Actions** once. The `github-pages` environment must allow that branch (default protection rejects other branches).
+## Features
 
-## Install in your app (consumers)
+- Single- and multi-select with a consistent look on **iOS**, **Android**, and **web** (Expo / RNW)
+- **TypeScript** types with a **discriminated union** on `isMulti`
+- Searchable options (`hideInputFilter` to turn search off)
+- Multi-select **chips** with remove / toggle affordances
+- **Host-safe by default:** `virtualized={false}` uses a bounded options `ScrollView` (avoids nested VirtualizedList warnings under forms)
+- Opt-in **`virtualized`** `FlatList` for very large option lists when there is no vertical scroll parent
+- Peers: **`react`** and **`react-native` only** — icons are text glyphs
+
+> **2.0** lives in this monorepo (`packages/multi-selectbox`). Published **1.5.x** remains on npm until you install / publish **2.0** (alpha or stable). Migration notes: [docs/MIGRATION.md](./docs/MIGRATION.md).
+
+---
+
+## Install
 
 ```bash
 npm install react-native-multi-selectbox
+# or
+yarn add react-native-multi-selectbox
+# or
+pnpm add react-native-multi-selectbox
 ```
 
 ### Peer dependencies
 
-| Peer           | Notes                             |
+| Peer           | Version                           |
 | -------------- | --------------------------------- |
 | `react`        | ≥ 18                              |
 | `react-native` | ≥ 0.73 (Expo SDK 50+ recommended) |
 
-Icons use built-in text glyphs — **no** `lodash` or `react-native-svg`.
+No extra native modules. Works with Expo managed workflow and bare RN.
 
-## Usage
+---
 
-Options **must** include `id` and `item`.
+## Quick start
+
+Options **must** include `id` and `item` (string label).
 
 ```tsx
 import { useState } from 'react'
 import { View } from 'react-native'
 import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
 
-const K_OPTIONS: SelectOption[] = [
-  { item: 'Juventus', id: 'JUVE' },
-  { item: 'Real Madrid', id: 'RM' },
-  { item: 'Barcelona', id: 'BR' },
+const COUNTRIES: SelectOption[] = [
+  { id: 'us', item: 'United States' },
+  { id: 'ca', item: 'Canada' },
+  { id: 'gb', item: 'United Kingdom' },
+  { id: 'in', item: 'India' },
 ]
 
-function toggleById(list: SelectOption[], item: SelectOption): SelectOption[] {
-  return list.some((x) => x.id === item.id) ? list.filter((x) => x.id !== item.id) : [...list, item]
-}
-
-export function Demo() {
-  const [selectedTeam, setSelectedTeam] = useState<SelectOption | Record<string, never>>({})
-  const [selectedTeams, setSelectedTeams] = useState<SelectOption[]>([])
+export function ProfileForm() {
+  const [country, setCountry] = useState<SelectOption | Record<string, never>>({})
 
   return (
-    <View style={{ margin: 30 }}>
+    <View style={{ padding: 16 }}>
       <SelectBox
-        label="Select single"
-        options={K_OPTIONS}
-        value={selectedTeam}
-        onChange={setSelectedTeam}
-      />
-      <SelectBox
-        label="Select multiple"
-        options={K_OPTIONS}
-        selectedValues={selectedTeams}
-        onMultiSelect={(item) => setSelectedTeams((prev) => toggleById(prev, item))}
-        onTapClose={(item) => setSelectedTeams((prev) => toggleById(prev, item))}
-        isMulti={true}
+        label="Country"
+        inputPlaceholder="Search countries…"
+        options={COUNTRIES}
+        value={country}
+        onChange={setCountry}
       />
     </View>
   )
 }
 ```
 
-### Types
+Open the [live demo](https://sauzy34.github.io/react-native-multi-selectbox/) for more patterns (timezone, skills chips, tags, etc.).
+
+---
+
+## Examples
+
+### Single select
+
+Controlled value via `value` + `onChange`. Empty `{}` / missing `item` means “nothing selected” (1.x-compatible).
+
+```tsx
+import { useState } from 'react'
+import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
+
+const TIMEZONES: SelectOption[] = [
+  { id: 'utc', item: 'UTC' },
+  { id: 'pt', item: 'Pacific Time (PT)' },
+  { id: 'et', item: 'Eastern Time (ET)' },
+]
+
+export function TimezoneField() {
+  const [timezone, setTimezone] = useState<SelectOption>({ id: 'utc', item: 'UTC' })
+
+  return (
+    <SelectBox
+      label="Timezone"
+      inputPlaceholder="Find a timezone…"
+      options={TIMEZONES}
+      value={timezone}
+      onChange={setTimezone}
+    />
+  )
+}
+```
+
+### Multi select
+
+Use `isMulti`, `selectedValues`, `onMultiSelect`, and `onTapClose` (chip remove). Parent owns the list; a small toggle-by-id helper avoids lodash:
+
+```tsx
+import { useState } from 'react'
+import SelectBox, { type SelectOption } from 'react-native-multi-selectbox'
+
+const SKILLS: SelectOption[] = [
+  { id: 'ts', item: 'TypeScript' },
+  { id: 'rn', item: 'React Native' },
+  { id: 'react', item: 'React' },
+]
+
+function toggleById(list: SelectOption[], item: SelectOption): SelectOption[] {
+  return list.some((x) => x.id === item.id) ? list.filter((x) => x.id !== item.id) : [...list, item]
+}
+
+export function SkillsField() {
+  const [skills, setSkills] = useState<SelectOption[]>([{ id: 'ts', item: 'TypeScript' }])
+
+  return (
+    <SelectBox
+      label="Skills"
+      inputPlaceholder="Add skills…"
+      options={SKILLS}
+      selectedValues={skills}
+      onMultiSelect={(item) => setSkills((prev) => toggleById(prev, item))}
+      onTapClose={(item) => setSkills((prev) => toggleById(prev, item))}
+      isMulti
+    />
+  )
+}
+```
+
+Reference implementation: multi cards in [`apps/example/demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx).
+
+### Hide search / filter
+
+For short lists, hide the filter input:
+
+```tsx
+<SelectBox
+  label="Department"
+  options={DEPARTMENTS}
+  value={department}
+  onChange={setDepartment}
+  hideInputFilter
+/>
+```
+
+### Styling & colors
+
+```tsx
+<SelectBox
+  label="Channels"
+  options={CHANNELS}
+  selectedValues={channels}
+  onMultiSelect={...}
+  onTapClose={...}
+  isMulti
+  arrowIconColor="#4F46E5"
+  searchIconColor="#4F46E5"
+  toggleIconColor="#4F46E5"
+  selectedItemStyle={{ fontSize: 16, fontWeight: '500' }}
+  optionsLabelStyle={{ fontSize: 15 }}
+  multiOptionContainerStyle={{ backgroundColor: '#4F46E5', borderRadius: 999 }}
+  multiOptionsLabelStyle={{ color: '#fff', fontWeight: '600' }}
+  containerStyle={{ borderBottomColor: '#E5E7EB' }}
+  inputFilterStyle={{ color: '#111827' }}
+/>
+```
+
+Full style prop names are in [Props](#props) and [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts).
+
+### Large option lists
+
+Default options rendering is a **ScrollView** (`virtualized={false}`) — safest inside forms. For **large** catalogs **without** an outer vertical scroll parent, opt into a windowed list:
+
+```tsx
+<SelectBox
+  label="City"
+  options={MANY_CITIES}
+  value={city}
+  onChange={setCity}
+  virtualized // FlatList + max height + nestedScrollEnabled
+  listOptionProps={{ initialNumToRender: 12 }}
+/>
+```
+
+---
+
+## Scrolling hosts
+
+React Native warns when a vertical **VirtualizedList** (`FlatList` / `SectionList`) is nested inside a vertical **`ScrollView`** (or another VirtualizedList).
+
+| Host screen                           | Recommended `virtualized`    |
+| ------------------------------------- | ---------------------------- |
+| `FlatList` / `SectionList` row        | `false` (**default**)        |
+| Vertical `ScrollView` form            | `false` (**default**)        |
+| Fixed / modal **without** list scroll | `true` (opt-in, large lists) |
+
+Copy-paste hosts in the example app:
+
+| Pattern         | File                                                                                         | When to use              |
+| --------------- | -------------------------------------------------------------------------------------------- | ------------------------ |
+| **SectionList** | [`apps/example/demos/SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx) | Long screens (preferred) |
+| **ScrollView**  | [`apps/example/demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)   | Simple / short forms     |
+
+Tabs live in [`apps/example/App.tsx`](./apps/example/App.tsx). Deeper write-up: [packages/multi-selectbox/README.md — Hosting](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
+
+---
+
+## Props
+
+Overview of the public surface. See **[`types.ts`](./packages/multi-selectbox/src/types.ts)** for the authoritative TypeScript definitions.
+
+| Prop                                                     | Description                                                                                                                                                                                                                                                 |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`                                                | `SelectOption[]` — `{ id, item }[]` (non-arrays treated as `[]`)                                                                                                                                                                                            |
+| `label`                                                  | Field label above the control                                                                                                                                                                                                                               |
+| `inputPlaceholder`                                       | Placeholder for closed field / filter                                                                                                                                                                                                                       |
+| `value` / `onChange`                                     | **Single** select (when `isMulti` is omitted or `false`)                                                                                                                                                                                                    |
+| `selectedValues` / `onMultiSelect` / `onTapClose`        | **Multi** select (`isMulti: true`)                                                                                                                                                                                                                          |
+| `isMulti`                                                | `true` enables multi mode (discriminated props)                                                                                                                                                                                                             |
+| `hideInputFilter`                                        | Hide the search field in the open panel                                                                                                                                                                                                                     |
+| `virtualized`                                            | `false` (default): options `ScrollView`; `true`: options `FlatList`                                                                                                                                                                                         |
+| `listOptionProps`                                        | Extra props for options **FlatList** (`virtualized={true}`)                                                                                                                                                                                                 |
+| `listScrollViewProps`                                    | Extra props for options **ScrollView** (default mode)                                                                                                                                                                                                       |
+| `multiSelectInputFieldProps`                             | Extra props for the chips **horizontal ScrollView**                                                                                                                                                                                                         |
+| `searchInputProps`                                       | Extra `TextInput` props for the filter                                                                                                                                                                                                                      |
+| `listEmptyText`                                          | Empty-state copy in the options panel                                                                                                                                                                                                                       |
+| `selectIcon`                                             | Custom chevron / icon node                                                                                                                                                                                                                                  |
+| `arrowIconColor` / `searchIconColor` / `toggleIconColor` | Icon paint colors                                                                                                                                                                                                                                           |
+| Style props                                              | `labelStyle`, `containerStyle`, `selectedItemStyle`, `optionsLabelStyle`, `optionContainerStyle`, `multiOptionContainerStyle`, `multiOptionsLabelStyle`, `multiListEmptyLabelStyle`, `listEmptyLabelStyle`, `inputFilterStyle`, `inputFilterContainerStyle` |
+| `width`                                                  | Field width (`DimensionValue`, default `'100%'`)                                                                                                                                                                                                            |
+
+Test IDs for automation: [`TEST_IDS`](./packages/multi-selectbox/src/testIDs.ts) (exported from the package).
+
+---
+
+## Types
 
 ```ts
-import type {
-  SelectOption,
-  SelectBoxProps,
-  SelectBoxSingleProps,
-  SelectBoxMultiProps,
+import SelectBox, {
+  type SelectOption,
+  type SelectBoxProps,
+  type SelectBoxSingleProps,
+  type SelectBoxMultiProps,
+  type OptionsListProps,
+  type OptionsScrollViewProps,
+  type MultiSelectFieldProps,
+  TEST_IDS,
 } from 'react-native-multi-selectbox'
 ```
 
-`SelectBoxProps` is a **discriminated union** on `isMulti` (`true` → multi; omit/`false` → single).
+`SelectBoxProps` is a **discriminated union** on `isMulti`:
 
-### Props (overview)
+- **Single:** `isMulti` omitted / `false` → `value?`, `onChange?`
+- **Multi:** `isMulti: true` → `selectedValues?`, `onMultiSelect?`, `onTapClose?`
 
-| Prop                                              | Description                                                                                                                    |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `options`                                         | `{ id, item }[]` (non-arrays treated as `[]`)                                                                                  |
-| `value` / `onChange`                              | Single-select controlled value                                                                                                 |
-| `selectedValues` / `onMultiSelect` / `onTapClose` | Multi-select                                                                                                                   |
-| `isMulti`                                         | `true` for multi mode                                                                                                          |
-| `hideInputFilter`                                 | Hide search field in the dropdown                                                                                              |
-| `virtualized`                                     | `false` (default): options ScrollView (host-safe); `true`: options `FlatList` for large lists without a vertical scroll parent |
-| `listOptionProps`                                 | Extra props for the options **FlatList** (when `virtualized={true}`)                                                           |
-| `multiSelectInputFieldProps`                      | Extra props for the chips **ScrollView**                                                                                       |
-| `inputFilterStyle` / `inputFilterContainerStyle`  | Filter field styles (`color` supported)                                                                                        |
-| `*Style` props                                    | Label, container, options, chips, empty states, selected text                                                                  |
-| Icon colors                                       | `arrowIconColor`, `searchIconColor`, `toggleIconColor`                                                                         |
-| `selectIcon`                                      | Custom dropdown icon node                                                                                                      |
-| `searchInputProps`                                | Extra `TextInput` props for the filter                                                                                         |
+```ts
+export type SelectOption = {
+  id: string | number
+  item: string
+}
+```
 
-See [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts) for the full TypeScript surface.
+---
 
-### Scrolling hosts (avoid nested VirtualizedList)
+## Monorepo & development
 
-RN warns when a vertical `FlatList` / `SectionList` is nested inside a vertical `ScrollView` (or another VirtualizedList). SelectBox defaults to **`virtualized={false}`** (options `ScrollView` — host-safe).
+```text
+apps/example/              # Expo SDK 56 demo (web + native)
+packages/multi-selectbox/  # Library (publishable package name)
+docs/MIGRATION.md          # 2.0 migration plan & phase log
+.github/workflows/ci.yml   # quality + GitHub Pages deploy
+```
 
-1. **Prefer `FlatList` / `SectionList` for long screens** — each field or card is a row ([`demos/SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx)).
-2. **`ScrollView` is fine for simpler forms** ([`demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)).
-3. Opt into **`virtualized={true}`** only when there is no other vertical scroll parent and you want windowed options.
+Requires **Node 20+** and **pnpm 10+**.
 
-The Expo app (`apps/example/App.tsx`) tabs between both hosts. Details: [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md#hosting-selectbox-in-scrolling-screens).
+```bash
+pnpm install
+pnpm example              # Expo start (offline by default) — press i / a / w
+pnpm example:web          # browser via react-native-web
+pnpm example:export:web   # static export → apps/example/dist (Pages)
+pnpm typecheck
+pnpm test                 # Jest (library) + example smoke
+pnpm lint
+pnpm format
+pnpm --filter react-native-multi-selectbox build   # emit dist/ for publish
+```
 
-## Scripts (root)
+| Script                       | Purpose                             |
+| ---------------------------- | ----------------------------------- |
+| `pnpm example`               | Start Expo example (offline)        |
+| `pnpm example:web`           | Start Expo web demo                 |
+| `pnpm example:export:web`    | Static `expo export --platform web` |
+| `pnpm typecheck`             | `tsc` in all packages               |
+| `pnpm test` / `pnpm test:ci` | Library Jest + example host smoke   |
+| `pnpm lint` / `pnpm format`  | ESLint / Prettier                   |
 
-| Script                       | Purpose                      |
-| ---------------------------- | ---------------------------- |
-| `pnpm example`               | Start Expo example (offline) |
-| `pnpm example:web`           | Start Expo web demo          |
-| `pnpm example:export:web`    | Static `expo export -p web`  |
-| `pnpm typecheck`             | `tsc` in all packages        |
-| `pnpm test` / `pnpm test:ci` | Jest (library) + smoke       |
-| `pnpm lint`                  | ESLint                       |
-| `pnpm format`                | Prettier write               |
+CI deploys the web demo to **GitHub Pages** on push to `master` / `main` (see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml)).
+
+---
+
+## References
+
+| Resource              | Link                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Live web demo**     | [sauzy34.github.io/react-native-multi-selectbox](https://sauzy34.github.io/react-native-multi-selectbox/)    |
+| npm package           | [npmjs.com/package/react-native-multi-selectbox](https://www.npmjs.com/package/react-native-multi-selectbox) |
+| Library source        | [`packages/multi-selectbox`](./packages/multi-selectbox)                                                     |
+| Public types          | [`packages/multi-selectbox/src/types.ts`](./packages/multi-selectbox/src/types.ts)                           |
+| Package README        | [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md)                                 |
+| Example app           | [`apps/example`](./apps/example) · [example README](./apps/example/README.md)                                |
+| SectionList host demo | [`demos/SectionListHostDemo.tsx`](./apps/example/demos/SectionListHostDemo.tsx)                              |
+| ScrollView host demo  | [`demos/ScrollViewHostDemo.tsx`](./apps/example/demos/ScrollViewHostDemo.tsx)                                |
+| Migration / roadmap   | [`docs/MIGRATION.md`](./docs/MIGRATION.md)                                                                   |
+| Issues                | [GitHub Issues](https://github.com/sauzy34/react-native-multi-selectbox/issues)                              |
+| CI                    | [Actions — CI workflow](https://github.com/sauzy34/react-native-multi-selectbox/actions/workflows/ci.yml)    |
+| License               | [MIT](./LICENSE)                                                                                             |
+
+React Native guidance on nested lists: [VirtualizedList](https://reactnative.dev/docs/virtualizedlist) (do not nest vertical VirtualizedLists inside vertical ScrollViews of the same orientation without care — this library defaults to a non-virtualized options panel for that reason).
+
+---
 
 ## Contributing
 
-1. Use **pnpm** and branch from the active migration branch if applicable.
-2. Library changes go in `packages/multi-selectbox`; exercise them via `pnpm example` and `pnpm test`.
-3. Follow [docs/MIGRATION.md](./docs/MIGRATION.md) for the 2.0 roadmap (Phase 8 = publish).
+1. Use **pnpm** from the repo root.
+2. Change the library under [`packages/multi-selectbox`](./packages/multi-selectbox); exercise with `pnpm example` / `pnpm example:web` and `pnpm test`.
+3. Keep Prettier/ESLint clean (`pnpm format` / `pnpm lint`).
+4. See [docs/MIGRATION.md](./docs/MIGRATION.md) for the 2.0 roadmap (publish / changelog as Phase 8).
 
-Issues: https://github.com/sauzy34/react-native-multi-selectbox/issues
+PRs and issues welcome: [github.com/sauzy34/react-native-multi-selectbox](https://github.com/sauzy34/react-native-multi-selectbox).
+
+---
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+[MIT](./LICENSE) © [Saurav Gupta](https://github.com/sauzy34)
