@@ -1,58 +1,75 @@
 /**
- * Example entry: switch between host patterns.
+ * Example entry: switch between host patterns and API demos.
  *
- * - demos/SectionListHostDemo.tsx — SectionList (preferred for long screens)
- * - demos/ScrollViewHostDemo.tsx  — ScrollView (simple forms; library default virtualized)
+ * - demos/SectionListHostDemo.tsx — SectionList host
+ * - demos/ScrollViewHostDemo.tsx  — ScrollView host
+ * - demos/AdditionalApisDemo.tsx  — 2.0.2+ control APIs
  */
 import { useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
+import AdditionalApisDemo from './demos/AdditionalApisDemo'
 import SectionListHostDemo from './demos/SectionListHostDemo'
 import ScrollViewHostDemo from './demos/ScrollViewHostDemo'
 import { theme } from './demos/shared/theme'
 
-type HostDemo = 'sectionList' | 'scrollView'
+type DemoTab = 'sectionList' | 'scrollView' | 'apis'
 
 export default function App() {
-  const [host, setHost] = useState<HostDemo>('sectionList')
+  const [tab, setTab] = useState<DemoTab>('sectionList')
 
   return (
     <View style={styles.root}>
       <StatusBar style="dark" />
       <View style={styles.chrome}>
         <Text style={styles.chromeTitle}>react-native-multi-selectbox</Text>
-        <Text style={styles.chromeSubtitle}>Pick a scrolling host pattern to explore</Text>
+        <Text style={styles.chromeSubtitle}>Hosts and 2.0.2+ control APIs</Text>
         <View style={styles.tabs}>
           <Pressable
             accessibilityRole="button"
-            accessibilityState={{ selected: host === 'sectionList' }}
-            onPress={() => setHost('sectionList')}
-            style={[styles.tab, host === 'sectionList' && styles.tabActive]}
+            accessibilityState={{ selected: tab === 'sectionList' }}
+            onPress={() => setTab('sectionList')}
+            style={[styles.tab, tab === 'sectionList' && styles.tabActive]}
           >
-            <Text style={[styles.tabText, host === 'sectionList' && styles.tabTextActive]}>
+            <Text style={[styles.tabText, tab === 'sectionList' && styles.tabTextActive]}>
               SectionList
             </Text>
-            <Text style={[styles.tabHint, host === 'sectionList' && styles.tabHintActive]}>
-              Preferred long form
+            <Text style={[styles.tabHint, tab === 'sectionList' && styles.tabHintActive]}>
+              Long form host
             </Text>
           </Pressable>
           <Pressable
             accessibilityRole="button"
-            accessibilityState={{ selected: host === 'scrollView' }}
-            onPress={() => setHost('scrollView')}
-            style={[styles.tab, host === 'scrollView' && styles.tabActive]}
+            accessibilityState={{ selected: tab === 'scrollView' }}
+            onPress={() => setTab('scrollView')}
+            style={[styles.tab, tab === 'scrollView' && styles.tabActive]}
           >
-            <Text style={[styles.tabText, host === 'scrollView' && styles.tabTextActive]}>
+            <Text style={[styles.tabText, tab === 'scrollView' && styles.tabTextActive]}>
               ScrollView
             </Text>
-            <Text style={[styles.tabHint, host === 'scrollView' && styles.tabHintActive]}>
-              Simple forms
+            <Text style={[styles.tabHint, tab === 'scrollView' && styles.tabHintActive]}>
+              Simple host
             </Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ selected: tab === 'apis' }}
+            onPress={() => setTab('apis')}
+            style={[styles.tab, tab === 'apis' && styles.tabActive]}
+          >
+            <Text style={[styles.tabText, tab === 'apis' && styles.tabTextActive]}>APIs</Text>
+            <Text style={[styles.tabHint, tab === 'apis' && styles.tabHintActive]}>2.0.2+</Text>
           </Pressable>
         </View>
       </View>
       <View style={styles.body}>
-        {host === 'sectionList' ? <SectionListHostDemo /> : <ScrollViewHostDemo />}
+        {tab === 'sectionList' ? (
+          <SectionListHostDemo />
+        ) : tab === 'scrollView' ? (
+          <ScrollViewHostDemo />
+        ) : (
+          <AdditionalApisDemo />
+        )}
       </View>
     </View>
   )
@@ -65,7 +82,7 @@ const styles = StyleSheet.create({
   },
   chrome: {
     paddingTop: 52,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingBottom: 12,
     backgroundColor: theme.card,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -91,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 12,
     paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     backgroundColor: theme.bg,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.border,
@@ -101,7 +118,7 @@ const styles = StyleSheet.create({
     borderColor: '#C7D2FE',
   },
   tabText: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '700',
     color: theme.text,
     marginBottom: 2,
@@ -110,7 +127,7 @@ const styles = StyleSheet.create({
     color: theme.accentText,
   },
   tabHint: {
-    fontSize: 11,
+    fontSize: 10,
     color: theme.muted,
   },
   tabHintActive: {

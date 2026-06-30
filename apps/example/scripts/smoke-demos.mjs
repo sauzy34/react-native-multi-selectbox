@@ -22,8 +22,10 @@ const ui = read('demos/shared/ui.tsx')
 
 assert.match(app, /SectionListHostDemo/, 'App imports SectionList host demo')
 assert.match(app, /ScrollViewHostDemo/, 'App imports ScrollView host demo')
-assert.match(app, /host === 'sectionList'/, 'App switches SectionList host')
-assert.match(app, /host === 'scrollView'/, 'App switches ScrollView host')
+assert.match(app, /AdditionalApisDemo/, 'App imports Additional APIs demo')
+assert.match(app, /tab === 'sectionList'|host === 'sectionList'/, 'App switches SectionList host')
+assert.match(app, /host === 'scrollView'|tab === 'scrollView'/, 'App switches ScrollView host')
+assert.match(app, /tab === 'apis'|host === 'apis'/, 'App switches APIs demo')
 
 assert.match(section, /SectionList/, 'SectionList demo uses SectionList')
 assert.match(
@@ -51,4 +53,22 @@ assert.match(data, /export const COUNTRIES/, 'shared option catalogs present')
 assert.match(theme, /export const theme/, 'shared theme present')
 assert.match(ui, /export function DemoCard/, 'shared DemoCard present')
 
-console.log('[@rn-multi-selectbox/example] smoke-demos: OK (App hosts + shared demos)')
+const apis = read('demos/AdditionalApisDemo.tsx')
+assert.match(
+  apis,
+  /export default function AdditionalApisDemo/,
+  'AdditionalApis demo default export',
+)
+assert.match(apis, /activeOptionsLabelStyle/, 'demo covers activeOptionsLabelStyle')
+assert.match(apis, /maxSelected/, 'demo covers maxSelected')
+assert.match(apis, /optionLabelKey/, 'demo covers optionLabelKey')
+assert.match(apis, /optionsAlign/, 'demo covers optionsAlign')
+assert.match(apis, /optionsMaxHeight/, 'demo covers optionsMaxHeight')
+assert.match(apis, /onOpenChange/, 'demo covers onOpenChange')
+assert.match(apis, /defaultOpen/, 'demo covers defaultOpen')
+assert.match(apis, /editable=\{false\}/, 'demo covers editable')
+assert.match(apis, /hideDropdownIcon/, 'demo covers hideDropdownIcon')
+assert.match(apis, /hideChipClose/, 'demo covers hideChipClose')
+assert.match(apis, /renderMultiChipLeading/, 'demo covers renderMultiChipLeading')
+
+console.log('[@rn-multi-selectbox/example] smoke-demos: OK (hosts + AdditionalApis demo)')
