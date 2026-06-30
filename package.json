@@ -31,7 +31,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "build": "pnpm -r --if-present run build",
-    "clean": "pnpm -r --if-present run clean && rm -rf node_modules"
+    "clean": "pnpm -r --if-present run clean && rm -rf node_modules",
+    "publish:lib": "pnpm --filter react-native-multi-selectbox publish --access public",
+    "pack:lib": "pnpm --filter react-native-multi-selectbox exec npm pack"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

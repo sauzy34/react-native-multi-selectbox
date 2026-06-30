@@ -10,17 +10,17 @@ Patch release: chip layout fix when close controls are hidden, plus interactive 
 
 Expo example app (**APIs** tab) — [`AdditionalApisDemo.tsx`](https://github.com/sauzy34/react-native-multi-selectbox/blob/master/apps/example/demos/AdditionalApisDemo.tsx):
 
-| Prop | Demo |
-| --- | --- |
-| `activeOptionsLabelStyle` | Highlight selected option labels |
-| `maxSelected` | Limit multi selection (e.g. 3 tags) |
-| `optionIdKey` / `optionLabelKey` | Options shaped as `{ id, name }` |
-| `optionsAlign` | Right-aligned option list |
-| `optionsMaxHeight` | Taller options panel |
-| `defaultOpen` / `onOpenChange` | Initial open + open-state callback |
-| `editable` / `hideDropdownIcon` | Read-only field / no chevron |
-| `hideChipClose` | Chips without × |
-| `renderMultiChipLeading` | Avatar / leading node on chips |
+| Prop                             | Demo                                |
+| -------------------------------- | ----------------------------------- |
+| `activeOptionsLabelStyle`        | Highlight selected option labels    |
+| `maxSelected`                    | Limit multi selection (e.g. 3 tags) |
+| `optionIdKey` / `optionLabelKey` | Options shaped as `{ id, name }`    |
+| `optionsAlign`                   | Right-aligned option list           |
+| `optionsMaxHeight`               | Taller options panel                |
+| `defaultOpen` / `onOpenChange`   | Initial open + open-state callback  |
+| `editable` / `hideDropdownIcon`  | Read-only field / no chevron        |
+| `hideChipClose`                  | Chips without ×                     |
+| `renderMultiChipLeading`         | Avatar / leading node on chips      |
 
 Also: SectionList and ScrollView host demos unchanged.
 
@@ -39,7 +39,10 @@ npm install react-native-multi-selectbox@2.0.3
 
 ## Publish
 
-```bash
-cd packages/multi-selectbox
-npm publish --access public --otp=YOUR_CODE
-```
+> **Publish from the library package only.** The repo root `package.json` is the **monorepo** (`private: true`) and cannot be published. Use:
+>
+> ```bash
+> cd packages/multi-selectbox && npm publish --access public --otp=YOUR_CODE
+> # or from repo root:
+> pnpm publish:lib --otp=YOUR_CODE
+> ```

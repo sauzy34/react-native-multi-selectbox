@@ -64,6 +64,8 @@ pnpm add react-native-multi-selectbox
 
 No extra native modules. Works with Expo managed workflow and bare RN.
 
+> **Maintainers:** publish this package from `packages/multi-selectbox` (or `pnpm publish:lib` at the repo root). Do not run `npm publish` at the monorepo root — that package is `private: true`.
+
 ---
 
 ## Quick start
