@@ -10,6 +10,8 @@ export const TEST_IDS = {
   optionsList: 'selectbox-options-list',
   option: (id: string | number) => `selectbox-option-${id}`,
   multiChip: (id: string | number) => `selectbox-chip-${id}`,
+  multiChipClose: (id: string | number) => `selectbox-chip-close-${id}`,
+  multiChipLeading: (id: string | number) => `selectbox-chip-leading-${id}`,
   multiEmpty: 'selectbox-multi-empty',
   listEmpty: 'selectbox-list-empty',
 } as const

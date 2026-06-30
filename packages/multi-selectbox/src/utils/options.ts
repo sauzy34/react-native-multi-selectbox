@@ -5,9 +5,62 @@ const EMPTY_OPTIONS: SelectOption[] = []
 /** Stable empty object for default prop objects (avoids breaking memo). */
 export const EMPTY_OBJECT = {} as const
 
-/** Coerce non-arrays (e.g. loading/API mistakes) to a safe empty list. */
-export function normalizeOptions(options: SelectOption[] | undefined): SelectOption[] {
-  return Array.isArray(options) ? options : EMPTY_OPTIONS
+function readId(value: unknown): string | number | undefined {
+  if (typeof value === 'string' || typeof value === 'number') {
+    return value
+  }
+  return undefined
+}
+
+function readLabel(value: unknown): string | undefined {
+  if (typeof value === 'string') {
+    return value
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value)
+  }
+  return undefined
+}
+
+/**
+ * Coerce options from arrays of SelectOption or records with custom id/label keys
+ * (e.g. `{ id, name }` via optionLabelKey="name"). Non-arrays become [].
+ */
+export function normalizeOptions(
+  options: ReadonlyArray<SelectOption | Record<string, unknown>> | undefined,
+  optionIdKey = 'id',
+  optionLabelKey = 'item',
+): SelectOption[] {
+  if (!Array.isArray(options)) {
+    return EMPTY_OPTIONS
+  }
+  const useDefaultKeys = optionIdKey === 'id' && optionLabelKey === 'item'
+  if (useDefaultKeys) {
+    const allValid = options.every(
+      (row) =>
+        row &&
+        typeof row === 'object' &&
+        readId((row as SelectOption).id) !== undefined &&
+        typeof (row as SelectOption).item === 'string',
+    )
+    if (allValid) {
+      return options as SelectOption[]
+    }
+  }
+  const out: SelectOption[] = []
+  for (const row of options) {
+    if (!row || typeof row !== 'object') {
+      continue
+    }
+    const rec = row as Record<string, unknown>
+    const id = readId(rec[optionIdKey])
+    const item = readLabel(rec[optionLabelKey])
+    if (id === undefined || item === undefined) {
+      continue
+    }
+    out.push({ id, item })
+  }
+  return out
 }
 
 export function readSelectedItemText(

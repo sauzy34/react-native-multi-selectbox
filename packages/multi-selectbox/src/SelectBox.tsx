@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState, type ReactElement } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import { Text, View, type StyleProp, type TextStyle } from 'react-native'
 import Colors from './constants/Colors'
 import SelectField from './components/SelectBox/SelectField'
@@ -24,6 +24,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     inputFilterContainerStyle,
     inputFilterStyle,
     optionsLabelStyle,
+    activeOptionsLabelStyle,
     optionContainerStyle,
     multiOptionContainerStyle,
     multiOptionsLabelStyle,
@@ -32,12 +33,20 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     selectedItemStyle,
     listEmptyText = 'No results found',
     selectIcon,
+    hideDropdownIcon = false,
+    editable = true,
+    defaultOpen = false,
+    onOpenChange,
+    optionsMaxHeight,
+    optionsAlign,
     label = 'Label',
     inputPlaceholder = 'Select',
     hideInputFilter,
     width = '100%',
     isMulti = false,
     options: optionsProp,
+    optionIdKey = 'id',
+    optionLabelKey = 'item',
     arrowIconColor = Colors.primary,
     searchIconColor = Colors.primary,
     toggleIconColor = Colors.primary,
@@ -46,12 +55,22 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     listOptionProps,
     listScrollViewProps,
     virtualized = false,
+    hideChipClose = false,
+    renderMultiChipLeading,
   } = props
 
-  const options = normalizeOptions(optionsProp)
-  const selectedValues = isMulti
-    ? normalizeOptions((props as Extract<SelectBoxProps, { isMulti: true }>).selectedValues)
-    : EMPTY_OPTIONS
+  const options = useMemo(
+    () => normalizeOptions(optionsProp, optionIdKey, optionLabelKey),
+    [optionsProp, optionIdKey, optionLabelKey],
+  )
+  const selectedValuesProp = isMulti
+    ? (props as Extract<SelectBoxProps, { isMulti: true }>).selectedValues
+    : undefined
+  const selectedValues = useMemo(
+    () =>
+      isMulti ? normalizeOptions(selectedValuesProp, optionIdKey, optionLabelKey) : EMPTY_OPTIONS,
+    [isMulti, optionIdKey, optionLabelKey, selectedValuesProp],
+  )
   const value = !isMulti
     ? ((props as Extract<SelectBoxProps, { isMulti?: false }>).value ?? null)
     : null
@@ -64,11 +83,40 @@ function SelectBox(props: SelectBoxProps): ReactElement {
   const onTapClose = isMulti
     ? (props as Extract<SelectBoxProps, { isMulti: true }>).onTapClose
     : undefined
+  const maxSelected = isMulti
+    ? (props as Extract<SelectBoxProps, { isMulti: true }>).maxSelected
+    : undefined
 
   const resolvedListOptionProps = (listOptionProps ?? EMPTY_OBJECT) as OptionsListProps
 
   const [inputValue, setInputValue] = useState('')
-  const [showOptions, setShowOptions] = useState(false)
+  const [showOptions, setShowOptions] = useState(defaultOpen)
+  const mountedRef = useRef(true)
+  const onOpenChangeRef = useRef(onOpenChange)
+  onOpenChangeRef.current = onOpenChange
+
+  useEffect(() => {
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
+
+  const setOpen = useCallback((next: boolean) => {
+    if (!mountedRef.current) {
+      return
+    }
+    setShowOptions((prev) => {
+      if (prev === next) {
+        return prev
+      }
+      if (!next) {
+        setInputValue('')
+      }
+      onOpenChangeRef.current?.(next)
+      return next
+    })
+  }, [])
 
   const filteredSuggestions = useMemo(
     () => filterOptions(options, inputValue),
@@ -80,31 +128,49 @@ function SelectBox(props: SelectBoxProps): ReactElement {
     [isMulti, selectedValues],
   )
 
+  const singleSelectedId =
+    !isMulti && value && typeof value === 'object' && 'id' in value ? value.id : undefined
+
   const optionLabelById = useMemo(() => buildOptionLabelById(options), [options])
 
   const selectedItemText = readSelectedItemText(value)
 
   const toggleOptions = useCallback(() => {
+    if (!editable) {
+      return
+    }
     setShowOptions((open) => {
+      if (!mountedRef.current) {
+        return open
+      }
       const next = !open
       if (!next) {
         setInputValue('')
       }
+      onOpenChangeRef.current?.(next)
       return next
     })
-  }, [])
+  }, [editable])
 
   const handleSelectOption = useCallback(
     (item: SelectOption) => {
       if (isMulti) {
+        const already = selectedIdSet.has(item.id)
+        if (
+          !already &&
+          typeof maxSelected === 'number' &&
+          maxSelected >= 0 &&
+          selectedValues.length >= maxSelected
+        ) {
+          return
+        }
         onMultiSelect?.(item)
         return
       }
-      setShowOptions(false)
-      setInputValue('')
+      setOpen(false)
       onChange?.(item)
     },
-    [isMulti, onChange, onMultiSelect],
+    [isMulti, maxSelected, onChange, onMultiSelect, selectedIdSet, selectedValues.length, setOpen],
   )
 
   const fieldLabelStyle: StyleProp<TextStyle> = [
@@ -128,6 +194,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         selectedItemText={selectedItemText}
         showOptions={showOptions}
         selectIcon={selectIcon}
+        hideDropdownIcon={hideDropdownIcon}
+        editable={editable}
         arrowIconColor={arrowIconColor}
         containerStyle={containerStyle}
         selectedItemStyle={selectedItemStyle}
@@ -137,6 +205,8 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         multiOptionsLabelStyle={multiOptionsLabelStyle}
         multiListEmptyLabelStyle={multiListEmptyLabelStyle}
         multiSelectInputFieldProps={multiSelectInputFieldProps}
+        hideChipClose={hideChipClose}
+        renderMultiChipLeading={renderMultiChipLeading}
         onTapClose={onTapClose}
         onToggleOpen={toggleOptions}
       />
@@ -144,6 +214,7 @@ function SelectBox(props: SelectBoxProps): ReactElement {
         <OptionsPanel
           options={filteredSuggestions}
           selectedIdSet={selectedIdSet}
+          singleSelectedId={singleSelectedId}
           isMulti={Boolean(isMulti)}
           inputValue={inputValue}
           onChangeInput={setInputValue}
@@ -156,8 +227,11 @@ function SelectBox(props: SelectBoxProps): ReactElement {
           inputFilterContainerStyle={inputFilterContainerStyle}
           searchInputProps={searchInputProps}
           optionsLabelStyle={optionsLabelStyle}
+          activeOptionsLabelStyle={activeOptionsLabelStyle}
           optionContainerStyle={optionContainerStyle}
           listEmptyLabelStyle={listEmptyLabelStyle}
+          optionsAlign={optionsAlign}
+          optionsMaxHeight={optionsMaxHeight}
           virtualized={virtualized}
           listOptionProps={resolvedListOptionProps}
           listScrollViewProps={listScrollViewProps}

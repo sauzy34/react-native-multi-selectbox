@@ -1,4 +1,4 @@
-import { memo, type ReactElement } from 'react'
+import { memo, type ReactElement, type ReactNode } from 'react'
 import {
   ScrollView,
   Text,
@@ -22,10 +22,12 @@ export type MultiChipsRowProps = {
   multiOptionContainerStyle?: StyleProp<ViewStyle> | undefined
   multiOptionsLabelStyle?: StyleProp<TextStyle> | undefined
   multiListEmptyLabelStyle?: StyleProp<TextStyle> | undefined
-  /** Extra props applied to the horizontal chips ScrollView (style / contentContainerStyle / etc.). */
   multiSelectInputFieldProps?: MultiSelectFieldProps | undefined
+  hideChipClose?: boolean | undefined
+  renderMultiChipLeading?: ((option: SelectOption) => ReactNode) | undefined
   onTapClose?: ((item: SelectOption) => void) | undefined
   onToggleOpen: () => void
+  editable?: boolean | undefined
 }
 
 function Chip({
@@ -33,21 +35,24 @@ function Chip({
   label,
   multiOptionContainerStyle,
   multiOptionsLabelStyle,
+  hideChipClose,
+  renderMultiChipLeading,
   onTapClose,
 }: {
   item: SelectOption
   label: string
   multiOptionContainerStyle?: StyleProp<ViewStyle> | undefined
   multiOptionsLabelStyle?: StyleProp<TextStyle> | undefined
+  hideChipClose?: boolean | undefined
+  renderMultiChipLeading?: ((option: SelectOption) => ReactNode) | undefined
   onTapClose?: ((item: SelectOption) => void) | undefined
 }): ReactElement {
-  // Chips must size to content — flexGrow: 1 made each chip expand and hide siblings in a row.
   const containerStyle: StyleProp<ViewStyle> = [
     {
       flexDirection: 'row',
       borderRadius: 20,
       paddingVertical: 5,
-      paddingRight: 5,
+      paddingRight: hideChipClose ? 10 : 5,
       paddingLeft: 10,
       marginRight: 4,
       alignItems: 'center',
@@ -66,16 +71,24 @@ function Chip({
 
   return (
     <View style={containerStyle} testID={TEST_IDS.multiChip(item.id)}>
+      {renderMultiChipLeading ? (
+        <View style={{ marginRight: 6 }} testID={TEST_IDS.multiChipLeading(item.id)}>
+          {renderMultiChipLeading(item)}
+        </View>
+      ) : null}
       <Text style={labelStyle} numberOfLines={1}>
         {label}
       </Text>
-      <TouchableOpacity
-        style={{ marginLeft: 10, flexShrink: 0 }}
-        hitSlop={hitSlop}
-        onPress={() => onTapClose?.(item)}
-      >
-        <Icon name="closeCircle" fill="#fff" width={21} height={21} />
-      </TouchableOpacity>
+      {hideChipClose ? null : (
+        <TouchableOpacity
+          style={{ marginLeft: 10, flexShrink: 0 }}
+          hitSlop={hitSlop}
+          onPress={() => onTapClose?.(item)}
+          testID={TEST_IDS.multiChipClose(item.id)}
+        >
+          <Icon name="closeCircle" fill="#fff" width={21} height={21} />
+        </TouchableOpacity>
+      )}
     </View>
   )
 }
@@ -88,25 +101,26 @@ function MultiChipsRow({
   multiOptionsLabelStyle,
   multiListEmptyLabelStyle,
   multiSelectInputFieldProps,
+  hideChipClose,
+  renderMultiChipLeading,
   onTapClose,
   onToggleOpen,
+  editable = true,
 }: MultiChipsRowProps): ReactElement {
   if (selectedValues.length === 0) {
     return (
       <MultiEmptyPlaceholder
         inputPlaceholder={inputPlaceholder}
         multiListEmptyLabelStyle={multiListEmptyLabelStyle}
-        onPress={onToggleOpen}
+        onPress={editable ? onToggleOpen : undefined}
       />
     )
   }
 
-  // multiSelectInputFieldProps is typed for FlatList; we only pass through scroll-view-compatible keys.
   const {
     style: multiFieldStyle,
     contentContainerStyle: multiFieldContentStyle,
     keyboardShouldPersistTaps: multiKbdTaps = 'handled',
-    // FlatList-only props — ignore if present
     ...rest
   } = (multiSelectInputFieldProps ?? {}) as Record<string, unknown> & {
     style?: StyleProp<ViewStyle>
@@ -115,8 +129,6 @@ function MultiChipsRow({
   }
   void rest
 
-  // Horizontal ScrollView: chips size to content and scroll within the field width.
-  // (Horizontal FlatList in a flex row often expands incorrectly and clips to one chip.)
   return (
     <ScrollView
       horizontal
@@ -138,6 +150,8 @@ function MultiChipsRow({
             label={chipLabel}
             multiOptionContainerStyle={multiOptionContainerStyle}
             multiOptionsLabelStyle={multiOptionsLabelStyle}
+            hideChipClose={hideChipClose}
+            renderMultiChipLeading={renderMultiChipLeading}
             onTapClose={onTapClose}
           />
         )

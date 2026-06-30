@@ -9,11 +9,14 @@ import type {
   ViewStyle,
 } from 'react-native'
 
-/** Option shape required by SelectBox (1.x / 2.0 contract). */
+/** Canonical option shape used internally and by most call sites. */
 export type SelectOption = {
   id: string | number
   item: string
 }
+
+/** Loose option row before coercion via optionIdKey / optionLabelKey. */
+export type SelectOptionInput = SelectOption | Record<string, unknown>
 
 /**
  * Extra props for the options panel list.
@@ -31,17 +34,41 @@ export type OptionsScrollViewProps = Omit<ScrollViewProps, 'children'>
 /** Extra props for the multi-select chips row (horizontal ScrollView). */
 export type MultiSelectFieldProps = Omit<ScrollViewProps, 'children' | 'horizontal'>
 
+export type OptionsAlign = 'left' | 'center' | 'right'
+
 /** Style and chrome props shared by single- and multi-select modes. */
 export type SelectBoxSharedProps = {
   label?: string
   labelStyle?: StyleProp<TextStyle>
   containerStyle?: StyleProp<ViewStyle>
-  /** Defaults to `[]` when omitted or non-array at runtime. */
-  options?: SelectOption[]
+  /**
+   * Option rows. Prefer `{ id, item }[]`. For other shapes use `optionIdKey` / `optionLabelKey`
+   * (e.g. `{ id, name }` with `optionLabelKey="name"`).
+   */
+  options?: ReadonlyArray<SelectOptionInput>
+  /** Property used as option id when coercing `options` (default `id`). */
+  optionIdKey?: string
+  /** Property used as option label when coercing `options` (default `item`). */
+  optionLabelKey?: string
   inputPlaceholder?: string
   hideInputFilter?: boolean
   width?: DimensionValue
   selectIcon?: ReactNode
+  /** Hide the field chevron entirely. */
+  hideDropdownIcon?: boolean
+  /** When false, the field does not open/close (read-only display). Default true. */
+  editable?: boolean
+  /** Start with the options panel open. */
+  defaultOpen?: boolean
+  /** Called when the options panel opens or closes. */
+  onOpenChange?: (open: boolean) => void
+  /**
+   * Max height for the options panel (overrides default 180). Use a large value for a tall list;
+   * pair with flex parents as needed.
+   */
+  optionsMaxHeight?: number
+  /** Align option row labels (`left` | `center` | `right`). */
+  optionsAlign?: OptionsAlign
   arrowIconColor?: string
   searchIconColor?: string
   toggleIconColor?: string
@@ -63,9 +90,15 @@ export type SelectBoxSharedProps = {
   /** Applied to the filter TextInput (e.g. `{ color: '#fff' }` overrides default text color). */
   inputFilterStyle?: StyleProp<TextStyle>
   optionsLabelStyle?: StyleProp<TextStyle>
+  /** Label style for options that are currently selected (multi) or match single value. */
+  activeOptionsLabelStyle?: StyleProp<TextStyle>
   optionContainerStyle?: StyleProp<ViewStyle>
   multiOptionContainerStyle?: StyleProp<ViewStyle>
   multiOptionsLabelStyle?: StyleProp<TextStyle>
+  /** Hide the remove (×) control on multi-select chips. */
+  hideChipClose?: boolean
+  /** Optional leading node on each multi chip (e.g. avatar). */
+  renderMultiChipLeading?: (option: SelectOption) => ReactNode
   multiListEmptyLabelStyle?: StyleProp<TextStyle>
   listEmptyLabelStyle?: StyleProp<TextStyle>
   selectedItemStyle?: StyleProp<TextStyle>
@@ -80,14 +113,17 @@ export type SelectBoxSingleProps = SelectBoxSharedProps & {
   selectedValues?: never
   onMultiSelect?: never
   onTapClose?: never
+  maxSelected?: never
 }
 
 export type SelectBoxMultiProps = SelectBoxSharedProps & {
   isMulti: true
   /** Controlled selected options (defaults to `[]`). */
-  selectedValues?: SelectOption[]
+  selectedValues?: ReadonlyArray<SelectOptionInput>
   onMultiSelect?: (option: SelectOption) => void
   onTapClose?: (option: SelectOption) => void
+  /** Maximum number of selected options; further adds are ignored until one is removed. */
+  maxSelected?: number
   value?: never
   onChange?: never
 }

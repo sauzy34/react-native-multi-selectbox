@@ -60,3 +60,20 @@ describe('options utils', () => {
     expect(map.get('b')).toBe('Beta')
   })
 })
+
+it('normalizeOptions maps custom optionLabelKey / optionIdKey', () => {
+  const rows = [
+    { code: 'x', name: 'X-ray' },
+    { code: 'y', name: 'Yankee' },
+  ]
+  expect(normalizeOptions(rows, 'code', 'name')).toEqual([
+    { id: 'x', item: 'X-ray' },
+    { id: 'y', item: 'Yankee' },
+  ])
+})
+
+it('normalizeOptions skips malformed rows when coercing', () => {
+  expect(normalizeOptions([{ id: 'ok', item: 'OK' }, { id: 'bad' }, null] as never)).toEqual([
+    { id: 'ok', item: 'OK' },
+  ])
+})

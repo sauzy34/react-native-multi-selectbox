@@ -2,6 +2,7 @@ import { memo, useCallback, type ReactElement } from 'react'
 import {
   FlatList,
   ScrollView,
+  View,
   type ListRenderItem,
   type StyleProp,
   type TextStyle,
@@ -10,7 +11,12 @@ import {
 } from 'react-native'
 import { optionsPanelStyle } from '../../constants/layout'
 import { TEST_IDS } from '../../testIDs'
-import type { OptionsListProps, OptionsScrollViewProps, SelectOption } from '../../types'
+import type {
+  OptionsAlign,
+  OptionsListProps,
+  OptionsScrollViewProps,
+  SelectOption,
+} from '../../types'
 import { OptionsListEmpty } from './EmptyStates'
 import FilterInput from './FilterInput'
 import OptionRow from './OptionRow'
@@ -18,8 +24,8 @@ import OptionRow from './OptionRow'
 export type OptionsPanelProps = {
   options: SelectOption[]
   selectedIdSet: ReadonlySet<string | number>
+  singleSelectedId?: string | number | undefined
   isMulti: boolean
-  /** Prefer FlatList when true; ScrollView+map when false (default false — safer under scroll hosts). */
   virtualized?: boolean | undefined
   inputValue: string
   onChangeInput: (text: string) => void
@@ -32,8 +38,11 @@ export type OptionsPanelProps = {
   inputFilterContainerStyle?: StyleProp<ViewStyle> | undefined
   searchInputProps?: TextInputProps | undefined
   optionsLabelStyle?: StyleProp<TextStyle> | undefined
+  activeOptionsLabelStyle?: StyleProp<TextStyle> | undefined
   optionContainerStyle?: StyleProp<ViewStyle> | undefined
   listEmptyLabelStyle?: StyleProp<TextStyle> | undefined
+  optionsAlign?: OptionsAlign | undefined
+  optionsMaxHeight?: number | undefined
   listOptionProps?: OptionsListProps | undefined
   listScrollViewProps?: OptionsScrollViewProps | undefined
   onSelectOption: (item: SelectOption) => void
@@ -42,6 +51,7 @@ export type OptionsPanelProps = {
 function OptionsPanel({
   options,
   selectedIdSet,
+  singleSelectedId,
   isMulti,
   virtualized = false,
   inputValue,
@@ -55,12 +65,20 @@ function OptionsPanel({
   inputFilterContainerStyle,
   searchInputProps,
   optionsLabelStyle,
+  activeOptionsLabelStyle,
   optionContainerStyle,
   listEmptyLabelStyle,
+  optionsAlign,
+  optionsMaxHeight,
   listOptionProps,
   listScrollViewProps,
   onSelectOption,
 }: OptionsPanelProps): ReactElement {
+  const panelStyle: StyleProp<ViewStyle> = [
+    optionsPanelStyle,
+    optionsMaxHeight !== undefined ? { maxHeight: optionsMaxHeight } : null,
+  ]
+
   const filterHeader = hideInputFilter ? null : (
     <FilterInput
       value={inputValue}
@@ -73,26 +91,41 @@ function OptionsPanel({
     />
   )
 
-  const renderItem: ListRenderItem<SelectOption> = useCallback(
-    ({ item }) => (
-      <OptionRow
-        item={item}
-        isMulti={isMulti}
-        checked={isMulti ? selectedIdSet.has(item.id) : false}
-        toggleIconColor={toggleIconColor}
-        optionsLabelStyle={optionsLabelStyle}
-        optionContainerStyle={optionContainerStyle}
-        onPress={onSelectOption}
-      />
-    ),
+  const renderRow = useCallback(
+    (item: SelectOption) => {
+      const checked = isMulti ? selectedIdSet.has(item.id) : false
+      const active = isMulti ? checked : singleSelectedId === item.id
+      return (
+        <OptionRow
+          item={item}
+          isMulti={isMulti}
+          checked={checked}
+          active={active}
+          toggleIconColor={toggleIconColor}
+          optionsLabelStyle={optionsLabelStyle}
+          activeOptionsLabelStyle={activeOptionsLabelStyle}
+          optionContainerStyle={optionContainerStyle}
+          optionsAlign={optionsAlign}
+          onPress={onSelectOption}
+        />
+      )
+    },
     [
+      activeOptionsLabelStyle,
       isMulti,
-      selectedIdSet,
-      toggleIconColor,
-      optionsLabelStyle,
-      optionContainerStyle,
       onSelectOption,
+      optionContainerStyle,
+      optionsAlign,
+      optionsLabelStyle,
+      selectedIdSet,
+      singleSelectedId,
+      toggleIconColor,
     ],
+  )
+
+  const renderItem: ListRenderItem<SelectOption> = useCallback(
+    ({ item }) => renderRow(item),
+    [renderRow],
   )
 
   const keyExtractor = useCallback((item: SelectOption) => String(item.id), [])
@@ -113,7 +146,7 @@ function OptionsPanel({
     return (
       <ScrollView
         testID={TEST_IDS.optionsList}
-        style={[optionsPanelStyle, scrollStyle]}
+        style={[panelStyle, scrollStyle]}
         contentContainerStyle={contentContainerStyle}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
         nestedScrollEnabled={nestedScrollEnabled}
@@ -122,18 +155,7 @@ function OptionsPanel({
         {filterHeader}
         {options.length === 0
           ? empty
-          : options.map((item) => (
-              <OptionRow
-                key={String(item.id)}
-                item={item}
-                isMulti={isMulti}
-                checked={isMulti ? selectedIdSet.has(item.id) : false}
-                toggleIconColor={toggleIconColor}
-                optionsLabelStyle={optionsLabelStyle}
-                optionContainerStyle={optionContainerStyle}
-                onPress={onSelectOption}
-              />
-            ))}
+          : options.map((item) => <View key={String(item.id)}>{renderRow(item)}</View>)}
       </ScrollView>
     )
   }
@@ -149,7 +171,6 @@ function OptionsPanel({
     ...restListOptionProps
   } = listOptionProps ?? {}
 
-  // Bounded height + nestedScrollEnabled. Opt in with virtualized={true} for large option lists (no scroll parent).
   return (
     <FlatList
       testID={TEST_IDS.optionsList}
@@ -158,7 +179,7 @@ function OptionsPanel({
       renderItem={renderItem}
       ListHeaderComponent={filterHeader}
       ListEmptyComponent={empty}
-      style={[optionsPanelStyle, listOptionStyle]}
+      style={[panelStyle, listOptionStyle]}
       contentContainerStyle={listContentStyle}
       keyboardShouldPersistTaps={keyboardShouldPersistTaps}
       nestedScrollEnabled={nestedScrollEnabled}
@@ -170,4 +191,5 @@ function OptionsPanel({
   )
 }
 
+// Need View import for non-virtualized map wrapper - fix OptionsPanel imports
 export default memo(OptionsPanel)

@@ -6,7 +6,7 @@ import { TEST_IDS } from '../../testIDs'
 type MultiEmptyProps = {
   inputPlaceholder: string
   multiListEmptyLabelStyle?: StyleProp<TextStyle> | undefined
-  onPress: () => void
+  onPress?: (() => void) | undefined
 }
 
 export function MultiEmptyPlaceholder({
@@ -18,6 +18,13 @@ export function MultiEmptyPlaceholder({
     { fontSize: 17, color: 'rgba(60, 60, 67, 0.3)' },
     multiListEmptyLabelStyle,
   ]
+  if (!onPress) {
+    return (
+      <View testID={TEST_IDS.multiEmpty} style={{ flexGrow: 1, width: '100%' }}>
+        <Text style={labelStyle}>{inputPlaceholder}</Text>
+      </View>
+    )
+  }
   return (
     <TouchableOpacity
       testID={TEST_IDS.multiEmpty}

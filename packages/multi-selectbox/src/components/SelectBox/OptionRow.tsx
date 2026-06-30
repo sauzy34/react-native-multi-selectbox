@@ -10,15 +10,18 @@ import {
 import Colors from '../../constants/Colors'
 import Icon from '../Icon'
 import { TEST_IDS } from '../../testIDs'
-import type { SelectOption } from '../../types'
+import type { OptionsAlign, SelectOption } from '../../types'
 
 export type OptionRowProps = {
   item: SelectOption
   isMulti: boolean
   checked?: boolean | undefined
+  active?: boolean | undefined
   toggleIconColor?: string | undefined
   optionsLabelStyle?: StyleProp<TextStyle> | undefined
+  activeOptionsLabelStyle?: StyleProp<TextStyle> | undefined
   optionContainerStyle?: StyleProp<ViewStyle> | undefined
+  optionsAlign?: OptionsAlign | undefined
   onPress: (item: SelectOption) => void
 }
 
@@ -26,11 +29,15 @@ function OptionRow({
   item,
   isMulti,
   checked = false,
+  active = false,
   toggleIconColor,
   optionsLabelStyle,
+  activeOptionsLabelStyle,
   optionContainerStyle,
+  optionsAlign = 'left',
   onPress,
 }: OptionRowProps): ReactElement {
+  const textAlign = optionsAlign
   const containerStyle: StyleProp<ViewStyle> = [
     {
       borderColor: '#dadada',
@@ -54,14 +61,15 @@ function OptionRow({
       flex: 1,
       flexShrink: 1,
       paddingRight: 12,
+      textAlign,
     },
     optionsLabelStyle,
+    active ? activeOptionsLabelStyle : undefined,
   ]
 
   const handlePress = () => onPress(item)
   const iconColor = toggleIconColor ?? Colors.primary
 
-  // Entire row is pressable (not only the label text).
   return (
     <TouchableOpacity
       testID={TEST_IDS.option(item.id)}
@@ -69,7 +77,7 @@ function OptionRow({
       onPress={handlePress}
       activeOpacity={0.65}
       accessibilityRole="button"
-      accessibilityState={isMulti ? { checked } : undefined}
+      accessibilityState={isMulti ? { checked } : { selected: active }}
     >
       <Text style={labelStyle}>{item.item}</Text>
       {isMulti ? (
@@ -92,9 +100,12 @@ function optionRowPropsAreEqual(prev: OptionRowProps, next: OptionRowProps): boo
     prev.item.item === next.item.item &&
     prev.isMulti === next.isMulti &&
     prev.checked === next.checked &&
+    prev.active === next.active &&
     prev.toggleIconColor === next.toggleIconColor &&
     prev.optionsLabelStyle === next.optionsLabelStyle &&
+    prev.activeOptionsLabelStyle === next.activeOptionsLabelStyle &&
     prev.optionContainerStyle === next.optionContainerStyle &&
+    prev.optionsAlign === next.optionsAlign &&
     prev.onPress === next.onPress
   )
 }

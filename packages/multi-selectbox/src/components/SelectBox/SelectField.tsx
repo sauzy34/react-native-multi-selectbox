@@ -21,6 +21,8 @@ export type SelectFieldProps = {
   selectedItemText: string
   showOptions: boolean
   selectIcon?: ReactNode | undefined
+  hideDropdownIcon?: boolean | undefined
+  editable?: boolean | undefined
   arrowIconColor?: string | undefined
   containerStyle?: StyleProp<ViewStyle> | undefined
   selectedItemStyle?: StyleProp<TextStyle> | undefined
@@ -30,6 +32,8 @@ export type SelectFieldProps = {
   multiOptionsLabelStyle?: StyleProp<TextStyle> | undefined
   multiListEmptyLabelStyle?: StyleProp<TextStyle> | undefined
   multiSelectInputFieldProps?: MultiSelectFieldProps | undefined
+  hideChipClose?: boolean | undefined
+  renderMultiChipLeading?: ((option: SelectOption) => ReactNode) | undefined
   onTapClose?: ((item: SelectOption) => void) | undefined
   onToggleOpen: () => void
 }
@@ -41,6 +45,8 @@ function SelectField({
   selectedItemText,
   showOptions,
   selectIcon,
+  hideDropdownIcon = false,
+  editable = true,
   arrowIconColor = Colors.primary,
   containerStyle,
   selectedItemStyle,
@@ -50,6 +56,8 @@ function SelectField({
   multiOptionsLabelStyle,
   multiListEmptyLabelStyle,
   multiSelectInputFieldProps,
+  hideChipClose,
+  renderMultiChipLeading,
   onTapClose,
   onToggleOpen,
 }: SelectFieldProps): ReactElement {
@@ -60,7 +68,7 @@ function SelectField({
       borderColor: '#ddd',
       borderBottomWidth: 1,
       paddingTop: 6,
-      paddingRight: 20,
+      paddingRight: hideDropdownIcon ? 0 : 20,
       paddingBottom: 8,
     },
     containerStyle,
@@ -74,9 +82,19 @@ function SelectField({
     selectedItemStyle,
   ]
 
+  const onFieldPress = editable ? onToggleOpen : undefined
+
   return (
     <View style={rowStyle}>
-      <View style={{ paddingRight: 20, flex: 1, flexGrow: 1, flexShrink: 1, minWidth: 0 }}>
+      <View
+        style={{
+          paddingRight: hideDropdownIcon ? 0 : 20,
+          flex: 1,
+          flexGrow: 1,
+          flexShrink: 1,
+          minWidth: 0,
+        }}
+      >
         {isMulti ? (
           <MultiChipsRow
             optionLabelById={optionLabelById}
@@ -86,26 +104,43 @@ function SelectField({
             multiOptionsLabelStyle={multiOptionsLabelStyle}
             multiListEmptyLabelStyle={multiListEmptyLabelStyle}
             multiSelectInputFieldProps={multiSelectInputFieldProps}
+            hideChipClose={hideChipClose}
+            renderMultiChipLeading={renderMultiChipLeading}
             onTapClose={onTapClose}
             onToggleOpen={onToggleOpen}
+            editable={editable}
           />
-        ) : (
+        ) : onFieldPress ? (
           <TouchableOpacity
             testID={TEST_IDS.singleTrigger}
             hitSlop={hitSlop}
-            onPress={onToggleOpen}
+            onPress={onFieldPress}
           >
             <Text style={valueStyle}>{selectedItemText || inputPlaceholder || label}</Text>
           </TouchableOpacity>
+        ) : (
+          <View testID={TEST_IDS.singleTrigger}>
+            <Text style={valueStyle}>{selectedItemText || inputPlaceholder || label}</Text>
+          </View>
         )}
       </View>
-      <TouchableOpacity testID={TEST_IDS.dropdownToggle} onPress={onToggleOpen} hitSlop={hitSlop}>
-        {selectIcon ? (
-          selectIcon
-        ) : (
-          <Icon name={showOptions ? 'upArrow' : 'downArrow'} fill={arrowIconColor} />
-        )}
-      </TouchableOpacity>
+      {hideDropdownIcon ? null : onFieldPress ? (
+        <TouchableOpacity testID={TEST_IDS.dropdownToggle} onPress={onFieldPress} hitSlop={hitSlop}>
+          {selectIcon ? (
+            selectIcon
+          ) : (
+            <Icon name={showOptions ? 'upArrow' : 'downArrow'} fill={arrowIconColor} />
+          )}
+        </TouchableOpacity>
+      ) : (
+        <View testID={TEST_IDS.dropdownToggle} pointerEvents="none">
+          {selectIcon ? (
+            selectIcon
+          ) : (
+            <Icon name={showOptions ? 'upArrow' : 'downArrow'} fill={arrowIconColor} />
+          )}
+        </View>
+      )}
     </View>
   )
 }
