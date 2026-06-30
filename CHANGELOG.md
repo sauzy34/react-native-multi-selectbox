@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-06-30
+
+### Documentation
+
+- Split README roles: package README is the consumer source of truth (npm); root README is the monorepo/contributor hub
+- Full install, examples, props, and scrolling-host guidance live in `packages/multi-selectbox/README.md`
+
 ## [2.0.0] - 2026-06-30
 
 Major rewrite: TypeScript library in a pnpm monorepo with an Expo example app. Published package source: `packages/multi-selectbox`.
@@ -45,4 +52,5 @@ Major rewrite: TypeScript library in a pnpm monorepo with an Expo example app. P
 
 Last line published from the pre-monorepo / JavaScript package layout. See npm history for 1.x details.
 
+[2.0.1]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/sauzy34/react-native-multi-selectbox/compare/v1.5.0...v2.0.0

@@ -1,6 +1,6 @@
 {
   "name": "react-native-multi-selectbox",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Platform-independent select / multi-select / picker for React Native and Expo (TypeScript).",
   "license": "MIT",
   "author": "Saurav Gupta <sonugupta34@gmail.com> (https://github.com/sauzy34)",
