@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^10.1.1",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
-    "typescript-eslint": "^8.26.1"
+    "typescript-eslint": "^8.62.1"
   },
   "keywords": [
     "react-native-select",
