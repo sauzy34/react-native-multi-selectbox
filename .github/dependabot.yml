@@ -1,0 +1,15 @@
+# Update from the repo root so Dependabot rewrites pnpm-lock.yaml together with
+# workspace package.json files. Nested directory entries (e.g. /packages/*) only
+# change manifests and leave --frozen-lockfile CI red on merge.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
