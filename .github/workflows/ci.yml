@@ -18,7 +18,7 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Do not set `version` here — package.json `packageManager` already pins pnpm@10.33.0.
       # Setting both makes pnpm/action-setup@v4 fail with "Multiple versions of pnpm specified".
@@ -51,7 +51,7 @@ jobs:
       (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: pnpm/action-setup@v4
 
