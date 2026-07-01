@@ -40,7 +40,7 @@
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "globals": "^16.0.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.9.4",
     "typescript-eslint": "^8.26.1"
   },
   "keywords": [
