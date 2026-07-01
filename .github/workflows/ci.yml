@@ -72,7 +72,7 @@ jobs:
       # Avoid Jekyll ignoring paths like _expo on some Pages setups.
       - run: touch apps/example/dist/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/example/dist
 
