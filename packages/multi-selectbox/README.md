@@ -6,8 +6,7 @@
 
 Cross-platform **select** / **multi-select** / **picker** for **React Native** and **Expo** (iOS, Android, web). Shared UI and a TypeScript-first API.
 
-> **This file is the consumer documentation source of truth** (npm + GitHub).  
-> Monorepo layout / contributor commands live in the [repository root README](../../README.md).
+> **Consumer docs** (install, API, examples). For monorepo development, see [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ### Live demo
 
