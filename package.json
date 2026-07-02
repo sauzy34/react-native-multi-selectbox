@@ -32,7 +32,7 @@
     "format:check": "prettier --check .",
     "build": "pnpm -r --if-present run build",
     "clean": "pnpm -r --if-present run clean && rm -rf node_modules",
-    "publish:lib": "pnpm --filter react-native-multi-selectbox publish --access public",
+    "publish:lib": "node scripts/publish-lib.mjs",
     "pack:lib": "pnpm --filter react-native-multi-selectbox exec npm pack"
   },
   "devDependencies": {

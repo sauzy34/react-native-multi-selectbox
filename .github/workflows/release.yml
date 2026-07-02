@@ -1,0 +1,89 @@
+# Create or update a GitHub Release when a v* tag is pushed.
+# Triggered automatically by `pnpm publish:lib` (tags + pushes vX.Y.Z after npm publish).
+#
+# Manual re-run / backfill:
+#   gh workflow run Release -f tag=v2.0.3
+#   or: git push origin v2.0.3 (if tag already points at the right commit)
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing git tag to publish/update as a GitHub Release (e.g. v2.0.3)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          case "$TAG" in
+            v*) ;;
+            *) TAG="v${TAG}" ;;
+          esac
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Using tag=${TAG} version=${VERSION}"
+
+      - uses: actions/checkout@v7
+        with:
+          # Need full history / the tag commit for notes extraction.
+          fetch-depth: 0
+          ref: ${{ steps.meta.outputs.tag }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Extract release notes from CHANGELOG.md
+        id: notes
+        run: |
+          node scripts/extract-changelog.mjs "${{ steps.meta.outputs.version }}" > release-notes.md
+          echo "----- release notes -----"
+          cat release-notes.md
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.meta.outputs.tag }}"
+          VERSION="${{ steps.meta.outputs.version }}"
+          TITLE="${VERSION}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Updating existing release $TAG"
+            gh release edit "$TAG" \
+              --title "$TITLE" \
+              --notes-file release-notes.md \
+              --latest
+          else
+            echo "Creating release $TAG"
+            gh release create "$TAG" \
+              --title "$TITLE" \
+              --notes-file release-notes.md \
+              --latest \
+              --verify-tag
+          fi
+
+          echo "Release URL: $(gh release view "$TAG" --json url -q .url)"

@@ -88,6 +88,24 @@ Demo hosts: [`apps/example/demos/SectionListHostDemo.tsx`](./apps/example/demos/
 
 CI deploys the web demo to GitHub Pages on push to `master` / `main` ([workflow](./.github/workflows/ci.yml)).
 
+### Publish (npm + GitHub Release)
+
+1. Bump `packages/multi-selectbox/package.json` `version` and add notes under that version in [`CHANGELOG.md`](./CHANGELOG.md) (keep the package copy in sync).
+2. Commit and push the version bump to `master`.
+3. From the monorepo root:
+
+```bash
+pnpm publish:lib
+# with npm OTP:
+pnpm publish:lib -- --otp=123456
+```
+
+`publish:lib` publishes to npm, creates/pushes tag `vX.Y.Z`, and the [Release](./.github/workflows/release.yml) workflow creates or updates the matching GitHub Release from the CHANGELOG section.
+
+- npm only (no tag / no GH release): `pnpm publish:lib -- --no-tag`
+- dry-run: `pnpm publish:lib -- --dry-run`
+- re-run release for an existing tag: **Actions → Release → Run workflow** and enter `vX.Y.Z`
+
 ---
 
 ## Contributing
