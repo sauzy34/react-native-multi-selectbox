@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { TouchableOpacity, type TouchableOpacityProps } from 'react-native'
-import Colors from '../constants/Colors'
+import Colors from '../constants/colors'
 import Icon from './Icon'
 
 export type ToggleProps = {

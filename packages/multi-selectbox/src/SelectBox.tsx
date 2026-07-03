@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import { Text, View, type StyleProp, type TextStyle } from 'react-native'
-import Colors from './constants/Colors'
+import Colors from './constants/colors'
 import SelectField from './components/SelectBox/SelectField'
 import OptionsPanel from './components/SelectBox/OptionsPanel'
 import {

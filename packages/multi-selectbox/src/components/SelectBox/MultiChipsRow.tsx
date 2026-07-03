@@ -8,7 +8,7 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native'
-import Colors from '../../constants/Colors'
+import Colors from '../../constants/colors'
 import { hitSlop } from '../../constants/layout'
 import Icon from '../Icon'
 import { TEST_IDS } from '../../testIDs'
