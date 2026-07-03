@@ -83,11 +83,15 @@ jobs:
       # Avoid Jekyll ignoring paths like _expo on some Pages setups.
       - run: touch apps/example/dist/.nojekyll
 
-      - uses: actions/configure-pages@v5
-
+      # Unique name per run/attempt avoids deploy-pages failing with:
+      # "Multiple artifacts named github-pages were unexpectedly found"
+      # (can happen on re-runs or when a prior upload lingers in the same run).
       - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/example/dist
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
 
       - id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
