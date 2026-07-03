@@ -6,12 +6,12 @@ on:
   pull_request:
     branches: [master, main]
 
-# Least privilege for quality; pages permissions only on deploy jobs.
+# Least privilege for quality; pages permissions only on the pages job.
 permissions:
   contents: read
 
-# Cancel redundant PR runs. Do not cancel master/main pushes — that can interrupt
-# an in-flight GitHub Pages deploy and leave the environment stuck until timeout.
+# Cancel redundant PR runs only. Master/main pushes must not cancel an
+# in-flight Pages deploy (can leave the github-pages environment stuck).
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -42,14 +42,25 @@ jobs:
   # URL: https://sauzy34.github.io/react-native-multi-selectbox/
   # Enable once: repo Settings → Pages → Build and deployment → Source: GitHub Actions
   #
-  # Only master/main: the github-pages environment defaults to “Protected branches only”
-  # (or selected branches), which rejects feature branches.
-  build-web-demo:
+  # Single job for export + upload + deploy so the artifact never has to be
+  # resolved across jobs (avoids flaky deploy-pages artifact / queue timeouts).
+  # Only master/main: the github-pages environment often restricts to protected branches.
+  pages:
     needs: quality
     if: >
       github.event_name == 'push' &&
       (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
 
@@ -74,29 +85,9 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/example/dist
 
-  deploy-pages:
-    needs: build-web-demo
-    if: >
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
-    runs-on: ubuntu-latest
-    # Isolate from quality re-runs; never cancel a live Pages deploy.
-    concurrency:
-      group: pages-deploy
-      cancel-in-progress: false
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-      # Required so deploy-pages can download the artifact from build-web-demo.
-      actions: read
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - id: deployment
         uses: actions/deploy-pages@v5
