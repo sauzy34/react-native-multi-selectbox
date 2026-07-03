@@ -33,7 +33,8 @@
     "build": "pnpm -r --if-present run build",
     "clean": "pnpm -r --if-present run clean && rm -rf node_modules",
     "publish:lib": "node scripts/publish-lib.mjs",
-    "pack:lib": "pnpm --filter react-native-multi-selectbox exec npm pack"
+    "pack:lib": "pnpm --filter react-native-multi-selectbox exec npm pack",
+    "sync:changelog": "node scripts/sync-changelog.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

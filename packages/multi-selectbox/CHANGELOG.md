@@ -87,7 +87,7 @@ Major rewrite: TypeScript library in a pnpm monorepo with an Expo example app. P
 2. Remove `lodash` / `react-native-svg` from your project **if** they were only installed for this package.
 3. Prefer forms hosted in `ScrollView` / `FlatList` / `SectionList` with the default `virtualized={false}`; set `virtualized` only for large option lists without an outer vertical scroll parent.
 4. Use TypeScript types from the package when possible; option shape remains `{ id, item }`.
-5. See [docs/MIGRATION.md](./docs/MIGRATION.md) for the monorepo / development layout.
+5. See [docs/MIGRATION.md](https://github.com/sauzy34/react-native-multi-selectbox/blob/master/docs/MIGRATION.md) for a short 1.x → 2.x upgrade checklist.
 
 ## [1.5.0] - prior
 

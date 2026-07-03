@@ -3,6 +3,9 @@
  * Publish react-native-multi-selectbox to npm, then push a v* git tag so the
  * "Release" GitHub Actions workflow can create/update the GitHub Release.
  *
+ * Before publish, syncs root CHANGELOG.md → packages/multi-selectbox/CHANGELOG.md
+ * (root file is the source of truth; edit only that copy day-to-day).
+ *
  * Usage (from monorepo root):
  *   pnpm publish:lib
  *   pnpm publish:lib -- --otp=123456
@@ -48,6 +51,12 @@ function runCapture(cmd, args) {
     encoding: 'utf8',
     shell: false,
   })
+}
+
+console.log('\n📝 Syncing CHANGELOG (root → package)…')
+const syncStatus = run('node', [path.join(root, 'scripts/sync-changelog.mjs')])
+if (syncStatus !== 0) {
+  process.exit(syncStatus)
 }
 
 console.log(`\n📦 Publishing react-native-multi-selectbox@${version}…\n`)

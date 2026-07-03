@@ -15,7 +15,7 @@ pnpm install
 ```text
 apps/example/                 # Expo demo (web + native)
 packages/multi-selectbox/     # Publishable library (npm: react-native-multi-selectbox)
-docs/MIGRATION.md             # 1.x → 2.0 migration notes
+docs/MIGRATION.md             # 1.x → 2.x consumer upgrade notes
 .github/workflows/            # CI, Pages deploy, GitHub Releases on v* tags
 ```
 
@@ -51,11 +51,11 @@ CI runs quality checks and deploys the web demo to GitHub Pages on push to `mast
 2. Library code lives in [`packages/multi-selectbox`](./packages/multi-selectbox). Exercise changes with `pnpm example` and `pnpm test`.
 3. Public API / consumer docs: update [`packages/multi-selectbox/README.md`](./packages/multi-selectbox/README.md).
 4. Keep Prettier and ESLint clean (`pnpm format` / `pnpm lint`).
-5. User-facing changes: add a section under the next version in [CHANGELOG.md](./CHANGELOG.md) (keep the copy under the package in sync for npm).
+5. User-facing changes: add a section under the next version in the **root** [CHANGELOG.md](./CHANGELOG.md) only. `pnpm publish:lib` syncs it to `packages/multi-selectbox/CHANGELOG.md` for npm (`node scripts/sync-changelog.mjs` to sync anytime).
 
 ## Publish (maintainers)
 
-1. Bump `version` in `packages/multi-selectbox/package.json` and add notes under that version in [CHANGELOG.md](./CHANGELOG.md) (keep the package copy in sync).
+1. Bump `version` in `packages/multi-selectbox/package.json` and add notes under that version in the **root** [CHANGELOG.md](./CHANGELOG.md) (do not hand-edit the package copy).
 2. Commit and push to `master`.
 3. From the monorepo root:
 

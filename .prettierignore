@@ -3,5 +3,4 @@ pnpm-lock.yaml
 coverage
 .expo
 dist
-demo.gif
 apps/example/assets
